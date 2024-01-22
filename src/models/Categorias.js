@@ -13,7 +13,7 @@ module.exports = (sequelize) => {
     descripcion: {
       type: DataTypes.STRING,
     },
-    pedirImporte: {
+    esGenero: {
       type: DataTypes.BOOLEAN,
     },
     esServicio: {
