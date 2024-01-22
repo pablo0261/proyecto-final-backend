@@ -43,7 +43,7 @@ sequelize.models = Object.fromEntries(capsEntries);
 
 // En sequelize.models están todos los modelos importados como propiedades
 // Para relacionarlos hacemos un destructuring
-const { Categorias_opciones, Categorias, Personas_logins, Personas_opciones, Personas,Oportunidades,Conversaciones } = sequelize.models;
+const { Categorias_opciones, Categorias, Personas_logins, Personas_opciones, Personas, Oportunidades, Conversaciones, Pagos } = sequelize.models;
 
 // Relaciones
 
@@ -65,7 +65,7 @@ Personas.hasOne(Categorias_opciones, {
 
 Categorias_opciones.belongsTo(Personas)
 
-Categorias_opciones.hasMany(Categorias, {
+Categorias.hasMany(Categorias_opciones, {
   foreignKey: 'idCategoria'
 })
 
@@ -73,8 +73,8 @@ Personas.hasMany(Personas_logins, {
   foreignKey: 'idPersona'
 })
 
-Oportunidades.hasMany(Conversaciones, {
-  foreignKey: 'idOportunidad'
+Personas.hasMany(Pagos, {
+  foreignKey: 'idPersona'
 })
 
 Personas.hasMany(Oportunidades, {
@@ -83,6 +83,10 @@ Personas.hasMany(Oportunidades, {
 
 Personas.hasMany(Oportunidades, {
   foreignKey: 'idProveedor'
+})
+
+Oportunidades.hasMany(Conversaciones, {
+  foreignKey: 'idOportunidad'
 })
 
 module.exports = {
