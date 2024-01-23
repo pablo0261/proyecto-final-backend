@@ -3,60 +3,60 @@ const { DataTypes, INTEGER } = require('sequelize');
 // Luego le injectamos la conexion a sequelize.
 module.exports = (sequelize) => {
   // defino el modelo
-  sequelize.define('oportunidades', {
-    idOportunidad: {
+  sequelize.define('opportunities', {
+    idOpportunities: {
       type: DataTypes.UUID,
       allowNull: false,
       primaryKey: true
     },
-    idCliente: {
+    idCustomer: {
       type: DataTypes.UUID,
       allowNull: false,
     },
-    idProveedor: {
+    idProvider: {
       type: DataTypes.UUID,
       allowNull: false,
     },
-    fechaConsulta: {
+    dateQuery: {
       type: DataTypes.DATE,
     },
-    idServicio: {
+    idService: {
       type: DataTypes.INTEGER,
     },
-    fechaContratacion: {
+    dateHiring: {
       type: DataTypes.DATE,
     },
-    fechaEstimadaFinalizacion: {
+    dateEstimateCompletion: {
       type: DataTypes.DATE,
     },
-    precio: {
+    prize: {
       type: DataTypes.DECIMAL(12, 2)
     },
-    fechaAceptado: {
+    dateOk: {
       type: DataTypes.DATE,
     },
-    fechaCancelado: {
+    dateCancelled: {
       type: DataTypes.DATE,
     },
-    idPersonaCancelado: {
+    idPeopleCancelled: {
       type: DataTypes.UUID,
     },
-    CausaCancelacion: {
+    Reason: {
       type: DataTypes.STRING,
     },
-    fechaFinServicio: {
+    DateServiceEnd: {
       type: DataTypes.DATE,
     },
-    valoracionCliente: {
+    ratingCustomer: {
       type: DataTypes.DECIMAL(2),
     },
-    valoracionProveedor: {
+    ratingProvider: {
       type: DataTypes.DECIMAL(2),
     },
-    observacionesCliente: {
+    reviewCustomer: {
       type: DataTypes.TEXT,
     },
-    observacionesProveedor: {
+    reviewProvider: {
       type: DataTypes.TEXT,
     },
   },
@@ -64,19 +64,19 @@ module.exports = (sequelize) => {
       indexes: [
         {
           unique: false,
-          fields: ['idCliente']
+          fields: ['idCustomer']
         },
         {
           unique: false,
-          fields: ['idProveedor']
+          fields: ['idProvider']
         },
         {
           unique: false,
-          fields: ['idServicio']
+          fields: ['idService']
         },
         {
           unique: false,
-          fields: ['idPersonaCancelado']
+          fields: ['idPeopleCancelled']
         },
       ]
     });
