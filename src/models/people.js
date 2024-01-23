@@ -35,8 +35,11 @@ module.exports = (sequelize) => {
     },
     state: {
       type: DataTypes.ENUM,
-      values: ['activo', 'inactivo', 'borrado'],
+      values: ['Active', 'Inactive', 'Deleted'],
       allowNull: false,
+    },
+    noShow:{
+      type:DataTypes.BOOLEAN
     },
     aboutMe: {
       type: DataTypes.TEXT,
@@ -46,9 +49,9 @@ module.exports = (sequelize) => {
       allowNull: false,
     },
     typeOfPerson: {
-      type: DataTypes.STRING,
+      type: DataTypes.ENUM,
       allowNull: false,
-      values: ['administrator', 'provider', 'customer']
+      values: ['administrator','customer',`'provider']
     },
     email: {
       type: DataTypes.STRING,
@@ -60,6 +63,9 @@ module.exports = (sequelize) => {
     },
     externalLogin: {
       type: DataTypes.STRING,
+    },
+    weekCalendar:{
+      type: DataTypes.ARRAY(DataTypes.BOOLEAN)
     }
   },
     {
