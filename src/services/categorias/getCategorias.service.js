@@ -1,0 +1,1 @@
+acceso al dato con sequielize
