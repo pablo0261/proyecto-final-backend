@@ -3,41 +3,37 @@ const { DataTypes, INTEGER } = require('sequelize');
 // Luego le injectamos la conexion a sequelize.
 module.exports = (sequelize) => {
   // defino el modelo
-  sequelize.define('personas', {
-    idPersona: {
+  sequelize.define('people', {
+    idPeople: {
       type: DataTypes.UUID,
       allowNull: false,
       primaryKey: true
     },
-    apellidoNombre: {
+    name: {
       allowNull: false,
       type: DataTypes.STRING,
     },
-    direccion: {
+    address: {
       allowNull: false,
       type: DataTypes.STRING,
     },
-    idLocalidad: {
+    idLocation: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    latitud: {
+    geoposition: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    longitud: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    fechaNacimiento: {
+    dateOfBirth: {
       type: DataTypes.DATE,
       allowNull: false,
     },
-    idGenero: {
+    idGenre: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    estado: {
+    state: {
       type: DataTypes.ENUM,
       values: ['activo', 'inactivo', 'borrado'],
       allowNull: false,
@@ -45,14 +41,14 @@ module.exports = (sequelize) => {
     aboutMe: {
       type: DataTypes.TEXT,
     },
-    fechaAlta: {
+    dateOfAdmission: {
       type: DataTypes.DATEONLY,
       allowNull: false,
     },
-    tipoPersona: {
+    typeOfPerson: {
       type: DataTypes.STRING,
       allowNull: false,
-      values: ['administrador', 'proveedor', 'cliente']
+      values: ['administrator', 'provider', 'customer']
     },
     email: {
       type: DataTypes.STRING,
@@ -62,7 +58,7 @@ module.exports = (sequelize) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    idLoginExterna: {
+    externalLogin: {
       type: DataTypes.STRING,
     }
   },
@@ -70,19 +66,19 @@ module.exports = (sequelize) => {
       indexes: [
         {
           unique: false,
-          fields: ['apellidoNombre']
+          fields: ['name']
         },
         {
           unique: false,
-          fields: ['idLoginExterna']
+          fields: ['externalLogin']
         },
         {
           unique: false,
-          fields: ['idLocalidad']
+          fields: ['idLocation']
         },
         {
           unique: false,
-          fields: ['idGenero']
+          fields: ['idGenre']
         },
         {
           unique: true,

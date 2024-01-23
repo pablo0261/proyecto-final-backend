@@ -43,50 +43,50 @@ sequelize.models = Object.fromEntries(capsEntries);
 
 // En sequelize.models están todos los modelos importados como propiedades
 // Para relacionarlos hacemos un destructuring
-const { Categorias_opciones, Categorias, Personas_logins, Personas_opciones, Personas, Oportunidades, Conversaciones, Pagos } = sequelize.models;
+const { Categories_options, Categories, People_logins, People_options, People, Opportunities, Chats, Payments } = sequelize.models;
 
 // Relaciones
 
-Personas.belongsToMany(Categorias_opciones,
+People.belongsToMany(Categories_options,
   {
-    through: Personas_opciones,
-    foreignKey: 'idPersona'
+    through: People_options,
+    foreignKey: 'idPeople'
   });
 
-Categorias_opciones.belongsToMany(Personas,
+Categories_options.belongsToMany(People,
   {
-    through: Personas_opciones,
-    foreignKey: 'idOpcion'
+    through: People_options,
+    foreignKey: 'idOption'
   });
 
-Personas.hasOne(Categorias_opciones, {
-  foreignKey: 'idGenero'
+People.hasOne(Categories_options, {
+  foreignKey: 'idGenre'
 })
 
-Categorias_opciones.belongsTo(Personas)
+Categories_options.belongsTo(People)
 
-Categorias.hasMany(Categorias_opciones, {
-  foreignKey: 'idCategoria'
+Categories.hasMany(Categories_options, {
+  foreignKey: 'idCategorie'
 })
 
-Personas.hasMany(Personas_logins, {
-  foreignKey: 'idPersona'
+People.hasMany(People_logins, {
+  foreignKey: 'idPeople'
 })
 
-Personas.hasMany(Pagos, {
-  foreignKey: 'idPersona'
+People.hasMany(Payments, {
+  foreignKey: 'idPeople'
 })
 
-Personas.hasMany(Oportunidades, {
-  foreignKey: 'idCliente'
+People.hasMany(Opportunities, {
+  foreignKey: 'idCustomer'
 })
 
-Personas.hasMany(Oportunidades, {
-  foreignKey: 'idProveedor'
+People.hasMany(Opportunities, {
+  foreignKey: 'idProvider'
 })
 
-Oportunidades.hasMany(Conversaciones, {
-  foreignKey: 'idOportunidad'
+Opportunities.hasMany(Chats, {
+  foreignKey: 'idOpportunities'
 })
 
 module.exports = {

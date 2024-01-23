@@ -3,20 +3,20 @@ const { DataTypes } = require('sequelize');
 // Luego le injectamos la conexion a sequelize.
 module.exports = (sequelize) => {
   // defino el modelo
-  sequelize.define('personas_logins', {
+  sequelize.define('people_logins', {
     id:{
       type: DataTypes.UUID,
       allowNull:false,
       primaryKey:true
     },
-    idPersona:{
+    idPeople:{
       type: DataTypes.UUID,
       allowNull:false,
     },
-    fechaLogin:{
+    loginDate:{
       type: DataTypes.DATE,
     },
-    fechaLogout: {
+    logoutDate: {
       type: DataTypes.DATE,
     },
   },
@@ -24,7 +24,7 @@ module.exports = (sequelize) => {
       indexes: [
         {
           unique: false,
-          fields: ['idPersona']
+          fields: ['idPeople']
         },
       ]
     });

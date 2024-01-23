@@ -3,20 +3,32 @@ const { DataTypes, INTEGER } = require('sequelize');
 // Luego le injectamos la conexion a sequelize.
 module.exports = (sequelize) => {
   // defino el modelo
-  sequelize.define('categorias', {
-    idCategoria: {
+  sequelize.define('categories', {
+    idCategorie: {
       type: DataTypes.INTEGER,
       allowNull: false,
       autoIncrement: true,
       primaryKey: true
     },
-    descripcion: {
+    description: {
       type: DataTypes.STRING,
     },
-    esGenero: {
+    isGenre: {
       type: DataTypes.BOOLEAN,
     },
-    esServicio: {
+    isEducation: {
+      type: DataTypes.BOOLEAN,
+    },
+    isSkill: {
+      type: DataTypes.BOOLEAN,
+    },
+    isService: {
+      type: DataTypes.BOOLEAN,
+    },
+    includeCustomer: {
+      type: DataTypes.BOOLEAN,
+    },
+    includeProvider: {
       type: DataTypes.BOOLEAN,
     },
   },
@@ -24,7 +36,7 @@ module.exports = (sequelize) => {
       indexes: [
         {
           unique: true,
-          fields: ['descripcion']
+          fields: ['description']
         }
       ]
     });
