@@ -3,39 +3,36 @@ const { DataTypes, INTEGER } = require('sequelize');
 // Luego le injectamos la conexion a sequelize.
 module.exports = (sequelize) => {
   // defino el modelo
-  sequelize.define('conversaciones', {
-    idConversacion: {
+  sequelize.define('payments', {
+    idPayment: {
       type: DataTypes.UUID,
       allowNull: false,
       primaryKey: true
     },
-    idOportunidad: {
+    idPeople: {
       type: DataTypes.UUID,
       allowNull: false,
     },
-    idPersona: {
-      type: DataTypes.UUID,
+    emisionDate: {
+      type: DataTypes.DATEONLY,
       allowNull: false,
     },
-    fechaMensaje: {
-      type: DataTypes.DATE,
+    dueDate: {
+      type: DataTypes.DATEONLY,
+      allowNull: false,
     },
-    fechaLeido: {
-      type: DataTypes.DATE,
+    paymentDay: {
+      type: DataTypes.DATEONLY,
     },
-    mensaje: {
-      type: DataTypes.TEXT
+    methodOfPayment: {
+      type: DataTypes.STRING
     }
   },
     {
       indexes: [
         {
           unique: false,
-          fields: ['idOportunidad']
-        },
-        {
-          unique: false,
-          fields: ['idPersona']
+          fields: ['idPeople']
         },
       ]
     });
