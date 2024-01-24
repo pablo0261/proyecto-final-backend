@@ -6,22 +6,7 @@ const postCategories = require('../controllers/categories/postCategories.control
 
 const categoriesRouter = Router();
 
-categoriesRouter.get('/', (req, res) => {
-  try {
-    const response = getCategories();
-    res.status(200).json({ message: response });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
-categoriesRouter.post('/', (req, res) => {
-  try {
-    const response = postCategories();
-    res.status(201).json({ message: response });
-  } catch (error) {
-    res.status(409).json({ error: error.message });
-  }
-});
+categoriesRouter.get('/categories', getCategories);
+categoriesRouter.post('/categories', postCategories);
 
 module.exports = categoriesRouter;

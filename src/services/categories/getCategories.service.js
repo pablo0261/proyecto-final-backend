@@ -1,14 +1,8 @@
-const {Categorias}=require('../../db')
+const { Categories } = require('../../db');
 
-const getCategorias = async () => {
-    try {
-        const categorias = await Categorias.findAll()
-        return categorias
+const getCategoriesServise = async () => {
+  const categoriesData = await Categories.findAll();
+  return categoriesData;
+};
 
-    } catch (error) {
-        return ({ error: error.message })
-    }
-
-}
-
-module.exports = { getCategorias }
+module.exports = getCategoriesServise;
