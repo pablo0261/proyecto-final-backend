@@ -27,12 +27,11 @@ const postPeopleService = async (idPeople, fullName, address, idLocation, geopos
             weekCalendar
         }
 
-        let [people, created] = await People.findOrCreate({
+        let [result, created] = await People.findOrCreate({
             where: { email: newData.email },
             defaults: newData
         })
         //lo creo
-        console.log(people)
         if (created) {
             //guardo login
             const logins = await People_logins.create(
@@ -53,7 +52,11 @@ const postPeopleService = async (idPeople, fullName, address, idLocation, geopos
                     prize
                 })
         }
-
+        const people={
+            status:created? "Created":"Updated",
+            result
+        }
+        
         return { people, created }
     } catch (error) {
         console.log(error)

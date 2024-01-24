@@ -28,8 +28,8 @@ const postPeopleController = async (req, res) => {
             idGenre,state,noShow,aboutMe,typeOfPerson,email,password,
             externalLogin,weekCalendar,prize,options)
         
-            if (created) return res.status(200).json(people)
-            return res.status(201).json(people)
+            if (created) return res.status(201).json(people)
+            return res.status(200).json(people)
 
     } catch (error) {
         res.status(500).json({ error: error.message })

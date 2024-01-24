@@ -2,10 +2,8 @@ const { getPeopleFilterService } = require("../../services/people/getPeopleFilte
 
 
 const getPeopleFilterController = async (req, res) => {
-    const { type } = req.query;
-    
     try {
-        const people = await getPeopleFilterService(type);
+        const people = await getPeopleFilterService(req.query);
 
         if (!people) {
             return res.status(404).send("No fue encontrado personas de este tipo.");
