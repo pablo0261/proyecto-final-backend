@@ -16,7 +16,7 @@ const postPeopleController = async (req, res) => {
             externalLogin,weekCalendar,prize,
             options} =req.body
     if (!idPeople) idPeople = uuidv4() //por si lo cargo desde afuera de la app
-    
+
     if (!fullName ||
         !email ||
         !password ||

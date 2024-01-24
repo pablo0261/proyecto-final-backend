@@ -31,7 +31,7 @@ module.exports = (sequelize) => {
     },
     idGenre: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
     },
     state: {
       type: DataTypes.ENUM,
