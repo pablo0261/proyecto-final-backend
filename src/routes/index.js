@@ -7,4 +7,7 @@ const router = Router();
 const categoriesRouter = require('./categoriesRouter.js');
 const peopleRouter=require('./people.router.js')
 
+router.use(categoriesRouter)
+router.use(peopleRouter)
+
 module.exports = router;

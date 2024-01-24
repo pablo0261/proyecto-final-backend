@@ -1,11 +1,12 @@
-const { People, Logins, Payments } = require('../../db');
+const { People, People_logins, Payments } = require('../../db');
+const { v4: uuidv4 } = require('uuid');
 
 const postPeopleService = async (idPeople, fullName, address, idLocation, geoposition, birthDate,
     idGenre, state, noShow, aboutMe, typeOfPerson, email, password,
     externalLogin, weekCalendar, prize, options) => {
 
     const currentDate = new Date()
-    
+
     try {
         const newData = {
             idPeople,
@@ -15,7 +16,7 @@ const postPeopleService = async (idPeople, fullName, address, idLocation, geopos
             geoposition,
             birthDate,
             idGenre,
-            state: !state? 'Active':state,
+            state: !state ? 'Active' : state,
             noShow,
             aboutMe,
             dateOfAdmission: currentDate,
@@ -25,37 +26,37 @@ const postPeopleService = async (idPeople, fullName, address, idLocation, geopos
             externalLogin,
             weekCalendar
         }
-        console.log(newData)
+
         let [people, created] = await People.findOrCreate({
-            where: { email: email },
+            where: { email: newData.email },
             defaults: newData
         })
         //lo creo
+        console.log(people)
         if (created) {
             //guardo login
-            const logins = await Logins.Create(
+            const logins = await People_logins.create(
                 {
-                    defaults: {
-                        idPeople,
-                        loginDate: currentDate
-                    }
+                    id:uuidv4(),
+                    idPeople,
+                    loginDate: currentDate
                 })
 
             //guardo payment
-            const payments = await Payments.Create(
+            const payments = await Payments.create(
                 {
-                    defaults: {
-                        idPeople,
-                        emisionDate: currentDate,
-                        dueDate:currentDate,
-                        paymentDate:currentDate,
-                        prize
-                    }
+                    idPayment:uuidv4(),
+                    idPeople,
+                    emisionDate: currentDate,
+                    dueDate: currentDate,
+                    paymentDate: currentDate,
+                    prize
                 })
         }
-        
-        return { people, created}
+
+        return { people, created }
     } catch (error) {
+        console.log(error)
         return ({ error: error.message })
     }
 }
