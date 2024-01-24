@@ -1,4 +1,4 @@
-const { getPeopleService } = require("../../services/people/getPeople.service.js");
+const { getPeopleByIdService } = require("../../services/people/getPeopleById.service.js");
 
 const getPeopleByIdController = async (req, res) => {
     const { id } = req.params

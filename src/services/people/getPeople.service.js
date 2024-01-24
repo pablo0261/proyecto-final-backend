@@ -5,7 +5,7 @@ const getPeopleService = async () => {
         const result = await People.findAll();
 
         const count = result.length;
-        const salida{
+        const salida={
             count:count,
             data:result}
             
