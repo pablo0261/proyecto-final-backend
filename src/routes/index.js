@@ -4,17 +4,18 @@ const router = Router();
 // Ejemplo: const authRouter = require('./auth.js');
 
 const { getPeopleController } = require("../controllers/people/getPeople.controller.js");
-const { getPeopleByTypeController } = require('../controllers/people/getPeopleFilter.controller.js');
 const { getPeopleByIdController } = require('../controllers/people/getPeopleById.controller.js');
 const { getPeopleFilterService } = require('../services/people/getPeopleFilter.service.js');
+const { postPeopleController } = require('../controllers/people/postPeople.controller.js');
 
 
 // router.get("/people/:type", (req, res) => getPeopleController(req, res));
 
+//People
 router.get('/people/filter', getPeopleFilterService)
 router.get('/people/:id', getPeopleByIdController)
 router.get('/people', getPeopleController)
-
+router.post('/people', postPeopleController)
 
 
 module.exports = router;
