@@ -1,16 +1,15 @@
 const { People } = require("../../db.js");
 
-const getPeopleService = async (type) => {
+const getPeopleService = async () => {
     try {
-        const result = await People.findAll({
-            where: {
-                typeOfPerson: type
-            }
-        });
+        const result = await People.findAll();
 
         const count = result.length;
-
-        return { count, result };
+        const salida{
+            count:count,
+            data:result}
+            
+        return { salida };
     } catch (error) {
         console.log("ERROR", error);
         throw error;
