@@ -1,10 +1,12 @@
 const express = require('express');
+const swaggerUi = require("swagger-ui-express");
+const { swaggerSpec } = require("./swagger.js");
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const routes = require('./routes/index.js');
 const path = require('path');
-const {ACCESS_CONTROL_ALLOW_ORIGIN} = process.env;
+const { ACCESS_CONTROL_ALLOW_ORIGIN } = process.env;
 
 require('./db.js');
 
@@ -28,6 +30,10 @@ server.use((req, res, next) => {
 // server.use('/images', express.static(pathImages));
 
 server.use('/', routes);
+
+// Implementación de Swagger
+server.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
 
 // Error catching endware.
 server.use((err, req, res, next) => { // eslint-disable-line no-unused-vars
