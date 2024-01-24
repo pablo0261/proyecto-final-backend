@@ -9,7 +9,7 @@ module.exports = (sequelize) => {
       allowNull: false,
       primaryKey: true
     },
-    name: {
+    fullName: {
       allowNull: false,
       type: DataTypes.STRING,
     },
@@ -19,14 +19,14 @@ module.exports = (sequelize) => {
     },
     idLocation: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
     },
     geoposition: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     dateOfBirth: {
-      type: DataTypes.DATE,
+      type: DataTypes.DATEONLY,
       allowNull: false,
     },
     idGenre: {
@@ -72,7 +72,7 @@ module.exports = (sequelize) => {
       indexes: [
         {
           unique: false,
-          fields: ['name']
+          fields: ['fullName']
         },
         {
           unique: false,

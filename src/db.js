@@ -6,7 +6,6 @@ const {
 } = process.env;
 const sequelize = new Sequelize(`postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/${DB_NAME}`,
   {
-    force: true,
     logging: false,
     native: false,
     dialect: 'postgres',
@@ -58,9 +57,9 @@ Categories_options.belongsToMany(People,
     foreignKey: 'idOption'
   });
 
-People.hasOne(Categories_options, {
-  foreignKey: 'idGenre'
-})
+// People.hasOne(Categories_options, {
+//   foreignKey: 'idGenre'
+// })
 
 Categories_options.belongsTo(People)
 

@@ -3,7 +3,7 @@ const { getPeopleByIdService } = require("../../services/people/getPeopleById.se
 const getPeopleByIdController = async (req, res) => {
     const { id } = req.params
     try {
-        const people = await getPeopleByIdService();
+        const people = await getPeopleByIdService(id);
 
         if (!people) {
             return res.status(404).send("No fue encontrado personas de este tipo.");
