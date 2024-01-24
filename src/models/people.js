@@ -51,7 +51,7 @@ module.exports = (sequelize) => {
     typeOfPerson: {
       type: DataTypes.ENUM,
       allowNull: false,
-      values: ['administrator','customer',`'provider']
+      values: ['administrator','customer','provider']
     },
     email: {
       type: DataTypes.STRING,
