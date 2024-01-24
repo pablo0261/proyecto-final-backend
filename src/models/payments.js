@@ -26,6 +26,9 @@ module.exports = (sequelize) => {
     },
     methodOfPayment: {
       type: DataTypes.STRING
+    },
+    prize:{
+      type:DataTypes.DECIMAL(12,2)
     }
   },
     {

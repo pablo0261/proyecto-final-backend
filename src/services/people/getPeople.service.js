@@ -5,11 +5,11 @@ const getPeopleService = async () => {
         const result = await People.findAll();
 
         const count = result.length;
-        const salida={
+        const people={
             count:count,
             data:result}
             
-        return { salida };
+        return { people };
     } catch (error) {
         console.log("ERROR", error);
         throw error;

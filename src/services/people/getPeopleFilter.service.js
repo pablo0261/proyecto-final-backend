@@ -1,11 +1,11 @@
 const { People } = require("../../db.js");
 
-const getPeopleByIdService = async (id) => {
-    console.log(id)
+const getPeopleFilterService = async (typeOfPerson) => {
+
     try {
         const result = await People.findAll({
             where: {
-                idPeople: id
+                typeOfPerson: 'customer'
             }
         });
 
@@ -21,4 +21,4 @@ const getPeopleByIdService = async (id) => {
     }
 }
 
-module.exports = { getPeopleByIdService }
+module.exports = { getPeopleFilterService }
