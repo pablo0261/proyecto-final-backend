@@ -1,9 +1,10 @@
 const { getPeopleService } = require("../../services/people/getPeople.service.js");
 
-const getPeopleController = async (req, res) => {
+const getPeopleByTypeController = async (req, res) => {
+    const { type } = req.query;
     
     try {
-        const people = await getPeopleService();
+        const people = await getPeopleByTypeService(type);
 
         if (!people) {
             return res.status(404).send("No fue encontrado personas de este tipo.");
@@ -19,4 +20,4 @@ const getPeopleController = async (req, res) => {
 
 };
 
-module.exports = { getPeopleController };
+module.exports = { getPeopleByTypeController };
