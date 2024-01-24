@@ -2,10 +2,10 @@ const { getPeopleFilterService } = require("../../services/people/getPeopleFilte
 
 
 const getPeopleFilterController = async (req, res) => {
-    const { typeOfPerson } = req.query;
-    console.log('**********',req.query)
+    const { type } = req.query;
+    
     try {
-        const people = await getPeopleFilterService(typeOfPerson);
+        const people = await getPeopleFilterService(type);
 
         if (!people) {
             return res.status(404).send("No fue encontrado personas de este tipo.");
@@ -16,10 +16,8 @@ const getPeopleFilterController = async (req, res) => {
     } catch (error) {
         console.log(error);
         return res.status(500).send("Error interno del servidor.");
-        
-
     }
-
 };
+
 
 module.exports = { getPeopleFilterController };
