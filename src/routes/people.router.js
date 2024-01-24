@@ -9,9 +9,60 @@ const { postPeopleController } = require('../controllers/people/postPeople.contr
 const peopleRouter = Router();
 
 peopleRouter.get('/people/type', getPeopleFilterController);
+/**
+ * @swagger
+ * /people/type:
+ *   get:
+ *     summary: Filtrar personas por tipo.
+ *     tags:
+ *       - People
+ *     parameters:
+ *       - in: query
+ *         name: type
+ *         schema:
+ *           type: string
+ *         description: >
+ *           El tipo de persona por el que se desea filtrar: customer, administrator, o provider.
+ *     responses:
+ *       200:
+ *         description: >
+ *           Obtiene un objeto con la propiedad "people", que tiene como valor un objeto con dos propiedades:
+ *           count: Cantidad de personas del tipo pasado por parámetro.
+ *           data: Un array de objetos con todas las personas que coinciden con el tipo especificado.
+ *       404:
+ *         description: No se encontraron personas de este tipo.
+ *       500:
+ *         description: Error interno del servidor.
+ */
+
 peopleRouter.get('/people/:id', getPeopleByIdController);
+/**
+ * @swagger
+ * /people/{id}:
+ *   get:
+ *     summary: Obtener información de una persona por su ID.
+ *     tags:
+ *       - People
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: El ID de la persona que se desea obtener.
+ *     responses:
+ *       200:
+ *         description: > 
+ *           Obtiene la información de la persona correspondiente al ID proporcionado.
+ *           Retorna un objeto con un propiedad: people, el cual tiene como valor un objeto con todas las
+ *           propiedades de la persona.
+ *       404:
+ *         description: No fue encontrado nadie con ese ID.
+ *       500:
+ *         description: Error interno del servidor.
+ */
+
 peopleRouter.get('/people', getPeopleController);
-peopleRouter.post('/people', postPeopleController);
 /**
  * @swagger
  * /people:
@@ -22,7 +73,7 @@ peopleRouter.post('/people', postPeopleController);
  *     responses:
  *       200:
  *         description: > 
- *           Obtiene un objeto con dos propiedades: count y data.
+ *           Obtiene un objeto llamado people con dos propiedades: count y data.
  *           count: contiene la cantidad de personas registradas.
  *           data: contiene un array de objetos, cada objeto contiene una persona y sus propiedades.  
  *       404:
@@ -30,5 +81,8 @@ peopleRouter.post('/people', postPeopleController);
  *       500:
  *         description: Error interno del servidor.
  */
+
+peopleRouter.post('/people', postPeopleController);
+
 
 module.exports = peopleRouter;

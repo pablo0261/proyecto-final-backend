@@ -6,7 +6,7 @@ const getPeopleByIdController = async (req, res) => {
         const people = await getPeopleByIdService(id);
 
         if (!people) {
-            return res.status(404).send("No fue encontrado personas de este tipo.");
+            return res.status(404).send("No fue encontrado nadie con ese ID.");
         }
 
         return res.status(200).json(people);

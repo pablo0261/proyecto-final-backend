@@ -1,7 +1,5 @@
 ```bash
 .Backend
-├── database.sql
-├── ESTRUCTURA.MD
 ├── index.js
 ├── LICENSE
 ├── package.json
@@ -17,8 +15,10 @@
     │   │   ├── getLogins.controller.js
     │   │   └── putLogin.controller.js
     │   └── people
+    │       ├── getPeopleById.controller.js
     │       ├── getPeople.controller.js
-    │       └── putPeople.controller.js
+    │       ├── getPeopleFilter.controller.js
+    │       └── postPeople.controller.js
     ├── db.js
     ├── models
     │   ├── categories.js
@@ -30,12 +30,18 @@
     │   ├── people_logins.js
     │   └── people_options.js
     ├── routes
-    │   ├── categories_options.route.js
-    │   ├── categories.route.js
+    │   ├── categoriesRouter.js
     │   ├── index.js
-    │   └── people.route.js
-    └── services
-        └── categories
-            ├── getCategories.service.js
-            └── postCategorias.service.js             
+    │   └── people.router.js
+    ├── services
+    │   ├── categories
+    │   │   ├── getCategories.service.js
+    │   │   └── postCategorias.service.js
+    │   └── people
+    │       ├── getPeopleById.service.js
+    │       ├── getPeopleFilter.service.js
+    │       ├── getPeople.service.js
+    │       └── postPeople.service.js
+    └── swagger.js
+
 ```
