@@ -1,3 +1,5 @@
-async await 
+const getCategories = () => {
+  return 'categorias encontradas';
+};
 
-llama al service
+module.exports = getCategories;

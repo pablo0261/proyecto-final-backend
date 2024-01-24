@@ -7,13 +7,14 @@ const { getPeopleController } = require("../controllers/people/getPeople.control
 const { getPeopleByTypeController } = require('../controllers/people/getPeopleByType.controller.js');
 const { getPeopleByIdController } = require('../controllers/people/getPeopleById.controller.js');
 
-
+const categoriesRouter = require('./categoriesRouter.js');
 // router.get("/people/:type", (req, res) => getPeopleController(req, res));
 
-router.get('/people/type', getPeopleByTypeController)
-router.get('/people/:id', getPeopleByIdController)
-router.get('/people', getPeopleController)
+router.get('/people/type', getPeopleByTypeController);
+router.get('/people/:id', getPeopleByIdController);
+router.get('/people', getPeopleController);
 
+router.use('/categories', categoriesRouter);
 
 
 module.exports = router;
