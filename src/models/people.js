@@ -20,10 +20,12 @@ module.exports = (sequelize) => {
     idLocation: {
       type: DataTypes.INTEGER,
       allowNull: true,
+      defaultValue:0
     },
     geoposition: {
       type: DataTypes.STRING,
       allowNull: true,
+      defaultValue:''
     },
     birthDate: {
       type: DataTypes.DATEONLY,
@@ -32,17 +34,20 @@ module.exports = (sequelize) => {
     idGenre: {
       type: DataTypes.INTEGER,
       allowNull: true,
+      defaultValue:0
     },
     state: {
       type: DataTypes.ENUM,
       values: ['Active', 'Inactive', 'Deleted'],
       allowNull: false,
+      defaultValue:'Active'
     },
     noShow:{
       type:DataTypes.BOOLEAN
     },
     aboutMe: {
       type: DataTypes.TEXT,
+      defaultValue:'Active'
     },
     dateOfAdmission: {
       type: DataTypes.DATEONLY,
@@ -65,7 +70,7 @@ module.exports = (sequelize) => {
       type: DataTypes.STRING,
     },
     weekCalendar:{
-      type: DataTypes.ARRAY(DataTypes.BOOLEAN)
+      type: DataTypes.ARRAY(DataTypes.BOOLEAN),
     }
   },
     {
