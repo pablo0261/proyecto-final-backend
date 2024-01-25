@@ -16,7 +16,7 @@ const sequelize = new Sequelize(`postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}
     },
     dialectOptions: JSON.parse(DIALECT_OPTIONS),
     query: {
-      raw: true, // Establece raw: true globalmente
+      raw: false, // Establece raw: true globalmente
     },
   }
 );
@@ -44,7 +44,6 @@ sequelize.models = Object.fromEntries(capsEntries);
 const { Categories_options, Categories, People_logins, People_options, People, Opportunities, Chats, Payments } = sequelize.models;
 
 // Relaciones
-
 People.belongsToMany(Categories_options,
   {
     through: People_options,
@@ -57,13 +56,30 @@ Categories_options.belongsToMany(People,
     foreignKey: 'idOption'
   });
 
+  People.hasMany(People_options, {
+    foreignKey: 'idPeople',
+  });
+  
+People_options.belongsTo(People, {
+  foreignKey: 'idPeople',
+});
+
+People_options.belongsTo(Categories_options, {
+  foreignKey: 'idOption',
+});
+
+
+
 // People.hasOne(Categories_options, {
 //   foreignKey: 'idGenre'
 // })
 
-Categories_options.belongsTo(People)
 
 Categories.hasMany(Categories_options, {
+  foreignKey: 'idCategorie'
+})
+
+Categories_options.belongsTo(Categories, {
   foreignKey: 'idCategorie'
 })
 

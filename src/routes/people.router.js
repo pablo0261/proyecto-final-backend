@@ -3,37 +3,9 @@ const { Router } = require('express');
 // controllers
 const { getPeopleController } = require("../controllers/people/getPeople.controller.js");
 const { getPeopleByIdController } = require('../controllers/people/getPeopleById.controller.js');
-const { getPeopleFilterController } = require('../controllers/people/getPeopleFilter.controller.js');
 const { postPeopleController } = require('../controllers/people/postPeople.controller.js');
 
 const peopleRouter = Router();
-
-peopleRouter.get('/people/type', getPeopleFilterController);
-/**
- * @swagger
- * /people/type:
- *   get:
- *     summary: Filtrar personas por tipo.
- *     tags:
- *       - People
- *     parameters:
- *       - in: query
- *         name: type
- *         schema:
- *           type: string
- *         description: >
- *           El tipo de persona por el que se desea filtrar: customer, administrator, o provider.
- *     responses:
- *       200:
- *         description: >
- *           Obtiene un objeto con la propiedad "people", que tiene como valor un objeto con dos propiedades:
- *           count: Cantidad de personas del tipo pasado por parámetro.
- *           data: Un array de objetos con todas las personas que coinciden con el tipo especificado.
- *       404:
- *         description: No se encontraron personas de este tipo.
- *       500:
- *         description: Error interno del servidor.
- */
 
 peopleRouter.get('/people/:id', getPeopleByIdController);
 /**
