@@ -1,5 +1,6 @@
 ```bash
 .Backend
+├── ESTRUCTURA.MD
 ├── index.js
 ├── LICENSE
 ├── package.json
@@ -18,6 +19,7 @@
     │       ├── getPeopleById.controller.js
     │       ├── getPeople.controller.js
     │       ├── getPeopleFilter.controller.js
+    │       ├── getPeopleOptions.controller.js
     │       └── postPeople.controller.js
     ├── db.js
     ├── models
@@ -40,6 +42,7 @@
     │   └── people
     │       ├── getPeopleById.service.js
     │       ├── getPeopleFilter.service.js
+    │       ├── getPeopleOptions.service.js
     │       ├── getPeople.service.js
     │       └── postPeople.service.js
     └── swagger.js
