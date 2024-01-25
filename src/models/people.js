@@ -20,12 +20,12 @@ module.exports = (sequelize) => {
     idLocation: {
       type: DataTypes.INTEGER,
       allowNull: true,
-      defaultValue:0
+      defaultValue: 0
     },
     geoposition: {
       type: DataTypes.STRING,
       allowNull: true,
-      defaultValue:''
+      defaultValue: ''
     },
     birthDate: {
       type: DataTypes.DATEONLY,
@@ -34,20 +34,20 @@ module.exports = (sequelize) => {
     idGenre: {
       type: DataTypes.INTEGER,
       allowNull: true,
-      defaultValue:0
+      defaultValue: 0
     },
     state: {
       type: DataTypes.ENUM,
       values: ['Active', 'Inactive', 'Deleted'],
       allowNull: false,
-      defaultValue:'Active'
+      defaultValue: 'Active'
     },
-    noShow:{
-      type:DataTypes.BOOLEAN
+    noShow: {
+      type: DataTypes.BOOLEAN
     },
     aboutMe: {
       type: DataTypes.TEXT,
-      defaultValue:'Active'
+      defaultValue: 'Active'
     },
     dateOfAdmission: {
       type: DataTypes.DATEONLY,
@@ -56,7 +56,7 @@ module.exports = (sequelize) => {
     typeOfPerson: {
       type: DataTypes.ENUM,
       allowNull: false,
-      values: ['administrator','customer','provider']
+      values: ['administrator', 'customer', 'provider']
     },
     email: {
       type: DataTypes.STRING,
@@ -69,32 +69,49 @@ module.exports = (sequelize) => {
     externalLogin: {
       type: DataTypes.STRING,
     },
-    weekCalendar:{
+    weekCalendar: {
       type: DataTypes.ARRAY(DataTypes.BOOLEAN),
-    }
+    },
+    age: {
+      type: DataTypes.VIRTUAL,
+      get() {
+        const birthDate = this.getDataValue('birthDate');
+        if (!birthDate) return 0;
+
+        const today = new Date();
+        const birth = new Date(birthDate);
+        let age = today.getFullYear() - birth.getFullYear();
+
+        if (today.getMonth() < birth.getMonth() || (today.getMonth() === birth.getMonth() && today.getDate() < birth.getDate())) {
+          age--;
+        }
+
+        return age;
+      },
+    },
   },
+{
+  indexes: [
     {
-      indexes: [
-        {
-          unique: false,
-          fields: ['fullName']
-        },
-        {
-          unique: false,
-          fields: ['externalLogin']
-        },
-        {
-          unique: false,
-          fields: ['idLocation']
-        },
-        {
-          unique: false,
-          fields: ['idGenre']
-        },
-        {
-          unique: true,
-          fields: ['email']
-        },
-      ]
-    });
+      unique: false,
+      fields: ['fullName']
+    },
+    {
+      unique: false,
+      fields: ['externalLogin']
+    },
+    {
+      unique: false,
+      fields: ['idLocation']
+    },
+    {
+      unique: false,
+      fields: ['idGenre']
+    },
+    {
+      unique: true,
+      fields: ['email']
+    },
+  ]
+});
 };
