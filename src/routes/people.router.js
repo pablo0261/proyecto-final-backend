@@ -5,6 +5,7 @@ const { getPeopleController } = require("../controllers/people/getPeople.control
 const { getPeopleByIdController } = require('../controllers/people/getPeopleById.controller.js');
 const { getPeopleFilterController } = require('../controllers/people/getPeopleFilter.controller.js');
 const { postPeopleController } = require('../controllers/people/postPeople.controller.js');
+const { getPeopleOptionsController } = require("../controllers/people/getPeopleOptions.controller.js")
 
 const peopleRouter = Router();
 
@@ -83,6 +84,11 @@ peopleRouter.get('/people', getPeopleController);
  */
 
 peopleRouter.post('/people', postPeopleController);
+
+
+
+// prueba del controller getPeopleOptions - será removido cuando getPeopleOptionsController se invocado en otro lugar
+peopleRouter.get('/peopleoptions/:idPeople', getPeopleOptionsController)
 
 
 module.exports = peopleRouter;
