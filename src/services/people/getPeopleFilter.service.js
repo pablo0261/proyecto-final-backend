@@ -1,12 +1,10 @@
 const { People } = require("../../db.js");
 
-const getPeopleFilterService = async (type) => {
-
+const getPeopleFilterService = async (query) => {
+    
     try {
         const result = await People.findAll({
-            where: {
-                typeOfPerson: `${type}`
-            }
+            where: query
         });
 
         const people={
