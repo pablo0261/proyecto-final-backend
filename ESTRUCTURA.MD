@@ -12,13 +12,14 @@
     │   ├── categories
     │   │   ├── getCategories.controller.js
     │   │   └── postCategories.controller.js
+    │   ├── categories_options
+    │   │   └── getCategoriesOptions.controller.js
     │   ├── logins
     │   │   ├── getLogins.controller.js
     │   │   └── putLogin.controller.js
     │   └── people
     │       ├── getPeopleById.controller.js
     │       ├── getPeople.controller.js
-    │       ├── getPeopleFilter.controller.js
     │       ├── getPeopleOptions.controller.js
     │       └── postPeople.controller.js
     ├── db.js
@@ -37,14 +38,16 @@
     │   └── people.router.js
     ├── services
     │   ├── categories
+    │   │   ├── categories_options
+    │   │   │   └── getCategoriesOption.service.js
     │   │   ├── getCategories.service.js
     │   │   └── postCategorias.service.js
     │   └── people
     │       ├── getPeopleById.service.js
-    │       ├── getPeopleFilter.service.js
     │       ├── getPeopleOptions.service.js
     │       ├── getPeople.service.js
     │       └── postPeople.service.js
-    └── swagger.js
-
+    ├── swagger.js
+    └── utils
+        └── formatPeople.js
 ```
