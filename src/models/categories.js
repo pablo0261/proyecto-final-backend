@@ -18,18 +18,35 @@ module.exports = (sequelize) => {
     },
     isEducation: {
       type: DataTypes.BOOLEAN,
+      default:false
     },
     isSkill: {
       type: DataTypes.BOOLEAN,
+      default:false
     },
     isService: {
       type: DataTypes.BOOLEAN,
+      default:false
+    },
+    isInterest: {
+      type: DataTypes.BOOLEAN,
+      default:false
+    },
+    isExtra: {
+      type: DataTypes.BOOLEAN,
+      default:false
+    },
+    isInterest: {
+      type: DataTypes.BOOLEAN,
+      default:false
     },
     includeCustomer: {
       type: DataTypes.BOOLEAN,
+      default:true
     },
     includeProvider: {
       type: DataTypes.BOOLEAN,
+      default:true
     },
   },
     {

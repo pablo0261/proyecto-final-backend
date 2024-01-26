@@ -15,6 +15,7 @@ const postPeopleController = async (req, res) => {
             idGenre,state,noShow,aboutMe,typeOfPerson,email,password,
             externalLogin,weekCalendar,prize,
             options} =req.body
+            
     if (!idPeople) idPeople = uuidv4() //por si lo cargo desde afuera de la app
 
     if (!fullName ||
@@ -32,6 +33,7 @@ const postPeopleController = async (req, res) => {
             return res.status(200).json(people)
 
     } catch (error) {
+        console.log(error)
         res.status(500).json({ error: error.message })
     }
 };

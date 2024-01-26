@@ -14,7 +14,7 @@ module.exports = (sequelize) => {
       type: DataTypes.STRING,
     },
     address: {
-      allowNull: false,
+      allowNull: true,
       type: DataTypes.STRING,
     },
     idLocation: {
@@ -41,9 +41,6 @@ module.exports = (sequelize) => {
       values: ['Active', 'Inactive', 'Deleted'],
       allowNull: false,
       defaultValue: 'Active'
-    },
-    noShow: {
-      type: DataTypes.BOOLEAN
     },
     aboutMe: {
       type: DataTypes.TEXT,
@@ -72,6 +69,10 @@ module.exports = (sequelize) => {
     weekCalendar: {
       type: DataTypes.ARRAY(DataTypes.BOOLEAN),
     },
+    image: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
     age: {
       type: DataTypes.VIRTUAL,
       get() {
@@ -90,28 +91,28 @@ module.exports = (sequelize) => {
       },
     },
   },
-{
-  indexes: [
     {
-      unique: false,
-      fields: ['fullName']
-    },
-    {
-      unique: false,
-      fields: ['externalLogin']
-    },
-    {
-      unique: false,
-      fields: ['idLocation']
-    },
-    {
-      unique: false,
-      fields: ['idGenre']
-    },
-    {
-      unique: true,
-      fields: ['email']
-    },
-  ]
-});
+      indexes: [
+        {
+          unique: false,
+          fields: ['fullName']
+        },
+        {
+          unique: false,
+          fields: ['externalLogin']
+        },
+        {
+          unique: false,
+          fields: ['idLocation']
+        },
+        {
+          unique: false,
+          fields: ['idGenre']
+        },
+        {
+          unique: true,
+          fields: ['email']
+        },
+      ]
+    });
 };
