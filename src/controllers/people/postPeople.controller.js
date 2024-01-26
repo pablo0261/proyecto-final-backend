@@ -8,6 +8,7 @@
 //flag con verification si tiene datos completos o no
 const { v4: uuidv4 } = require('uuid');
 const { postPeopleService } = require('../../services/people/postPeople.service');
+const { validator } = require("../../utils/validator.util");
 
 const postPeopleController = async (req, res) => {
     let { idPeople } = req.body
@@ -17,6 +18,13 @@ const postPeopleController = async (req, res) => {
         options } = req.body
 
     if (!idPeople) idPeople = uuidv4() //por si lo cargo desde afuera de la app
+
+    const errors = validator(req.body);
+
+    if (Object.keys(errors).length > 0) {
+        return res.status(400).json({ errors: errors });
+    }
+
 
     if (!fullName ||
         !email ||
@@ -34,20 +42,23 @@ const postPeopleController = async (req, res) => {
 
     } catch (error) {
         let errorMessage = 'Unknown error';
-    
+
         if (error) {
             if (error.original && error.original.message) {
                 errorMessage = error.original.message;
-            } else if (error.errors && Array.isArray(error.errors) && error.errors.length > 0 && error.errors[0].message) {
+            } else if (error.errors &&
+                Array.isArray(error.errors) &&
+                error.errors.length > 0 &&
+                error.errors[0].message) {
                 errorMessage = error.errors[0].message;
             } else if (error.message) {
                 errorMessage = error.message;
             }
         }
-    
+
         res.status(500).json({ error: errorMessage });
     }
-    
+
 };
 
 module.exports = { postPeopleController };

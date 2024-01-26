@@ -49,5 +49,6 @@
     │       └── postPeople.service.js
     ├── swagger.js
     └── utils
-        └── formatPeople.js
+        ├── formatPeople.js
+        └── validator.util.js
 ```
