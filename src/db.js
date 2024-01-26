@@ -6,7 +6,7 @@ const {
 } = process.env;
 const sequelize = new Sequelize(`postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/${DB_NAME}`,
   {
-    logging: console.log,
+    logging: false,
     native: false,
     dialect: 'postgres',
     ssl: SSL,

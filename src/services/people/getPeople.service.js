@@ -4,39 +4,41 @@ const { People, People_options, Categories, Categories_options, People_logins } 
 const formatPeople = require("../../utils/formatPeople.js");
 
 const getPeopleService = async (filtro) => {
-    let result
+    let filterPeople = {}
     try {
-        result = await People.findAll(
+        filtro ? filterPeople = filtro : filterPeople = { state: 'Active' }
 
+        result = await People.findAll(
             {
+                where: filterPeople,
                 include: [
                     {
                         model: People_options,
                         foreignKey: 'idPeople',
-                        order:[['idOption','DESC']],
+                        order: [['idOption', 'DESC']],
                         include:
                             [
                                 {
                                     model: Categories_options,
-                                    order:[['idCategorie','DESC']],
+                                    order: [['idCategorie', 'DESC']],
                                     include: [
                                         {
                                             model: Categories,
-                                            order:[['idCategorie','DESC']]
+                                            order: [['idCategorie', 'DESC']]
                                         }
                                     ],
                                 },
                             ]
                     }
                 ]
-            }
+            },
+
         );
-        //add age
 
         const count = result.length;
         const people = {
             count: count,
-            //data:result
+            filter: filterPeople,
             data: formatPeople(result)
         }
 
@@ -48,3 +50,4 @@ const getPeopleService = async (filtro) => {
 }
 
 module.exports = { getPeopleService }
+
