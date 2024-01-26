@@ -19,7 +19,6 @@
 //     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 require('dotenv').config();
 const { PORT, SYNC_FORCE } = process.env;
-console.log("^^^^^", SYNC_FORCE);
 
 const server = require('./src/app.js');
 const { conn } = require('./src/db.js');
