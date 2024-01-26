@@ -19,11 +19,12 @@
 //     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 require('dotenv').config();
 const { PORT, SYNC_FORCE } = process.env;
+console.log("^^^^^", SYNC_FORCE);
 
 const server = require('./src/app.js');
 const { conn } = require('./src/db.js');
 // Syncing all the models at once.
-conn.sync({ force: SYNC_FORCE }).then(() => {
+conn.sync({ alter: SYNC_FORCE }).then(() => {
   server.listen(PORT, () => {
     console.log('Server listening at 3001'); // eslint-disable-line no-console
   });
