@@ -29,6 +29,9 @@ const formatPeople = (dataObject) => {
                     isEducation: option.categories_option.category.isEducation,
                     isSkill: option.categories_option.category.isSkill,
                     isService: option.categories_option.category.isService,
+                    isInterest: option.categories_option.category.isInterest,
+                    isExperience: option.categories_option.category.isExperience,
+                    isExtra: option.categories_option.category.isExtra,
                     includeCustomer: option.categories_option.category.includeCustomer,
                     includeProvider: option.categories_option.category.includeProvider,
                 };

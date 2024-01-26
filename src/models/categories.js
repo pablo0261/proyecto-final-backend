@@ -36,7 +36,7 @@ module.exports = (sequelize) => {
       type: DataTypes.BOOLEAN,
       default:false
     },
-    isInterest: {
+    isExperience: {
       type: DataTypes.BOOLEAN,
       default:false
     },
