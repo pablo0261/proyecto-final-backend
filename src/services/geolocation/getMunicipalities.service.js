@@ -1,12 +1,11 @@
 const axios = require('axios');
 const { formattedGeolocation } = require("../../utils/formattedGeolocation.util");
-require('dotenv').config();
-const { MUNICIPALITIES } = process.env;
+const { municipalities } = require("../../constants");
 
 const getMunicipalitiesService = async (province) => {
 
     try {
-        const result = await axios(`${MUNICIPALITIES}${province}&aplanar`);
+        const result = await axios(`${municipalities}${province}&aplanar`);
         const originalData = result.data;
 
         console.log("TIAGO: ", originalData);

@@ -1,12 +1,11 @@
 const axios = require('axios');
 const { formattedGeolocation } = require("../../utils/formattedGeolocation.util");
-require('dotenv').config();
-const { PROVINCES } = process.env;
+const { provinces } = require("../../constants");
 
 const getProvincesService = async () => {
 
     try {
-        const result = await axios(PROVINCES);
+        const result = await axios(provinces);
         const originalData = result.data;
         const data = formattedGeolocation(originalData)
 
