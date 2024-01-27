@@ -21,7 +21,6 @@ const postPeopleService = async (
 ) => {
     const currentDate = new Date();
 
-    console.log(typeOfPerson)
     try {
         const newData = {
             idPeople,
@@ -53,6 +52,7 @@ const postPeopleService = async (
             result = await People.findOne({ where: { idPeople: newData.idPeople } });
         } else {
             // Si se creó una nueva entrada, guardamos el login y el pago
+
             const logins = await People_logins.create({
                 id: uuidv4(),
                 idPeople,

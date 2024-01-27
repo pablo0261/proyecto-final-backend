@@ -67,12 +67,12 @@ module.exports = (sequelize) => {
     externalLogin: {
       type: DataTypes.STRING,
     },
-    averageRanking: {
+    averageRating: {
       type: DataTypes.DECIMAL(6, 2),
       allowNull: true,
       defaultValue: 0
     },
-    countRanking: {
+    countRating: {
       type: DataTypes.INTEGER,
       allowNull: true,
       defaultValue: 0
@@ -83,6 +83,11 @@ module.exports = (sequelize) => {
     image: {
       type: DataTypes.STRING,
       allowNull: true,
+    },
+    logged: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+      defaultValue:false
     },
     age: {
       type: DataTypes.VIRTUAL,
