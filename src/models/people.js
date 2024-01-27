@@ -67,6 +67,16 @@ module.exports = (sequelize) => {
     externalLogin: {
       type: DataTypes.STRING,
     },
+    averageRanking: {
+      type: DataTypes.DECIMAL(6, 2),
+      allowNull: true,
+      defaultValue: 0
+    },
+    countRanking: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      defaultValue: 0
+    },
     weekCalendar: {
       type: DataTypes.ARRAY(DataTypes.BOOLEAN),
     },

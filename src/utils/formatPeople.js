@@ -7,16 +7,17 @@ const formatPeople = (dataObject) => {
             idLocation: dataObject.idLocation,
             geoposition: dataObject.geoposition,
             birthDate: dataObject.birthDate,
-            age:dataObject.age,
+            age: dataObject.age,
             idGenre: dataObject.idGenre,
             state: dataObject.state,
-            noShow: dataObject.noShow,
             aboutMe: dataObject.aboutMe,
             dateOfAdmission: dataObject.dateOfAdmission,
             typeOfPerson: dataObject.typeOfPerson,
             email: dataObject.email,
             externalLogin: dataObject.externalLogin,
             weekCalendar: dataObject.weekCalendar,
+            averageRanking: dataObject.averageRanking,
+            countRanking: dataObject.countRanking,
             categories: [], // Inicializar array para las categorías
         };
 
@@ -64,11 +65,11 @@ const formatPeople = (dataObject) => {
                 }
                 // Ordenar las categorías por idCategorie
                 peopleData.categories.sort((a, b) => a.idCategorie - b.idCategorie);
-                
+
                 peopleData.categories.forEach((category) => {
                     category.categories_options.sort((a, b) => a.idOption - b.idOption);
-                  });
-              
+                });
+
                 // Anidar dentro de people_options
                 categoryOption.people_options.push(peopleOption);
             });
