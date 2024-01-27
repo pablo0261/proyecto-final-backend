@@ -16,8 +16,9 @@ const formatPeople = (dataObject) => {
             email: dataObject.email,
             externalLogin: dataObject.externalLogin,
             weekCalendar: dataObject.weekCalendar,
-            averageRanking: dataObject.averageRanking,
-            countRanking: dataObject.countRanking,
+            averageRating: dataObject.averageRanking,
+            countRating: dataObject.countRanking,
+            logged: dataObject.logged,
             categories: [], // Inicializar array para las categorías
         };
 
