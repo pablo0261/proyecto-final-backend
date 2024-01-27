@@ -1,6 +1,6 @@
 
 const { Sequelize } = require("sequelize");
-const { People, People_options, Categories, Categories_options, People_logins } = require("../../db.js");
+const { People, People_options, Categories, Categories_options, People_logins, Opportunities } = require("../../db.js");
 const formatPeople = require("../../utils/formatPeople.js");
 
 const getPeopleService = async (filtro) => {
@@ -8,7 +8,7 @@ const getPeopleService = async (filtro) => {
     try {
         filtro ? filterPeople = filtro : filterPeople = { state: 'Active' }
 
-        result = await People.findAll(
+        const result = await People.findAll(
             {
                 where: filterPeople,
                 include: [
@@ -29,7 +29,11 @@ const getPeopleService = async (filtro) => {
                                     ],
                                 },
                             ]
-                    }
+                    },
+                    {
+                        model: Opportunities,
+                        foreignKey: 'idCustomer',
+                    },
                 ]
             },
 
@@ -39,7 +43,7 @@ const getPeopleService = async (filtro) => {
         const people = {
             count: count,
             filter: filterPeople,
-            data: formatPeople(result)
+            data: result
         }
 
         return { people };

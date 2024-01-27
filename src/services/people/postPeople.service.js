@@ -10,7 +10,6 @@ const postPeopleService = async (
     birthDate,
     idGenre,
     state,
-    noShow,
     aboutMe,
     typeOfPerson,
     email,
@@ -22,7 +21,7 @@ const postPeopleService = async (
 ) => {
     const currentDate = new Date();
 
-
+    console.log(typeOfPerson)
     try {
         const newData = {
             idPeople,
@@ -33,7 +32,6 @@ const postPeopleService = async (
             birthDate,
             idGenre,
             state: !state ? 'Active' : state,
-            noShow,
             aboutMe,
             dateOfAdmission: currentDate,
             typeOfPerson,
