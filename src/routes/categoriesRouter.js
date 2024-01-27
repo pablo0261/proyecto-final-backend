@@ -8,24 +8,64 @@ const postCategories = require("../controllers/categories/postCategories.control
 const categoriesRouter = Router();
 
 categoriesRouter.get("/categories", getCategories);
+// /**
+//  * @swagger
+//  * /categories:
+//  *   get:
+//  *     summary: Obtener todas las categorías.
+//  *     tags:
+//  *       - Categories
+//  *     responses:
+//  *       200:
+//  *         description: > 
+//  *           Obtiene un objeto con dos propiedades: count y data.
+//  *           count: contiene la cantidad de categorías registradas.
+//  *           data: contiene un array de objetos, cada objeto contiene una categoría y sus propiedades.  
+//  *       404:
+//  *         description: No hay registro de categorías.
+//  *       500:
+//  *         description: Error interno del servidor.
+//  */
+
 categoriesRouter.get("/categoriesoptions", getCategoriesOptions);
-/**
- * @swagger
- * /categoriesoptions:
- *   get:
- *     summary: Filtrar las opciones de las categorias.
- *     tags:
- *       - Categorias
- *     responses:
- *       200:
- *         description: >
- *           Obtiene un objeto con la propiedad "categorias opcion", que tiene como valor un objeto con una propiedad:
- *           data: Un array de objetos con todas las opciones que coinciden con el tipo de categoria especificado.
- *       404:
- *         description: No hay datos en categories_options.
- *       500:
- *         description: Error interno del servidor.
- */
+// /**
+//  * @swagger
+//  * /categoriesoptions:
+//  *   get:
+//  *     summary: Obtener opciones de categorías.
+//  *     tags:
+//  *       - Categories
+//  *     responses:
+//  *       200:
+//  *         description: > 
+//  *           Obtiene un array de objetos, cada objeto contiene una opción de categoría y sus propiedades.
+//  *       404:
+//  *         description: No hay datos en categories_options.
+//  *       500:
+//  *         description: Error interno del servidor.
+//  */
+
 categoriesRouter.post("/categories", postCategories);
+// /**
+//  * @swagger
+//  * /categories:
+//  *   post:
+//  *     summary: Crear una nueva categoría.
+//  *     tags:
+//  *       - Categories
+//  *     requestBody:
+//  *       required: true
+//  *       content:
+//  *         application/json:
+//  *           schema:
+//  *             $ref: '#/components/schemas/CategoryInput'
+//  *     responses:
+//  *       201:
+//  *         description: La categoría ha sido creada exitosamente.
+//  *       400:
+//  *         description: Petición incorrecta, los datos enviados no son válidos.
+//  *       500:
+//  *         description: Error interno del servidor.
+//  */
 
 module.exports = categoriesRouter;

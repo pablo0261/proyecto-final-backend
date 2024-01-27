@@ -5,7 +5,7 @@ const { municipalities } = require("../../constants");
 const getMunicipalitiesService = async (province) => {
 
     try {
-        const result = await axios(`${municipalities}${province}&aplanar`);
+        const result = await axios(`${municipalities}${province}&aplanar&max=500`);
         const originalData = result.data;
 
         console.log("TIAGO: ", originalData);

@@ -25,9 +25,8 @@ peopleRouter.get('/people/:id', getPeopleByIdController);
  *     responses:
  *       200:
  *         description: > 
- *           Obtiene la información de la persona correspondiente al ID proporcionado.
- *           Retorna un objeto con un propiedad: people, el cual tiene como valor un objeto con todas las
- *           propiedades de la persona.
+ *           Obtiene un objeto con la, el cual tiene una propiedad llamada data que es un array,
+ *           el array contiene todas las informaciones de la persona.
  *       404:
  *         description: No fue encontrado nadie con ese ID.
  *       500:
@@ -55,5 +54,41 @@ peopleRouter.get('/people', getPeopleController);
  */
 
 peopleRouter.post('/people', postPeopleController);
+/**
+ * @swagger
+ * /people:
+ *   post:
+ *     summary: Registrar una nueva persona.
+ *     tags:
+ *       - People
+ *     requestBody:
+ *       description: Datos de la persona a registrar.
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               age:
+ *                 type: integer
+ *               email:
+ *                 type: string
+ *               password: 
+ *                 type: string
+ *               typeOfPerson:
+ *                 type: string
+ *               birthDate:
+ *                 type: date
+ *     responses:
+ *       201:
+ *         description: >
+ *           Persona registrada exitosamente. Obtiene un objeto con todos los datos de la persona creada.
+ *       400:
+ *         description: Datos de la persona no válidos o incompletos.
+ *       500:
+ *         description: Error interno del servidor.
+ */
 
 module.exports = peopleRouter;

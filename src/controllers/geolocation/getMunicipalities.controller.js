@@ -2,7 +2,7 @@ const { getMunicipalitiesService } = require("../../services/geolocation/getMuni
 
 const getMunicipalitiesController = async (req, res) => {
     try {
-        const { province } = req.query;
+        const { province } = req.params;
 
         console.log(province);
 
