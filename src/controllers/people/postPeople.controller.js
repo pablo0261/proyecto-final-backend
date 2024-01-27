@@ -41,6 +41,7 @@ const postPeopleController = async (req, res) => {
         return res.status(200).json(people)
 
     } catch (error) {
+        console.log("Error: ", error)
         let errorMessage = 'Unknown error';
 
         if (error) {
