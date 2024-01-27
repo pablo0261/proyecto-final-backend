@@ -103,6 +103,28 @@ Opportunities.hasMany(Chats, {
   foreignKey: 'idOpportunities'
 })
 
+People.prototype.getRatingStats = async function () {
+  const idPeople = this.getDataValue('idPeople');
+
+  if (!idPeople) return { avgRating: 0, totalRatings: 0 };
+
+  const ratingStats = await Opportunities.findOne({
+    attributes: [
+      [Sequelize.fn('AVG', Sequelize.col('ratingCustomer')), 'avgRating'],
+      [Sequelize.fn('COUNT', Sequelize.col('ratingCustomer')), 'totalRatings']
+    ],
+    where: {
+      idPeople: idCustomer,
+    },
+    raw: true,
+  });
+
+  return {
+    avgRating: ratingStats.avgRating || 0,
+    totalRatings: ratingStats.totalRatings || 0,
+  };
+};
+
 module.exports = {
   ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');
   conn: sequelize,     // para importart la conexión { conn } = require('./db.js');

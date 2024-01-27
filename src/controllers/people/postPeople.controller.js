@@ -16,7 +16,7 @@ const postPeopleController = async (req, res) => {
         idGenre, state, noShow, aboutMe, typeOfPerson, email, password,
         externalLogin, weekCalendar, prize,
         options } = req.body
-
+        console.log(typeOfPerson)
     if (!idPeople) idPeople = uuidv4() //por si lo cargo desde afuera de la app
 
     const errors = validator(req.body);
@@ -34,7 +34,7 @@ const postPeopleController = async (req, res) => {
 
     try {
         const { people, created } = await postPeopleService(idPeople, fullName, address, idLocation, geoposition, birthDate,
-            idGenre, state, noShow, aboutMe, typeOfPerson, email, password,
+            idGenre, state, aboutMe, typeOfPerson, email, password,
             externalLogin, weekCalendar, prize, options)
 
         if (created) return res.status(201).json(people)
