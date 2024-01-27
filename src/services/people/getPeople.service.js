@@ -1,6 +1,6 @@
 
-const { Sequelize } = require("sequelize");
-const { People, People_options, Categories, Categories_options, People_logins, Opportunities } = require("../../db.js");
+const { Sequelize, Op } = require("sequelize");
+const { People, People_options, Categories, Categories_options, People_logins, Opportunities, conn } = require("../../db.js");
 const formatPeople = require("../../utils/formatPeople.js");
 
 const getPeopleService = async (filtro) => {
@@ -30,20 +30,16 @@ const getPeopleService = async (filtro) => {
                                 },
                             ]
                     },
-                    {
-                        model: Opportunities,
-                        foreignKey: 'idCustomer',
-                    },
-                ]
+                ],
             },
-
         );
 
+        //devuelvo el array            
         const count = result.length;
         const people = {
             count: count,
             filter: filterPeople,
-            data: result
+            data: formatPeople(result)
         }
 
         return { people };

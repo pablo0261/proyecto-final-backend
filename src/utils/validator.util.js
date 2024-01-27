@@ -32,9 +32,9 @@ const validator = (data) => {
         errors.geoposition = "El formato de la geoposición no es válido.";
     }
 
-    // if (!/^\d{4}-\d{2}-\d{2}$/.test(data.birthDate)) {
-    //     errors.birthDate = "El formato de la fecha de nacimiento no es válido. Debe ser YYYY-MM-DD."
-    // }
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(data.birthDate)) {
+        errors.birthDate = "El formato de la fecha de nacimiento no es válido. Debe ser YYYY-MM-DD."
+     }
 
     if (data.idGenre !== undefined) {
         if (typeof data.idGenre !== 'number' || !Number.isInteger(data.idGenre)) {
