@@ -27,7 +27,7 @@ geolocationRouter.get('/provinces', getProvincesController);
  */
 
 
-geolocationRouter.get('/municipalities/:province', getMunicipalitiesController);
+geolocationRouter.get('/municipalities', getMunicipalitiesController);
 /**
  * @swagger
  * /municipalities/{province}:

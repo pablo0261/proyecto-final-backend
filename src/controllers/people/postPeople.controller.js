@@ -15,8 +15,8 @@ const postPeopleController = async (req, res) => {
     const { fullName, address, idLocation, geoposition, birthDate,
         idGenre, state, noShow, aboutMe, typeOfPerson, email, password,
         externalLogin, weekCalendar, prize,
-        options } = req.body
-        console.log(typeOfPerson)
+        people_options } = req.body
+
     if (!idPeople) idPeople = uuidv4() //por si lo cargo desde afuera de la app
 
     const errors = validator(req.body);
@@ -41,7 +41,6 @@ const postPeopleController = async (req, res) => {
         return res.status(200).json(people)
 
     } catch (error) {
-        console.log("Error: ", error)
         let errorMessage = 'Unknown error';
 
         if (error) {

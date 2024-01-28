@@ -5,7 +5,7 @@ const formattedGeolocation = (originalData) => {
         formattedData = {
             count: originalData.cantidad,
             data: originalData.provincias.map(province => ({
-                id: province.id,
+                idProvincia: province.id,
                 nombre: province.nombre,
                 lat: province.centroide.lat,
                 lon: province.centroide.lon
@@ -15,14 +15,15 @@ const formattedGeolocation = (originalData) => {
         formattedData = {
             count: originalData.cantidad,
             data: originalData.municipios.map(municipio => ({
-                id: municipio.id,
-                nombre: municipio.nombre,
-                lat: municipio.centroide_lat,
-                lon: municipio.centroide_lon
+                idLocalidad: municipio.id,
+                nombreLocalidad: municipio.nombre,
+                lat: municipio.centroide.lat,
+                lon: municipio.centroide.lon,
+                idProvincia:municipio.provincia.id,
+                nombreProvincia:municipio.provincia.nombre
             }))
         };
     }
-
     return formattedData;
 
 };

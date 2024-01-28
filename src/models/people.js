@@ -21,7 +21,7 @@ module.exports = (sequelize) => {
     idLocation: {
       type: DataTypes.INTEGER,
       allowNull: true,
-      defaultValue: 0
+      defaultValue: 999999
     },
     geoposition: {
       type: DataTypes.STRING,
