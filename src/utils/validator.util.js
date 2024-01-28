@@ -1,6 +1,6 @@
 const validator = (data) => {
     let errors = {};
-
+    return 
     const MIN_FULLNAME_LENGTH = 2;
     const MAX_FULLNAME_LENGTH = 50;
     const MAX_ADDRESS_LENGTH = 100;
