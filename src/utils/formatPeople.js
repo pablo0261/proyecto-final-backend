@@ -1,10 +1,15 @@
-const formatPeople = (dataObject) => {
-    return dataObject.map((dataObject) => {
+const formatPeople = (result) => {
+    
+    return result.map((data) => {
+        const dataObject=data.dataValues
         const peopleData = {
             idPeople: dataObject.idPeople,
             fullName: dataObject.fullName,
             address: dataObject.address,
             idLocation: dataObject.idLocation,
+            locationName: dataObject.locationName,
+            idProvince: dataObject.idProvince,
+            provinceName: dataObject.provinceName,
             geoposition: dataObject.geoposition,
             birthDate: dataObject.birthDate,
             age: dataObject.age,
