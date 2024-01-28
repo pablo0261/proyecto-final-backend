@@ -2,16 +2,28 @@ const axios = require('axios');
 const { formattedGeolocation } = require("../../utils/formattedGeolocation.util");
 const { URL_PROVINCES } = require("../../constants");
 
-const getProvincesService = async (id) => {
-    let provinces=URL_PROVINCES
+const getProvincesService = async (id, name) => {
+    let urlProvinces = URL_PROVINCES
 
-    if (id) provinces=provinces+`?id=${id}`
+    if (id) {
+        urlProvinces = urlProvinces + `?id=${id}`
+    } if (name) {
+        urlProvinces = urlProvinces + `?nombre=${name}`
+    }
+
     try {
-        const result = await axios(provinces);
-        const originalData = result.data;
-        const data = formattedGeolocation(originalData)
+        const requestOptions = {
+            method: 'GET', // Método HTTP (GET en este caso)
+            headers: {
+              'Content-Type': 'application/json', // Puedes ajustar los encabezados según sea necesario
+            },
+          };
+          
+        const response = await fetch(urlProvinces,requestOptions)
+        const data = await response.json();
+        const provinces = formattedGeolocation(data)
 
-        return data;
+        return provinces;
     } catch (error) {
         throw error;
     }
