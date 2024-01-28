@@ -60,8 +60,6 @@ const postPeopleService = async (params) => {
             });
         }
         const result= await getPeopleService({idPeople:idPeople})
-
-        console.log(result)
         return { result, created };
     } catch (error) {
         throw error;
