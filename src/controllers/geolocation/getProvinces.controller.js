@@ -1,10 +1,10 @@
 const { getProvincesService } = require("../../services/geolocation/getProvinces.service");
 
 const getProvincesController = async (req, res) => {
-    const {id}=req.query
+    const {id,name}=req.query
     try {
 
-        const data = await getProvincesService(id);
+        const data = await getProvincesService(id,name);
 
         return res.status(200).json(data);
 
