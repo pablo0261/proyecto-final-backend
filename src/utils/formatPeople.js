@@ -24,6 +24,10 @@ const formatPeople = (result) => {
             averageRating: dataObject.averageRating,
             countRating: dataObject.countRating,
             logged: dataObject.logged,
+            phone: dataObject.phone,
+            location: dataObject.location,
+            country: dataObject.country,
+            profession: dataObject.profession,
             categories: [], // Inicializar array para las categorías
         };
 
