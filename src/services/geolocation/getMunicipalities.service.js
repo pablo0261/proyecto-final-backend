@@ -3,31 +3,38 @@ const { formattedGeolocation } = require("../../utils/formattedGeolocation.util"
 const { URL_MUNICIPALITIES } = require("../../constants");
 
 const getMunicipalitiesService = async (id, name, idProvince, province) => {
-    let municipalities = URL_MUNICIPALITIES
+    let urlMunicipalities = URL_MUNICIPALITIES
     let separator = '?'
     if (id) {
-        municipalities = municipalities + `${separator}id=${id}`
+        urlMunicipalities = urlMunicipalities + `${separator}id=${id}`
         if (separator === '?') separator = '&'
     }
     if (name) {
-        municipalities = municipalities + `${separator}nombre=${name}`
+        urlMunicipalities = urlMunicipalities + `${separator}nombre=${name}`
         if (separator === '?') separator = '&'
     }
     if (idProvince) {
-        municipalities = municipalities + `{$separator}provincia=${idProvince}&max=500`
+        urlMunicipalities = urlMunicipalities + `{$separator}provincia=${idProvince}&max=500`
         if (separator === '?') separator = '&'
     }
     if (province) {
-        municipalities = municipalities + `${separator}provincia=${province}&max=500`
+        urlMunicipalities = urlMunicipalities + `${separator}provincia=${province}&max=500`
         if (separator === '?') separator = '&'
     }
 
     try {
-        const result = await axios(`${municipalities}`);
-        const originalData = result.data;
+        const requestOptions = {
+            method: 'GET', // Método HTTP (GET en este caso)
+            headers: {
+              'Content-Type': 'application/json', // Puedes ajustar los encabezados según sea necesario
+            },
+          };
+          
+        const response = await fetch(urlMunicipalities,requestOptions);
+        const data = await response.json();
+        const municipalities = formattedGeolocation(data)
+        return municipalities;
 
-        const data = formattedGeolocation(originalData)
-        return data;
     } catch (error) {
         console.log("service: ", error);
         throw error;
