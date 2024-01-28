@@ -5,9 +5,9 @@ const formatPeople = require("../../utils/formatPeople.js");
 const { getMunicipalitiesService } = require("../geolocation/getMunicipalities.service.js");
 
 
-const getPeopleService = async (body) => {
+const getPeopleService = async (filter) => {
 
-    let filterPeople = {}
+    let filterPeople = filter
     try {
         // filtro ? filterPeople = filtro : filterPeople = { state: 'Active' }
 
