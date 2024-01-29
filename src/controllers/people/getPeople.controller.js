@@ -8,13 +8,14 @@ const getPeopleController = async (req, res) => {
       if (!email) return res.status(400).json({ error: 'Falta email' });
       if (!password) return res.status(400).json({ error: 'Falta password' });
 
-      const people = await loginPeopleService({ email, password });
-      if (!people) {
+      const response = await loginPeopleService(email, password);
+      if (!response) {
         return res
           .status(400)
           .json({ error: 'email o contraseña incorrectos' });
       }
-     //return res.status(200).json(people);
+      const people = await getPeopleService({ idPeople: response });
+      return res.status(200).json(people);
     }
 
     const people = await getPeopleService(req.query);
