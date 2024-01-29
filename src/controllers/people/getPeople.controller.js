@@ -14,7 +14,7 @@ const getPeopleController = async (req, res) => {
           .status(400)
           .json({ error: 'email o contraseña incorrectos' });
       }
-      return res.status(200).json(people);
+     //return res.status(200).json(people);
     }
 
     const people = await getPeopleService(req.query);

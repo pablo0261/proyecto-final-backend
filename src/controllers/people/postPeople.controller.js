@@ -11,7 +11,7 @@ const { postPeopleService } = require('../../services/people/postPeople.service'
 const { validator } = require("../../utils/validator.util");
 
 const postPeopleController = async (req, res) => {
-    const params=req.body
+    const params = req.body
     let { idPeople } = params
     const { fullName, birthDate,
         email, password,
@@ -19,15 +19,15 @@ const postPeopleController = async (req, res) => {
 
     if (!idPeople) idPeople = uuidv4() //por si lo cargo desde afuera de la app
 
-    params.idPeople=idPeople
+    params.idPeople = idPeople
 
     const errors = validator(params);
 
-    // if (!fullName ||
-    //     !email ||
-    //     !password ||
-    //     !birthDate)
-    //     return res.status(400).json({ error: "Faltan Datos" })
+    if (email && password) { //si viene mail y password es por que se da de alta
+        if (!fullName || !birthDate) { // tiene que venir name y fechanacimiento
+            return res.status(400).json({ error: "Faltan Datos" })
+        }
+    }
     try {
         const { result, created } = await postPeopleService(params)
 
