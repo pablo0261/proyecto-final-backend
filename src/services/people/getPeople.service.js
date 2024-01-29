@@ -44,16 +44,15 @@ const getPeopleService = async (params) => {
         })
 
     }
+    console.log('.s',pageSize)
+    const page=pageNumber? pageNumber : 1
+    const itemsPage=pageSize? pageSize:PAGESIZE
+    const offset = (page - 1) * itemsPage;
 
-    //paginado
-    if(!pageSize) pageSize=PAGESIZE
-    if(!pageNumber || pageNumber<=0) pageNumber=1
-
-    const offset = (pageNumber - 1) * pageSize;
     try {
         let result = await People.findAll(
             {
-                limit: pageSize,
+                limit: itemsPage,
                 offset: offset,
                 where: {
                     [Sequelize.Op.and]: filters
@@ -94,8 +93,8 @@ const getPeopleService = async (params) => {
         const count = result.length;
         const people = {
             count: count,
-            pageSize: parseInt(pageSize),
-            pageNumber: parseInt(offset+1),
+            pageSize: parseInt(itemsPage),
+            pageNumber: parseInt(page),
             filter: filterPeople,
             options: idOption,
             data: formatPeople(result)
