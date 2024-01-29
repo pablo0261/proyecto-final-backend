@@ -34,7 +34,6 @@ const getPeopleService = async (params) => {
         filterRequired=true
         
     }
-    console.log(filterPeopleOptions)
 
     try {
 

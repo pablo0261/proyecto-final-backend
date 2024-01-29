@@ -9,7 +9,7 @@ const loginPeopleService = async (email, password) => {
   if (people) {
     people.logged = true;
     await people.save();
-    return await getPeopleByIdService(people.idPeople);
+    return people.idPeople;
   }
 };
 
