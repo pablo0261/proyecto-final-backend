@@ -1,5 +1,5 @@
-const { People } = require('../../db');
-const { getPeopleByIdService } = require('./getPeopleById.service');
+const { People, People_logins } = require('../../db');
+const { v4: uuidv4 } = require('uuid');
 
 const loginPeopleService = async (email, password) => {
   const people = await People.findOne({
@@ -7,9 +7,17 @@ const loginPeopleService = async (email, password) => {
   });
 
   if (people) {
+    const currentDate = new Date();
+    const idPeople = people.idPeople;
+
     people.logged = true;
     await people.save();
-    return people.idPeople;
+    await People_logins.create({
+      id: uuidv4(),
+      idPeople,
+      loginDate: currentDate,
+    });
+    return idPeople;
   }
 };
 
