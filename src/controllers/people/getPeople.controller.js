@@ -1,21 +1,32 @@
 const { getPeopleService } = require("../../services/people/getPeople.service.js");
+const loginPeopleService = require('../../services/people/loginPeople.service.js');
 
 const getPeopleController = async (req, res) => {
-    
-    try {
-        const people = await getPeopleService(req.query);
+  try {
+    const { email, password } = req.body;
+    if (email || password) {
+      if (!email) return res.status(400).json({ error: 'Falta email' });
+      if (!password) return res.status(400).json({ error: 'Falta password' });
 
-        if (!people) {
-            return res.status(404).send("No hay registro de personas.");
-        }
-
-        return res.status(200).json(people);
-
-    } catch (error) {
-        return res.status(500).send(error);
-
+      const people = await loginPeopleService({ email, password });
+      if (!people) {
+        return res
+          .status(400)
+          .json({ error: 'email o contraseña incorrectos' });
+      }
+      return res.status(200).json(people);
     }
 
+    const people = await getPeopleService(req.query);
+
+    if (!people) {
+      return res.status(404).send('No hay registro de personas.');
+    }
+
+    return res.status(200).json(people);
+  } catch (error) {
+    return res.status(500).send(error);
+  }
 };
 
 module.exports = { getPeopleController };
