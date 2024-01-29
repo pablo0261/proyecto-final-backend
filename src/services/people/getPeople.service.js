@@ -25,12 +25,17 @@ const getPeopleService = async (params) => {
     // peopleoptions        
     const { idOption } = params
     const filterPeopleOptions = {}
+    let filterRequired=false
     if (idOption) {
         //convierto a array
         const splitIdOption = idOption.split(',')
         //creo el filtro con Op.in
         filterPeopleOptions.idOption = { [Op.in]: splitIdOption }
+        filterRequired=true
+        
     }
+    console.log(filterPeopleOptions)
+
     try {
 
 
@@ -42,11 +47,11 @@ const getPeopleService = async (params) => {
                         model: People_options,
                         foreignKey: 'idPeople',
                         where: filterPeopleOptions,
+                        required:filterRequired,
                         include:
                             [
                                 {
                                     model: Categories_options,
-                                    order: [['idCategorie', 'DESC']],
                                     include: [
                                         {
                                             model: Categories,
