@@ -5,11 +5,34 @@ const formatPeople = require("../../utils/formatPeople.js");
 const { getMunicipalitiesService } = require("../geolocation/getMunicipalities.service.js");
 
 
-const getPeopleService = async (filter) => {
+const getPeopleService = async (params) => {
+    const peopleFields = ['idPeople', 'fullName', 'address', 'idLocation', 'locationName', 'geoposition',
+        'birthDate', 'age', 'idGenre', 'aboutMe', 'dateOfAdmission', 'typeOfPerson',
+        'email', 'externalLogin', 'weekCalendar', 'averageRating', 'countRating',
+        'logged', 'phone', 'location', 'country', 'profession']
 
-    let filterPeople = filter
+    //armo un objeto solo con los campos de people asi no me da error el sequelize por filtrar nombre de campo inexistente
+    let filterPeople = Object.fromEntries(
+        Object.entries(params).filter(([key]) => peopleFields.includes(key)))
+    //activos si no viene por params
+    const { state } = params
+    if (state) {
+        filterPeople.state = state
+    } else {
+        filterPeople.state = 'Active'
+    }
+
+    // peopleoptions        
+    const { idOption } = params
+    const filterPeopleOptions = {}
+    if (idOption) {
+        //convierto a array
+        const splitIdOption = idOption.split(',')
+        //creo el filtro con Op.in
+        filterPeopleOptions.idOption = { [Op.in]: splitIdOption }
+    }
     try {
-        // filtro ? filterPeople = filtro : filterPeople = { state: 'Active' }
+
 
         let result = await People.findAll(
             {
@@ -18,7 +41,7 @@ const getPeopleService = async (filter) => {
                     {
                         model: People_options,
                         foreignKey: 'idPeople',
-                        order: [['idOption', 'DESC']],
+                        where: filterPeopleOptions,
                         include:
                             [
                                 {
@@ -27,7 +50,6 @@ const getPeopleService = async (filter) => {
                                     include: [
                                         {
                                             model: Categories,
-                                            order: [['idCategorie', 'DESC']]
                                         }
                                     ],
                                 },
@@ -54,6 +76,7 @@ const getPeopleService = async (filter) => {
         const people = {
             count: count,
             filter: filterPeople,
+            options: idOption,
             data: formatPeople(result)
         }
 
