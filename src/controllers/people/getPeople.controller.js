@@ -17,7 +17,7 @@ const getPeopleController = async (req, res) => {
       const people = await getPeopleService({ idPeople: response });
       return res.status(200).json(people);
     }
-
+    
     const people = await getPeopleService(req.query);
 
     if (!people) {
