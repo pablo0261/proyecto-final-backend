@@ -3,6 +3,7 @@ const { Sequelize, Op } = require("sequelize");
 const { People, People_options, Categories, Categories_options, People_logins, Opportunities, conn } = require("../../db.js");
 const formatPeople = require("../../utils/formatPeople.js");
 const { getMunicipalitiesService } = require("../geolocation/getMunicipalities.service.js");
+const { PAGESIZE } = require("../../constants/index.js");
 
 const getPeopleService = async (params) => {
     const peopleFields = ['idPeople', 'fullName', 'address', 'idLocation', 'locationName', 'geoposition',
@@ -44,20 +45,19 @@ const getPeopleService = async (params) => {
 
     }
 
-    //paginado    
-    // let limit=2
-    // let offset=1
-    // if(!pageSize) limit=pageSize
-    // if(!pageNumber) offset=(pageNumber-1)*limit
+    //paginado
+    if(!pageSize) pageSize=PAGESIZE
+    if(!pageNumber || pageNumber<=0) pageNumber=1
 
+    const offset = (pageNumber - 1) * pageSize;
     try {
         let result = await People.findAll(
             {
+                limit: pageSize,
+                offset: offset,
                 where: {
                     [Sequelize.Op.and]: filters
                 },
-                // limit:limit,
-                // offset:offset,
                 include: [
                     {
                         model: People_options,
@@ -75,8 +75,6 @@ const getPeopleService = async (params) => {
                             ]
                     },
                 ],
-                // limit:limit
-                // offset:offset
             },
         )
         for (let person of result) {
@@ -96,6 +94,8 @@ const getPeopleService = async (params) => {
         const count = result.length;
         const people = {
             count: count,
+            pageSize: parseInt(pageSize),
+            pageNumber: parseInt(offset+1),
             filter: filterPeople,
             options: idOption,
             data: formatPeople(result)
