@@ -11,5 +11,5 @@ const getOpportunities = async (req, res) => {
     res.status(500).json({ error: "Error al obtener oportunidades" });
   }
 };
-
+ 
 module.exports = getOpportunities;

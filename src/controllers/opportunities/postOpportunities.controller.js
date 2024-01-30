@@ -32,7 +32,7 @@ const postOpportunities = async (req, res) => {
       ratingCustomer,
       reviewCustomer,
       reviewProvider,
-    };
+    }; 
 
     const createdOpportunity = await createOpportunity(opportunityData);
 
