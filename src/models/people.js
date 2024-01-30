@@ -87,7 +87,27 @@ module.exports = (sequelize) => {
     logged: {
       type: DataTypes.BOOLEAN,
       allowNull: true,
-      defaultValue:false
+      defaultValue: false
+    },
+    phone: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      defaultValue: ""
+    },
+    location: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      defaultValue: ""
+    },
+    country: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      defaultValue: ""
+    },
+    profession: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      defaultValue: ""
     },
     age: {
       type: DataTypes.VIRTUAL,

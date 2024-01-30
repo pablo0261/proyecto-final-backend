@@ -11,34 +11,28 @@ const { postPeopleService } = require('../../services/people/postPeople.service'
 const { validator } = require("../../utils/validator.util");
 
 const postPeopleController = async (req, res) => {
-    let { idPeople } = req.body
-    const { fullName, address, idLocation, geoposition, birthDate,
-        idGenre, state, noShow, aboutMe, typeOfPerson, email, password,
-        externalLogin, weekCalendar, prize,
-        people_options } = req.body
+    const params = req.body
+    let { idPeople } = params
+    const { fullName, birthDate,
+        email, password,
+    } = req.body
 
     if (!idPeople) idPeople = uuidv4() //por si lo cargo desde afuera de la app
 
-    const errors = validator(req.body);
+    params.idPeople = idPeople
 
-    if (Object.keys(errors).length > 0) {
-        return res.status(400).json({ errors: errors });
+    const errors = validator(params);
+
+    if (email && password) { //si viene mail y password es por que se da de alta
+        if (!fullName || !birthDate) { // tiene que venir name y fechanacimiento
+            return res.status(400).json({ error: "Faltan Datos" })
+        }
     }
-
-
-    if (!fullName ||
-        !email ||
-        !password ||
-        !birthDate)
-        return res.status(400).json({ error: "Faltan Datos" })
-
     try {
-        const { people, created } = await postPeopleService(idPeople, fullName, address, idLocation, geoposition, birthDate,
-            idGenre, state, aboutMe, typeOfPerson, email, password,
-            externalLogin, weekCalendar, prize, options)
+        const { result, created } = await postPeopleService(params)
 
-        if (created) return res.status(201).json(people)
-        return res.status(200).json(people)
+        if (created) return res.status(201).json(result)
+        return res.status(200).json(result)
 
     } catch (error) {
         let errorMessage = 'Unknown error';

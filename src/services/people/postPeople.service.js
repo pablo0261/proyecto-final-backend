@@ -1,24 +1,12 @@
 const { People, People_logins, Payments } = require('../../db');
 const { v4: uuidv4 } = require('uuid');
+const { getPeopleService } = require('./getPeople.service');
 
-const postPeopleService = async (
-    idPeople,
-    fullName,
-    address,
-    idLocation,
-    geoposition,
-    birthDate,
-    idGenre,
-    state,
-    aboutMe,
-    typeOfPerson,
-    email,
-    password,
-    externalLogin,
-    weekCalendar,
-    prize,
-    options
-) => {
+const postPeopleService = async (params) => {
+    const { idPeople, fullName, address, idLocation, geoposition, birthDate, idGenre, state,
+        aboutMe, typeOfPerson, email, password, externalLogin, weekCalendar, prize,
+        phone,location,country,profession} = params
+
     const currentDate = new Date();
 
     try {
@@ -38,9 +26,13 @@ const postPeopleService = async (
             password,
             externalLogin,
             weekCalendar,
+            phone,
+            location,
+            country,
+            profession
         };
 
-        let [result, created] = await People.findOrCreate({
+        const [found, created] = await People.findOrCreate({
             where: { idPeople: newData.idPeople },
             defaults: newData,
         });
@@ -48,8 +40,7 @@ const postPeopleService = async (
         if (!created) {
             // Si no se creó, se actualiza el usuario que contiene el idPeople
             await People.update(newData, { where: { idPeople: newData.idPeople } });
-            // Se recupera los datos actualizados
-            result = await People.findOne({ where: { idPeople: newData.idPeople } });
+              
         } else {
             // Si se creó una nueva entrada, guardamos el login y el pago
 
@@ -68,13 +59,8 @@ const postPeopleService = async (
                 prize,
             });
         }
-
-        const people = {
-            status: created ? 'Created' : 'Updated',
-            result,
-        };
-
-        return { people, created };
+        const result= await getPeopleService({idPeople:idPeople})
+        return { result, created };
     } catch (error) {
         throw error;
     }
