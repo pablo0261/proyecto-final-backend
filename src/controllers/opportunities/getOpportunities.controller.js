@@ -12,4 +12,5 @@ const getOpportunities = async (req, res) => {
   }
 };
 
+
 module.exports = getOpportunities;

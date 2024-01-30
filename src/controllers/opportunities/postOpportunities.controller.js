@@ -34,6 +34,7 @@ const postOpportunities = async (req, res) => {
       reviewProvider,
     };
 
+
     const createdOpportunity = await createOpportunity(opportunityData);
 
     res.status(201).json(createdOpportunity);
