@@ -10,7 +10,7 @@ const getPeopleService = async (params) => {
         'birthDate', 'age', 'idGenre', 'aboutMe', 'dateOfAdmission', 'typeOfPerson',
         'email', 'externalLogin', 'weekCalendar', 'averageRating', 'countRating',
         'logged', 'phone', 'location', 'country', 'profession']
-    const { idOption, state, pageSize, pageNumber } = params
+    const { idOption, idOrder, state, pageSize, pageNumber } = params
 
     const filters = []
 
@@ -44,11 +44,22 @@ const getPeopleService = async (params) => {
         })
 
     }
-    console.log('.s',pageSize)
-    const page=pageNumber? pageNumber : 1
-    const itemsPage=pageSize? pageSize:PAGESIZE
+
+    //paginado
+    const page = pageNumber ? pageNumber : 1
+    const itemsPage = pageSize ? pageSize : PAGESIZE
     const offset = (page - 1) * itemsPage;
 
+    //order
+    const orderPeople = []
+    if (!idOrder) {
+        orderPeople.push(['fullName', 'ASC'])
+    } else {
+        const orderField = idOrder.split(',')
+        orderPeople.push([orderField[0], orderField[1] ? orderField[1] : 'ASC'])
+    }
+
+    console.log(orderPeople)
     try {
         let result = await People.findAll(
             {
@@ -57,6 +68,7 @@ const getPeopleService = async (params) => {
                 where: {
                     [Sequelize.Op.and]: filters
                 },
+                order: orderPeople,
                 include: [
                     {
                         model: People_options,
