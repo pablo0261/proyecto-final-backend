@@ -9,7 +9,6 @@ const opportunitiesRouter = require("./opportunitiesRouter.js");
 router.use(categoriesRouter);
 router.use(peopleRouter);
 router.use(geolocationRouter);
-router.use(opportunitiesRouter);
-
+// router.use(opportunitiesRouter); 
 
 module.exports = router;
