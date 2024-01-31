@@ -1,4 +1,4 @@
-const getCategoriesOption = require("../../services/categories/categories_options/getCategoriesOption.service");
+const getCategoriesOption = require("../../services/categories_options/getCategoriesOption.service");
 
 const getCategoriesOptions = async (req, res) => {
   try {
