@@ -4,6 +4,7 @@ const { Router } = require('express');
 const { getPeopleController } = require("../controllers/people/getPeople.controller.js");
 // const { getPeopleByIdController } = require('../controllers/people/getPeopleById.controller.js');
 const { postPeopleController } = require('../controllers/people/postPeople.controller.js');
+const loginPeopleController = require('../controllers/logins/loginPeople.controller.js');
 
 const peopleRouter = Router();
 
@@ -21,18 +22,18 @@ peopleRouter.get('/people', getPeopleController);
  *         required: false
  *         schema:
  *           type: string
- *         description: 
- *          en blanco todos los registros con paginado de 10 
+ *         description:
+ *          en blanco todos los registros con paginado de 10
  *          pageSize= items por pagina
  *          pageNumber= numero de pagina
  *          idOrder= con uno o varios campos de la tabla people con el criterio ASC,DESC separado por "," si son varios separados por ";"Ejemplo idGenre,DESC;fullName,ASC;
  *          idOption= id uno o varios idOption de la tabla categories_options separado por "," Ejemplo 1,3 devuelve todos las personas con esas opciones
  *     responses:
  *       200:
- *         description: > 
+ *         description: >
  *           Obtiene un objeto llamado people con dos propiedades: count y data.
  *           count: contiene la cantidad de personas registradas.
- *           data: contiene un array de objetos, cada objeto contiene una persona y sus propiedades.  
+ *           data: contiene un array de objetos, cada objeto contiene una persona y sus propiedades.
  *       404:
  *         description: No hay registro de personas.
  *       500:
@@ -61,7 +62,7 @@ peopleRouter.post('/people', postPeopleController);
  *                 type: integer
  *               email:
  *                 type: string
- *               password: 
+ *               password:
  *                 type: string
  *               typeOfPerson:
  *                 type: string
@@ -76,5 +77,7 @@ peopleRouter.post('/people', postPeopleController);
  *       500:
  *         description: Error interno del servidor.
  */
+
+peopleRouter.get('/people/login', loginPeopleController);
 
 module.exports = peopleRouter;
