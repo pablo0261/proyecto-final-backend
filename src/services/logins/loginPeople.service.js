@@ -1,4 +1,5 @@
 const { People, People_logins } = require('../../db');
+
 const { v4: uuidv4 } = require('uuid');
 
 const loginPeopleService = async (email, password) => {
@@ -12,6 +13,7 @@ const loginPeopleService = async (email, password) => {
 
     people.logged = true;
     await people.save();
+
     await People_logins.create({
       id: uuidv4(),
       idPeople,
