@@ -31,26 +31,18 @@ const postPeopleController = async (req, res) => {
     try {
         const { result, created } = await postPeopleService(params)
 
-        if (created) return res.status(201).json(result)
+        console.log("Tiago: ", result.people.count);
+
+        if (created) {
+            return res.status(201).json(result)
+        }
         return res.status(200).json(result)
 
     } catch (error) {
-        let errorMessage = 'Unknown error';
-
-        if (error) {
-            if (error.original && error.original.message) {
-                errorMessage = error.original.message;
-            } else if (error.errors &&
-                Array.isArray(error.errors) &&
-                error.errors.length > 0 &&
-                error.errors[0].message) {
-                errorMessage = error.errors[0].message;
-            } else if (error.message) {
-                errorMessage = error.message;
-            }
-        }
-
-        res.status(500).json({ error: errorMessage });
+        if (error.name === 'SequelizeUniqueConstraintError') {
+            return res.status(409).send("Error: Ya existe un registro con el mismo idPeople o email");
+        } 
+        return res.status(500).send("Error interno del servidor.");
     }
 
 };

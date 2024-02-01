@@ -5,7 +5,7 @@ const { getPeopleService } = require('./getPeople.service');
 const postPeopleService = async (params) => {
     const { idPeople, fullName, address, idLocation, geoposition, birthDate, idGenre, state,
         aboutMe, typeOfPerson, email, password, externalLogin, weekCalendar, price,
-        phone,location,country,profession} = params
+        phone, location, country, profession } = params;
 
     const currentDate = new Date();
 
@@ -40,7 +40,7 @@ const postPeopleService = async (params) => {
         if (!created) {
             // Si no se creó, se actualiza el usuario que contiene el idPeople
             await People.update(newData, { where: { idPeople: newData.idPeople } });
-              
+
         } else {
             // Si se creó una nueva entrada, guardamos el login y el pago
 
@@ -59,7 +59,7 @@ const postPeopleService = async (params) => {
                 price,
             });
         }
-        const result= await getPeopleService({idPeople:idPeople})
+        const result = await getPeopleService({ idPeople: idPeople })
         return { result, created };
     } catch (error) {
         throw error;

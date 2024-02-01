@@ -36,7 +36,6 @@ const getMunicipalitiesService = async (id, name, idProvince, province) => {
         return municipalities;
 
     } catch (error) {
-        console.log("service: ", error);
         throw error;
     }
 }

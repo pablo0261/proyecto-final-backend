@@ -131,7 +131,6 @@ const getPeopleService = async (params) => {
 
         return { people };
     } catch (error) {
-        console.log("ERROR", error);
         throw error;
     }
 }
