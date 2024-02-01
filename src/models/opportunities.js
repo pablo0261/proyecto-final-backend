@@ -1,4 +1,5 @@
 const { DataTypes, INTEGER } = require('sequelize');
+const { STATE_ACCEPTED, STATE_CANCELLED, STATE_COMPLETED, STATE_PENDING, STATE_RATINGCUSTOMERPENDING, STATE_RATINGPENDING, STATE_RATINGPROVIDERPENDING, STATE_VIEW } = require('../constants');
 // Exportamos una funcion que define el modelo
 // Luego le injectamos la conexion a sequelize.
 module.exports = (sequelize) => {
@@ -17,6 +18,11 @@ module.exports = (sequelize) => {
       type: DataTypes.UUID,
       allowNull: false,
     },
+    state:{
+      type:DataTypes.ENUM,
+      default:STATE_VIEW,
+      values: [STATE_ACCEPTED,STATE_CANCELLED,STATE_COMPLETED,STATE_PENDING,STATE_RATINGCUSTOMERPENDING,STATE_RATINGPENDING,STATE_RATINGPROVIDERPENDING,STATE_VIEW]
+    },
     dateQuery: {
       type: DataTypes.DATE,
     },
@@ -29,7 +35,7 @@ module.exports = (sequelize) => {
     dateEstimateCompletion: {
       type: DataTypes.DATE,
     },
-    prize: {
+    price: {
       type: DataTypes.DECIMAL(12, 2)
     },
     dateOk: {
@@ -41,10 +47,10 @@ module.exports = (sequelize) => {
     idPeopleCancelled: {
       type: DataTypes.UUID,
     },
-    Reason: {
+    reasonForCancelation: {
       type: DataTypes.STRING,
     },
-    DateServiceEnd: {
+    dateEndService: {
       type: DataTypes.DATE,
     },
     ratingCustomer: {
@@ -77,6 +83,10 @@ module.exports = (sequelize) => {
         {
           unique: false,
           fields: ['idPeopleCancelled']
+        },
+        {
+          unique: false,
+          fields: ['state']
         },
       ]
     });

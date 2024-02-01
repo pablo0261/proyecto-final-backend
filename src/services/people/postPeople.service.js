@@ -4,7 +4,7 @@ const { getPeopleService } = require('./getPeople.service');
 
 const postPeopleService = async (params) => {
     const { idPeople, fullName, address, idLocation, geoposition, birthDate, idGenre, state,
-        aboutMe, typeOfPerson, email, password, externalLogin, weekCalendar, prize,
+        aboutMe, typeOfPerson, email, password, externalLogin, weekCalendar, price,
         phone,location,country,profession} = params
 
     const currentDate = new Date();
@@ -56,7 +56,7 @@ const postPeopleService = async (params) => {
                 emisionDate: currentDate,
                 dueDate: currentDate,
                 paymentDate: currentDate,
-                prize,
+                price,
             });
         }
         const result= await getPeopleService({idPeople:idPeople})
