@@ -30,7 +30,7 @@ geolocationRouter.get('/provinces', getProvincesController);
 geolocationRouter.get('/municipalities', getMunicipalitiesController);
 /**
  * @swagger
- * /municipalities/{province}:
+ * /municipalities:
  *   get:
  *     summary: Obtener todos los municipios de una provincia específica.
  *     tags:

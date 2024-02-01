@@ -31,8 +31,6 @@ const postPeopleController = async (req, res) => {
     try {
         const { result, created } = await postPeopleService(params)
 
-        console.log("Tiago: ", result.people.count);
-
         if (created) {
             return res.status(201).json(result)
         }
