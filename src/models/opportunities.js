@@ -5,7 +5,7 @@ const { STATE_ACCEPTED, STATE_CANCELLED, STATE_COMPLETED, STATE_PENDING, STATE_R
 module.exports = (sequelize) => {
   // defino el modelo
   sequelize.define('opportunities', {
-    idOpportunities: {
+    idOpportunitie: {
       type: DataTypes.UUID,
       allowNull: false,
       primaryKey: true
@@ -23,7 +23,7 @@ module.exports = (sequelize) => {
       default:STATE_VIEW,
       values: [STATE_ACCEPTED,STATE_CANCELLED,STATE_COMPLETED,STATE_PENDING,STATE_RATINGCUSTOMERPENDING,STATE_RATINGPENDING,STATE_RATINGPROVIDERPENDING,STATE_VIEW]
     },
-    dateQuery: {
+    dateView: {
       type: DataTypes.DATE,
     },
     idService: {
@@ -32,19 +32,25 @@ module.exports = (sequelize) => {
     dateHiring: {
       type: DataTypes.DATE,
     },
-    dateEstimateCompletion: {
-      type: DataTypes.DATE,
+    dateOfService: {
+      type: DataTypes.DATEONLY,
+    },
+    timeOfService:{
+      type:DataTypes.TIME
+    },
+    durationOfService:{
+      type:DataTypes.INTEGER
     },
     price: {
       type: DataTypes.DECIMAL(12, 2)
     },
-    dateOk: {
+    dateAccepted: {
       type: DataTypes.DATE,
     },
     dateCancelled: {
       type: DataTypes.DATE,
     },
-    idPeopleCancelled: {
+    idPeopleWhoCancel: {
       type: DataTypes.UUID,
     },
     reasonForCancelation: {
@@ -56,8 +62,14 @@ module.exports = (sequelize) => {
     ratingCustomer: {
       type: DataTypes.DECIMAL(2),
     },
+    dateRatingCustomer:{
+      type:DataTypes.DATE,
+    },
     ratingProvider: {
       type: DataTypes.DECIMAL(2),
+    },
+    dateRatingProvider:{
+      type:DataTypes.DATE,
     },
     reviewCustomer: {
       type: DataTypes.TEXT,
@@ -82,7 +94,7 @@ module.exports = (sequelize) => {
         },
         {
           unique: false,
-          fields: ['idPeopleCancelled']
+          fields: ['idPeopleWhoCancel']
         },
         {
           unique: false,

@@ -1,3 +1,5 @@
+const { PEOPLE_STATE_ACTIVE, PEOPLE_STATE_INACTIVE, PEOPLE_STATE_DELETED } = require("../constants");
+
 const validator = (data) => {
     let errors = {};
     return 
@@ -43,8 +45,8 @@ const validator = (data) => {
     }
 
     if (data.state !== undefined) {
-        if (!['Active', 'Inactive', 'Deleted'].includes(data.state)) {
-            errors.state = 'El valor de state debe ser "Active", "Inactive" o "Deleted".';
+        if (![PEOPLE_STATE_ACTIVE, PEOPLE_STATE_INACTIVE,PEOPLE_STATE_DELETED].includes(data.state)) {
+            errors.state = `El valor de state debe ser ${PEOPLE_STATE_ACTIVE},${PEOPLE_STATE_INACTIVE},${PEOPLE_STATE_DELETED}`;
         }
     }
 
