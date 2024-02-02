@@ -1,6 +1,7 @@
 const { People, People_logins, Payments } = require('../../db');
 const { v4: uuidv4 } = require('uuid');
 const { getPeopleService } = require('./getPeople.service');
+const { PEOPLE_STATE_ACTIVE } = require('../../constants');
 
 const postPeopleService = async (params) => {
     const { idPeople, fullName, address, idLocation, geoposition, birthDate, idGenre, state,
@@ -18,7 +19,7 @@ const postPeopleService = async (params) => {
             geoposition,
             birthDate,
             idGenre,
-            state: !state ? 'Active' : state,
+            state: !state ? PEOPLE_STATE_ACTIVE : state,
             aboutMe,
             dateOfAdmission: currentDate,
             typeOfPerson,

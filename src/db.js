@@ -100,7 +100,7 @@ People.hasMany(Opportunities, {
 })
 
 Opportunities.hasMany(Chats, {
-  foreignKey: 'idOpportunities'
+  foreignKey: 'idOpportunitie'
 })
 
 People.prototype.getRatingStats = async function () {

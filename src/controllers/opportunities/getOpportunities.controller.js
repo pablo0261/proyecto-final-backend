@@ -2,14 +2,17 @@
 //   getOpportunitiesService,
 // } = require("../../services/opportunities/opportunities.service");
 
-// const getOpportunities = async (req, res) => {
-//   try {
-//     const opportunitiesData = await getOpportunitiesService();
-//     res.json(opportunitiesData);
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ error: "Error al obtener oportunidades" });
-//   }
-// };
- 
-// module.exports = getOpportunities;
+const { getOpportunitiesService } = require("../../services/opportunities/getOpportunities.service");
+
+const getOpportunitiesController = async (req, res) => {
+        try {
+               
+                const {opportunities,status} = await getOpportunitiesService(req.body);
+
+                return res.status(status).json(opportunities);
+        } catch (error) {
+                return res.status(500).send(error);
+        }
+};
+
+module.exports = { getOpportunitiesController }
