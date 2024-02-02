@@ -5,14 +5,14 @@
 const { getOpportunitiesService } = require("../../services/opportunities/getOpportunities.service");
 
 const getOpportunitiesController = async (req, res) => {
-        try {
-               
-                const {opportunities,status} = await getOpportunitiesService(req.body);
+    try {
 
-                return res.status(status).json(opportunities);
-        } catch (error) {
-                return res.status(500).send(error);
-        }
+        const { opportunities, status } = await getOpportunitiesService(req.query);
+
+        return res.status(status).json(opportunities);
+    } catch (error) {
+        return res.status(500).send(error);
+    }
 };
 
 module.exports = { getOpportunitiesController }

@@ -2,9 +2,11 @@ const { v4: uuidv4 } = require('uuid');
 const { Opportunities } = require('../../db');
 const { STATE_VIEW, STATE_PENDING, STATE_ACCEPTED, STATE_CANCELLED, STATE_RATINGPENDING, STATE_RATINGPROVIDERPENDING, STATE_RATINGCUSTOMERPENDING, STATE_COMPLETED } = require('../../constants');
 const { getOpportunitiesService } = require('./getOpportunities.service');
+const { putRatingService } = require('../people/putRating.service');
 
 const putOpportunitiesService = async (params) => {
   const {
+    idPeople,
     idOpportunitie,
     idService,
     dateOfService,
@@ -22,10 +24,13 @@ const putOpportunitiesService = async (params) => {
     cancelled,
   } = params
 
+  let updateRating = false
+
   try {
     const currentDate = new Date();
 
     if (!idOpportunitie) return { result: { message: 'Falta id de oportunidad' }, status: 400 }
+    if (!idPeople) return { result: { message: 'Falta id de persona' }, status: 400 }
 
     const opportunitie = await Opportunities.findByPk(idOpportunitie);
 
@@ -75,6 +80,7 @@ const putOpportunitiesService = async (params) => {
         case STATE_RATINGPENDING:
         case STATE_RATINGCUSTOMERPENDING:
         case STATE_RATINGPROVIDERPENDING:
+        case STATE_COMPLETED:
 
           if (ratingCustomer) {
             if (!reviewCustomer) return { result: { message: 'Falta review de Cliente' }, status: 400 }
@@ -87,6 +93,7 @@ const putOpportunitiesService = async (params) => {
             } else {
               newData.state = STATE_COMPLETED
             }
+            updateRating = true
 
           } else if (ratingProvider) {
             if (!reviewProvider) return { result: { message: 'Falta review de proveedor' }, status: 400 }
@@ -95,10 +102,11 @@ const putOpportunitiesService = async (params) => {
             newData.dateRatingProvider = currentDate
             newData.reviewProvider = reviewProvider
             if (opportunitie.state === STATE_RATINGPENDING || opportunitie.state === STATE_RATINGCUSTOMERPENDING) {
-              newData.state =  STATE_RATINGCUSTOMERPENDING
+              newData.state = STATE_RATINGCUSTOMERPENDING
             } else {
               newData.state = STATE_COMPLETED
             }
+            updateRating = true
           }
           break;
 
@@ -107,7 +115,8 @@ const putOpportunitiesService = async (params) => {
       }
     }
     await Opportunities.update(newData, { where: { idOpportunitie: idOpportunitie } });
-
+    if (updateRating) putRatingService(idPeople)
+    console.log(updateRating)
     result = await getOpportunitiesService({ idOpportunitie: idOpportunitie })
     return { result, status: 200 };
 
