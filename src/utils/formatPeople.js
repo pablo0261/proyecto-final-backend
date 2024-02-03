@@ -2,6 +2,7 @@ const formatPeople = (result) => {
     
     return result.map((data) => {
         const dataObject=data.dataValues
+        console.log(dataObject.age)
         const peopleData = {
             idPeople: dataObject.idPeople,
             fullName: dataObject.fullName,
