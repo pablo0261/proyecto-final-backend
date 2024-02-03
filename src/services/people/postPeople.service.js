@@ -28,11 +28,22 @@ const postPeopleService = async (params) => {
             externalLogin,
             weekCalendar,
             phone,
-            location,
             country,
             profession
         };
-
+        
+        //age
+        if (birthDate) {
+            const birthDateToDate = new Date(birthDate);
+            let age = currentDate.getFullYear() - birthDateToDate.getFullYear();
+            if (
+                currentDate.getMonth() < birthDateToDate.getMonth() ||
+                (currentDate.getMonth() === birthDateToDate.getMonth() && currentDate.getDate() < birthDateToDate.getDate())
+            ) {
+                age--; // Resta 1 año si aún no ha cumplido años este año
+            }
+            newData.age=age
+        }
         const [found, created] = await People.findOrCreate({
             where: { idPeople: newData.idPeople },
             defaults: newData,

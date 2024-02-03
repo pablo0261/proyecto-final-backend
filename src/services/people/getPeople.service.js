@@ -11,17 +11,16 @@ const getPeopleService = async (params) => {
         'fullName',
         'address',
         'idLocation',
-        'locationName',
         'geoposition',
         'birthDate',
         'age',
         'idGenre',
+        'state',
         'aboutMe',
         'dateOfAdmission',
         'typeOfPerson',
         'email',
         'externalLogin',
-        'weekCalendar',
         'averageRating',
         'countRating',
         'logged',
@@ -29,6 +28,7 @@ const getPeopleService = async (params) => {
         'location',
         'country',
         'profession']
+
     const { idOption, idOrder, state, pageSize, pageNumber } = params
 
     const filters = []
@@ -93,12 +93,12 @@ const getPeopleService = async (params) => {
                 },
             }
         )
-
         //registros
         let result = await People.findAll(
             {
                 limit: itemsPage,
                 offset: offset,
+                attributes: peopleFields,
                 where: {
                     [Sequelize.Op.and]: filters
                 },
@@ -137,6 +137,7 @@ const getPeopleService = async (params) => {
             }
         }
         const count = result.length;
+
         const people = {
             totalCount: totalCount,
             totalOfPages: Math.ceil(totalCount / itemsPage),
@@ -145,7 +146,7 @@ const getPeopleService = async (params) => {
             pageNumber: parseInt(page),
             filter: filterPeople,
             options: idOption,
-            data: formatPeople(result)
+            data: result
         }
 
         return { people };
