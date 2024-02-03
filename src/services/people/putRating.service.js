@@ -26,7 +26,6 @@ const putRatingService = async (idPeople) => {
 
 
     } catch (error) {
-        console.log(error)
         return { error: error.message, status: 500 };
     };
 }

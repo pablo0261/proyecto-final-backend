@@ -4,7 +4,6 @@ const { Opportunities, conn } = require("../../db.js");
 const { PAGESIZE } = require("../../constants/index.js");
 
 const getOpportunitiesService = async (params) => {
-    console.log(params)
     const opportunitiesFields = [
         'idOpportunitie',
         'idCustomer',
@@ -56,7 +55,6 @@ const getOpportunitiesService = async (params) => {
             orders.push([field[0], field[1] ? field[1] : 'ASC'])
         })
     }
-    console.log(orders)
     try {
         //total de registros
         const totalCount = await Opportunities.count(
@@ -89,11 +87,9 @@ const getOpportunitiesService = async (params) => {
             filter: filters,
             data: result
         }
-        console.log(opportunities)
         return { opportunities, status: totalCount === 0 ? 409 : 200 };
 
     } catch (error) {
-        console.log("ERROR", error);
         throw error;
     }
 }

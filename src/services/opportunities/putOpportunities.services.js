@@ -92,7 +92,6 @@ const putOpportunitiesService = async (params) => {
                         opportunitie.reviewCustomer = review
                         opportunitie.state = opportunitie.dateRatingProvider? STATE_COMPLETED :STATE_RATINGPROVIDERPENDING 
                         updateRating = true
-                        console.log()
                     }
                     if (typeOfPerson === USER_PROVIDER) {
                         // cargo el ratign del provider al customer
@@ -118,7 +117,6 @@ const putOpportunitiesService = async (params) => {
 
 
     } catch (error) {
-        console.log(error)
         return { error: error.message, status: 500 };
     };
 }
