@@ -1,24 +1,25 @@
 const { Sequelize } = require('sequelize');
 const fs = require('fs');
 const path = require('path');
+const updateAges = require('./utils/updateAges');
 const {
-  DB_USER, DB_PASSWORD, DB_HOST, DIALECT_OPTIONS, SSL, DB_NAME
+    DB_USER, DB_PASSWORD, DB_HOST, DIALECT_OPTIONS, SSL, DB_NAME
 } = process.env;
 const sequelize = new Sequelize(`postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/${DB_NAME}`,
-  {
-    logging: false,
-    native: false,
-    dialect: 'postgres',
-    ssl: SSL,
-    define: {
-      freezeTableName: true,
-      timestamps: false,
-    },
-    dialectOptions: JSON.parse(DIALECT_OPTIONS),
-    query: {
-      raw: false, // Establece raw: true globalmente
-    },
-  }
+    {
+        logging: false,
+        native: false,
+        dialect: 'postgres',
+        ssl: SSL,
+        define: {
+            freezeTableName: true,
+            timestamps: false,
+        },
+        dialectOptions: JSON.parse(DIALECT_OPTIONS),
+        query: {
+            raw: false, // Establece raw: true globalmente
+        },
+    }
 );
 
 const basename = path.basename(__filename);
@@ -27,10 +28,10 @@ const modelDefiners = [];
 
 // Leemos todos los archivos de la carpeta Models, los requerimos y agregamos al arreglo modelDefiners
 fs.readdirSync(path.join(__dirname, '/models'))
-  .filter((file) => (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js'))
-  .forEach((file) => {
-    modelDefiners.push(require(path.join(__dirname, '/models', file)));
-  });
+    .filter((file) => (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js'))
+    .forEach((file) => {
+        modelDefiners.push(require(path.join(__dirname, '/models', file)));
+    });
 
 // Injectamos la conexion (sequelize) a todos los modelos
 modelDefiners.forEach(model => model(sequelize));
@@ -45,30 +46,28 @@ const { Categories_options, Categories, People_logins, People_options, People, O
 
 // Relaciones
 People.belongsToMany(Categories_options,
-  {
-    through: People_options,
-    foreignKey: 'idPeople'
-  });
+    {
+        through: People_options,
+        foreignKey: 'idPeople'
+    });
 
 Categories_options.belongsToMany(People,
-  {
-    through: People_options,
-    foreignKey: 'idOption'
-  });
+    {
+        through: People_options,
+        foreignKey: 'idOption'
+    });
 
-  People.hasMany(People_options, {
+People.hasMany(People_options, {
     foreignKey: 'idPeople',
-  });
-  
+});
+
 People_options.belongsTo(People, {
-  foreignKey: 'idPeople',
+    foreignKey: 'idPeople',
 });
 
 People_options.belongsTo(Categories_options, {
-  foreignKey: 'idOption',
+    foreignKey: 'idOption',
 });
-
-
 
 // People.hasOne(Categories_options, {
 //   foreignKey: 'idGenre'
@@ -76,56 +75,34 @@ People_options.belongsTo(Categories_options, {
 
 
 Categories.hasMany(Categories_options, {
-  foreignKey: 'idCategorie'
+    foreignKey: 'idCategorie'
 })
 
 Categories_options.belongsTo(Categories, {
-  foreignKey: 'idCategorie'
+    foreignKey: 'idCategorie'
 })
 
 People.hasMany(People_logins, {
-  foreignKey: 'idPeople'
+    foreignKey: 'idPeople'
 })
 
 People.hasMany(Payments, {
-  foreignKey: 'idPeople'
+    foreignKey: 'idPeople'
 })
 
 People.hasMany(Opportunities, {
-  foreignKey: 'idCustomer'
+    foreignKey: 'idCustomer'
 })
 
 People.hasMany(Opportunities, {
-  foreignKey: 'idProvider'
+    foreignKey: 'idProvider'
 })
 
 Opportunities.hasMany(Chats, {
-  foreignKey: 'idOpportunitie'
+    foreignKey: 'idOpportunitie'
 })
 
-People.prototype.getRatingStats = async function () {
-  const idPeople = this.getDataValue('idPeople');
-
-  if (!idPeople) return { avgRating: 0, totalRatings: 0 };
-
-  const ratingStats = await Opportunities.findOne({
-    attributes: [
-      [Sequelize.fn('AVG', Sequelize.col('ratingCustomer')), 'avgRating'],
-      [Sequelize.fn('COUNT', Sequelize.col('ratingCustomer')), 'totalRatings']
-    ],
-    where: {
-      idPeople: idCustomer,
-    },
-    raw: true,
-  });
-
-  return {
-    avgRating: ratingStats.avgRating || 0,
-    totalRatings: ratingStats.totalRatings || 0,
-  };
-};
-
 module.exports = {
-  ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');
-  conn: sequelize,     // para importart la conexión { conn } = require('./db.js');
+    ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');
+    conn: sequelize,     // para importart la conexión { conn } = require('./db.js');
 };
