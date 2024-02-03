@@ -52,9 +52,11 @@
             // Ejecutar la tarea de actualización cada día a las 00:00
             cron.schedule('0 0 * * *', async () => {
                 console.log('Realizando tareas programadas.');
+                //contorl de age
                 const allPeople = await People.findAll();
-            
                 await Promise.all(allPeople.map(person => updateAges(person)));
+                
+
                 console.log(`Server listening at ${PORT}`);
             });
 
