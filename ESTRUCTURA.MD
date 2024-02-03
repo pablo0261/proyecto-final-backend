@@ -21,12 +21,17 @@
     │   │   └── getProvinces.controller.js
     │   ├── logins
     │   │   ├── getLogins.controller.js
+    │   │   ├── loginPeople.controller.js
     │   │   └── putLogin.controller.js
-    │   └── people
-    │       ├── getPeopleById.controller.js
-    │       ├── getPeople.controller.js
-    │       ├── getPeopleOptions.controller.js
-    │       └── postPeople.controller.js
+    │   ├── opportunities
+    │   │   ├── getOpportunities.controller.js
+    │   │   ├── postOpportunities.controller.js
+    │   │   └── putOpportunities.controller.js
+    │   ├── people
+    │   │   ├── getPeople.controller.js
+    │   │   └── postPeople.controller.js
+    │   └── people_options
+    │       └── getPeopleOptions.controller.js
     ├── db.js
     ├── models
     │   ├── categories.js
@@ -41,26 +46,34 @@
     │   ├── categoriesRouter.js
     │   ├── geolocation.router.js
     │   ├── index.js
+    │   ├── opportunitiesRouter.js
     │   └── people.router.js
     ├── services
     │   ├── categories
-    │   │   ├── categories_options
-    │   │   │   └── getCategoriesOption.service.js
     │   │   ├── getCategories.service.js
     │   │   └── postCategorias.service.js
+    │   ├── categories_options
+    │   │   └── getCategoriesOption.service.js
     │   ├── geolocation
     │   │   ├── getMunicipalities.service.js
     │   │   └── getProvinces.service.js
-    │   └── people
-    │       ├── getPeopleById.service.js
-    │       ├── getPeopleOptions.service.js
-    │       ├── getPeople.service.js
-    │       └── postPeople.service.js
+    │   ├── logins
+    │   │   └── loginPeople.service.js
+    │   ├── opportunities
+    │   │   ├── getOpportunities.service.js
+    │   │   ├── postOpportunities.services.js
+    │   │   └── putOpportunities.services.js
+    │   ├── people
+    │   │   ├── getPeople.service.js
+    │   │   ├── postPeople.service.js
+    │   │   └── putRating.service.js
+    │   └── people_options
+    │       └── getPeopleOptions.service.js
     ├── swagger.js
     └── utils
         ├── formatPeople.js
         ├── formattedGeolocation.util.js
+        ├── updateAges.js
         └── validator.util.js
-        prueba
 
 ```

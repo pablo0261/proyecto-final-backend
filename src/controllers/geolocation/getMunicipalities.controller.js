@@ -2,7 +2,6 @@ const { getMunicipalitiesService } = require("../../services/geolocation/getMuni
 
 const getMunicipalitiesController = async (req, res) => {
 
-    console.log("ssdsdsd", req.name);
     try {
         const { id, name, idProvince, province } = req.query;
         const data = await getMunicipalitiesService(id, name, idProvince, province);
@@ -14,7 +13,6 @@ const getMunicipalitiesController = async (req, res) => {
         return res.status(404).send('Municipalidad no encontrada.');
 
     } catch (error) {
-        console.log("TIAGO ", error);
         res.status(500).send("Error interno del servidor.");
     }
 }

@@ -16,7 +16,6 @@ const getPeopleOptionsService = async (idPeople) => {
         return peopleOptions;
 
     } catch (error) {
-        console.log("Error en el Service: ", error.original);
         throw error;
     }
 }

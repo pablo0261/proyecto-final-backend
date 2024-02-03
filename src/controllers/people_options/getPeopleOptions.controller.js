@@ -10,12 +10,10 @@ const getPeopleOptionsController = async (req, res) => {
             return { error: "No fue encontrado datos de esa persona en peopleOptions" };
         }
 
-        console.log(peopleOptions);
         return peopleOptions;
 
 
     } catch (error) {
-        console.log("Error en el Controller: ", error);
         return { error: "Error interno en la busqueda de los peopleOptions" }
     }
 }

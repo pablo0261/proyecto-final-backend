@@ -27,7 +27,6 @@ const postOpportunitiesService = async (params) => {
     return { result, status: created ? 201 : 409 };
 
   } catch (error) {
-    console.log(error)
     return { error: error.message, status: 500 };
   };
 }

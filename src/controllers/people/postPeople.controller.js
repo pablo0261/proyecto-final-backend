@@ -19,13 +19,17 @@ const postPeopleController = async (req, res) => {
 
     if (!idPeople) idPeople = uuidv4() //por si lo cargo desde afuera de la app
 
-    params.idPeople = idPeople
+    params.idPeople = idPeople;
 
     const errors = validator(params);
 
+    if (Object.keys(errors).length !== 0) {
+        return res.status(400).json(errors);
+    }
+
     if (email && password) { //si viene mail y password es por que se da de alta
         if (!fullName || !birthDate) { // tiene que venir name y fechanacimiento
-            return res.status(400).json({ error: "Faltan Datos" })
+            return res.status(400).json({ error: "Faltan Datos." })
         }
     }
     try {
@@ -37,10 +41,11 @@ const postPeopleController = async (req, res) => {
         return res.status(200).json(result)
 
     } catch (error) {
+
         if (error.name === 'SequelizeUniqueConstraintError') {
-            return res.status(409).send("Error: Ya existe un registro con el mismo idPeople o email");
-        } 
-        return res.status(500).send("Error interno del servidor.");
+            return res.status(409).json({ error: "Ya existe un registro con el mismo idPeople o email." });
+        }
+        return res.status(500).json({ error: "Error interno del servidor." });
     }
 
 };
