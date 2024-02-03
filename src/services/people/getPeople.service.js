@@ -145,7 +145,7 @@ const getPeopleService = async (params) => {
             pageNumber: parseInt(page),
             filter: filterPeople,
             options: idOption,
-            data: formatPeople(result)
+            data: result
         }
 
         return { people };
