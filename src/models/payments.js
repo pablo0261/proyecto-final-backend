@@ -29,7 +29,12 @@ module.exports = (sequelize) => {
     },
     price:{
       type:DataTypes.DECIMAL(12,2)
+    },
+    responseApi:{
+        type:DataTypes.JSON,
+        allowNull:true
     }
+
   },
     {
       indexes: [
