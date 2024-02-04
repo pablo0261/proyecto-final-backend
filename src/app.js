@@ -23,7 +23,7 @@ server.use(bodyParser.json({ limit: '50mb' }));
 server.use(cookieParser());
 server.use(morgan('dev'));
 server.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', ACCESS_CONTROL_ALLOW_ORIGIN); // update to match the domain you will make the request from
+    res.header('Access-Control-Allow-Origin',ACCESS_CONTROL_ALLOW_ORIGIN); // update to match the domain you will make the request from
     res.header('Access-Control-Allow-Credentials', 'true');
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
     res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
@@ -48,11 +48,18 @@ server.use((err, req, res, next) => { // eslint-disable-line no-unused-vars
 });
 
 const serverSocket = http.createServer(server); // Crea un servidor HTTP
-const io = socketIO(serverSocket); // Crea una instancia de socket.io y la asocia con el servidor HTTP
+const io = socketIO(serverSocket,{
+    cors: {
+        origin: 'http://localhost:5173', // Reemplazar con el origen de tu aplicación React
+        methods: ['GET', 'POST'],
+        credentials: true
+    }
+}); // Crea una instancia de socket.io y la asocia con el servidor HTTP
 
 // ...
 
 io.on('connection', (socket) => {
+    console.log(socket)
     console.log(`Usuario conectado: ${socket.id}`);
 
     // Maneja eventos de Socket.IO según tus necesidades

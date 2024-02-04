@@ -9,7 +9,6 @@
 const { v4: uuidv4 } = require('uuid');
 const { postPeopleService } = require('../../services/people/postPeople.service');
 const { validator } = require("../../utils/validator.util");
-const { io } = require('../../app');
 
 const postPeopleController = async (req, res) => {
     const params = req.body
@@ -35,7 +34,6 @@ const postPeopleController = async (req, res) => {
         if (created) {
             return res.status(201).json(result)
         }
-        io.emit('nuevoMensaje', 'se modifico un usuario');
         return res.status(200).json(result)
 
     } catch (error) {
