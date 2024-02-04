@@ -1,7 +1,7 @@
 const { Sequelize } = require('sequelize');
 const fs = require('fs');
 const path = require('path');
-const updateAges = require('./utils/updateAges');
+
 const {
     DB_USER, DB_PASSWORD, DB_HOST, DIALECT_OPTIONS, SSL, DB_NAME
 } = process.env;
