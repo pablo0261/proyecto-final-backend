@@ -59,7 +59,6 @@ const io = socketIO(serverSocket,{
 // ...
 
 io.on('connection', (socket) => {
-    console.log(socket)
     console.log(`Usuario conectado: ${socket.id}`);
 
     // Maneja eventos de Socket.IO según tus necesidades
