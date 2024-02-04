@@ -25,6 +25,10 @@ module.exports = (sequelize) => {
     },
     message: {
       type: DataTypes.TEXT
+    },
+    isRating:{
+        type:DataTypes.BOOLEAN,
+        defaultValue:false
     }
   },
     {

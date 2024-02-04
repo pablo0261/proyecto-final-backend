@@ -10,5 +10,6 @@ router.use(categoriesRouter);
 router.use(peopleRouter);
 router.use(geolocationRouter);
 router.use(chats);
+router.use(opportunitiesRouter); 
 
 module.exports = router;

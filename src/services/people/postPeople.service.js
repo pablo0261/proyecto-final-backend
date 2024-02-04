@@ -1,11 +1,12 @@
 const { People, People_logins, Payments } = require('../../db');
 const { v4: uuidv4 } = require('uuid');
 const { getPeopleService } = require('./getPeople.service');
+const { PEOPLE_STATE_ACTIVE } = require('../../constants');
 
 const postPeopleService = async (params) => {
     const { idPeople, fullName, address, idLocation, geoposition, birthDate, idGenre, state,
-        aboutMe, typeOfPerson, email, password, externalLogin, weekCalendar, prize,
-        phone,location,country,profession} = params
+        aboutMe, typeOfPerson, email, password, externalLogin, weekCalendar, price,
+        phone, location, country, profession } = params;
 
     const currentDate = new Date();
 
@@ -18,7 +19,7 @@ const postPeopleService = async (params) => {
             geoposition,
             birthDate,
             idGenre,
-            state: !state ? 'Active' : state,
+            state: !state ? PEOPLE_STATE_ACTIVE : state,
             aboutMe,
             dateOfAdmission: currentDate,
             typeOfPerson,
@@ -27,11 +28,22 @@ const postPeopleService = async (params) => {
             externalLogin,
             weekCalendar,
             phone,
-            location,
             country,
             profession
         };
-
+        
+        //age
+        if (birthDate) {
+            const birthDateToDate = new Date(birthDate);
+            let age = currentDate.getFullYear() - birthDateToDate.getFullYear();
+            if (
+                currentDate.getMonth() < birthDateToDate.getMonth() ||
+                (currentDate.getMonth() === birthDateToDate.getMonth() && currentDate.getDate() < birthDateToDate.getDate())
+            ) {
+                age--; // Resta 1 año si aún no ha cumplido años este año
+            }
+            newData.age=age
+        }
         const [found, created] = await People.findOrCreate({
             where: { idPeople: newData.idPeople },
             defaults: newData,
@@ -40,7 +52,7 @@ const postPeopleService = async (params) => {
         if (!created) {
             // Si no se creó, se actualiza el usuario que contiene el idPeople
             await People.update(newData, { where: { idPeople: newData.idPeople } });
-              
+
         } else {
             // Si se creó una nueva entrada, guardamos el login y el pago
 
@@ -56,10 +68,10 @@ const postPeopleService = async (params) => {
                 emisionDate: currentDate,
                 dueDate: currentDate,
                 paymentDate: currentDate,
-                prize,
+                price,
             });
         }
-        const result= await getPeopleService({idPeople:idPeople})
+        const result = await getPeopleService({ idPeople: idPeople })
         return { result, created };
     } catch (error) {
         throw error;

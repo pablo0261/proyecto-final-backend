@@ -1,46 +1,17 @@
-// const { createOpportunity } = require("../../services/opportunities/opportunities.service");
+const {postOpportunitiesService} = require('../../services/opportunities/postOpportunities.services');
 
-// const postOpportunities = async (req, res) => {
-//   try {
-//     const {
-//       idCustomer,
-//       idProvider,
-//       dateQuery,
-//       idService,
-//       price,
-//       dateHiring,
-//       dateCanceled,
-//       idCanceler,
-//       dateServiceEnd,
-//       ratingProvider,
-//       ratingCustomer,
-//       reviewCustomer,
-//       reviewProvider,
-//     } = req.body;
+const postOpportunitiesController = async (req, res) => {
 
-//     const opportunityData = {
-//       idCustomer,
-//       idProvider,
-//       dateQuery,
-//       idService,
-//       price,
-//       dateHiring,
-//       dateCanceled,
-//       idCanceler,
-//       dateServiceEnd,
-//       ratingProvider,
-//       ratingCustomer,
-//       reviewCustomer,
-//       reviewProvider,
-//     }; 
+    try {
+        const { result, status } = await postOpportunitiesService(req.body)
+        
+        return res.status(status).json(result)
 
-//     const createdOpportunity = await createOpportunity(opportunityData);
+    } catch (error) {
 
-//     res.status(201).json(createdOpportunity);
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ error: "Error al procesar la solicitud" });
-//   }
-// };
+        res.status(500).json({ error: error.message });
+    }
 
-// module.exports = postOpportunities;
+};
+
+module.exports = { postOpportunitiesController };

@@ -3,13 +3,32 @@ const { Sequelize, Op } = require("sequelize");
 const { People, People_options, Categories, Categories_options, People_logins, Opportunities, conn } = require("../../db.js");
 const formatPeople = require("../../utils/formatPeople.js");
 const { getMunicipalitiesService } = require("../geolocation/getMunicipalities.service.js");
-const { PAGESIZE } = require("../../constants/index.js");
+const { PAGESIZE, PEOPLE_STATE_ACTIVE } = require("../../constants/index.js");
 
 const getPeopleService = async (params) => {
-    const peopleFields = ['idPeople', 'fullName', 'address', 'idLocation', 'locationName', 'geoposition',
-        'birthDate', 'age', 'idGenre', 'aboutMe', 'dateOfAdmission', 'typeOfPerson',
-        'email', 'externalLogin', 'weekCalendar', 'averageRating', 'countRating',
-        'logged', 'phone', 'location', 'country', 'profession']
+    const peopleFields = [
+        'idPeople',
+        'fullName',
+        'address',
+        'idLocation',
+        'geoposition',
+        'birthDate',
+        'age',
+        'idGenre',
+        'state',
+        'aboutMe',
+        'dateOfAdmission',
+        'typeOfPerson',
+        'email',
+        'externalLogin',
+        'averageRating',
+        'countRating',
+        'logged',
+        'phone',
+        'location',
+        'country',
+        'profession']
+
     const { idOption, idOrder, state, pageSize, pageNumber } = params
 
     const filters = []
@@ -22,7 +41,7 @@ const getPeopleService = async (params) => {
     if (state) {
         filterPeople.state = state
     } else {
-        filterPeople.state = 'Active'
+        filterPeople.state = PEOPLE_STATE_ACTIVE
     }
 
     //sequelize acepta filtros como array de objetosç
@@ -74,12 +93,12 @@ const getPeopleService = async (params) => {
                 },
             }
         )
-
         //registros
         let result = await People.findAll(
             {
                 limit: itemsPage,
                 offset: offset,
+                attributes: peopleFields,
                 where: {
                     [Sequelize.Op.and]: filters
                 },
@@ -118,8 +137,10 @@ const getPeopleService = async (params) => {
             }
         }
         const count = result.length;
+
         const people = {
             totalCount:totalCount,
+            totalCount: totalCount,
             totalOfPages: Math.ceil(totalCount / itemsPage),
             count: count,
             pageSize: parseInt(itemsPage),
@@ -131,7 +152,6 @@ const getPeopleService = async (params) => {
 
         return { people };
     } catch (error) {
-        console.log("ERROR", error);
         throw error;
     }
 }

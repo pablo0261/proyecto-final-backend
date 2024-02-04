@@ -1,10 +1,11 @@
 const { DataTypes, INTEGER } = require('sequelize');
+const { STATE_ACCEPTED, STATE_CANCELLED, STATE_COMPLETED, STATE_PENDING, STATE_RATINGCUSTOMERPENDING, STATE_RATINGPENDING, STATE_RATINGPROVIDERPENDING, STATE_VIEW } = require('../constants');
 // Exportamos una funcion que define el modelo
 // Luego le injectamos la conexion a sequelize.
 module.exports = (sequelize) => {
   // defino el modelo
   sequelize.define('opportunities', {
-    idOpportunities: {
+    idOpportunitie: {
       type: DataTypes.UUID,
       allowNull: false,
       primaryKey: true
@@ -17,7 +18,12 @@ module.exports = (sequelize) => {
       type: DataTypes.UUID,
       allowNull: false,
     },
-    dateQuery: {
+    state:{
+      type:DataTypes.ENUM,
+      default:STATE_VIEW,
+      values: [STATE_ACCEPTED,STATE_CANCELLED,STATE_COMPLETED,STATE_PENDING,STATE_RATINGCUSTOMERPENDING,STATE_RATINGPENDING,STATE_RATINGPROVIDERPENDING,STATE_VIEW]
+    },
+    dateView: {
       type: DataTypes.DATE,
     },
     idService: {
@@ -26,32 +32,44 @@ module.exports = (sequelize) => {
     dateHiring: {
       type: DataTypes.DATE,
     },
-    dateEstimateCompletion: {
-      type: DataTypes.DATE,
+    dateOfService: {
+      type: DataTypes.DATEONLY,
     },
-    prize: {
+    timeOfService:{
+      type:DataTypes.TIME
+    },
+    durationOfService:{
+      type:DataTypes.INTEGER
+    },
+    price: {
       type: DataTypes.DECIMAL(12, 2)
     },
-    dateOk: {
+    dateAccepted: {
       type: DataTypes.DATE,
     },
     dateCancelled: {
       type: DataTypes.DATE,
     },
-    idPeopleCancelled: {
+    idPeopleWhoCancel: {
       type: DataTypes.UUID,
     },
-    Reason: {
+    reasonForCancelation: {
       type: DataTypes.STRING,
     },
-    DateServiceEnd: {
+    dateEndService: {
       type: DataTypes.DATE,
     },
     ratingCustomer: {
       type: DataTypes.DECIMAL(2),
     },
+    dateRatingCustomer:{
+      type:DataTypes.DATE,
+    },
     ratingProvider: {
       type: DataTypes.DECIMAL(2),
+    },
+    dateRatingProvider:{
+      type:DataTypes.DATE,
     },
     reviewCustomer: {
       type: DataTypes.TEXT,
@@ -76,7 +94,11 @@ module.exports = (sequelize) => {
         },
         {
           unique: false,
-          fields: ['idPeopleCancelled']
+          fields: ['idPeopleWhoCancel']
+        },
+        {
+          unique: false,
+          fields: ['state']
         },
       ]
     });
