@@ -139,6 +139,7 @@ const getPeopleService = async (params) => {
         const count = result.length;
 
         const people = {
+            totalCount:totalCount,
             totalCount: totalCount,
             totalOfPages: Math.ceil(totalCount / itemsPage),
             count: count,

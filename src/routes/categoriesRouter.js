@@ -4,6 +4,7 @@ const { Router } = require("express");
 const getCategories = require("../controllers/categories/getCategories.controller");
 const getCategoriesOptions = require("../controllers/categories_options/getCategoriesOptions.controller");
 const postCategories = require("../controllers/categories/postCategories.controller");
+const postCategoriasOptions = require("../controllers/categories_options/postCategoriesOptions.controller");
 
 const categoriesRouter = Router();
 
@@ -17,10 +18,10 @@ categoriesRouter.get("/categories", getCategories);
 //  *       - Categories
 //  *     responses:
 //  *       200:
-//  *         description: > 
+//  *         description: >
 //  *           Obtiene un objeto con dos propiedades: count y data.
 //  *           count: contiene la cantidad de categorías registradas.
-//  *           data: contiene un array de objetos, cada objeto contiene una categoría y sus propiedades.  
+//  *           data: contiene un array de objetos, cada objeto contiene una categoría y sus propiedades.
 //  *       404:
 //  *         description: No hay registro de categorías.
 //  *       500:
@@ -37,7 +38,7 @@ categoriesRouter.get("/categoriesoptions", getCategoriesOptions);
 //  *       - Categories
 //  *     responses:
 //  *       200:
-//  *         description: > 
+//  *         description: >
 //  *           Obtiene un array de objetos, cada objeto contiene una opción de categoría y sus propiedades.
 //  *       404:
 //  *         description: No hay datos en categories_options.
@@ -67,5 +68,7 @@ categoriesRouter.post("/categories", postCategories);
 //  *       500:
 //  *         description: Error interno del servidor.
 //  */
+
+categoriesRouter.post("/categoriesoptions", postCategoriasOptions);
 
 module.exports = categoriesRouter;
