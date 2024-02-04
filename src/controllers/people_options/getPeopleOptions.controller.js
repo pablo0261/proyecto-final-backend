@@ -1,4 +1,4 @@
-const { getPeopleOptionsService } = require("../../services/people/getPeopleOptions.service")
+const { getPeopleOptionsService } = require("../../services/people_options/getPeopleOptions.service")
 
 const getPeopleOptionsController = async (req, res) => {
     const { idPeople } = req.params;

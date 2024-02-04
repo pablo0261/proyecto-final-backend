@@ -2,36 +2,10 @@ const { Router } = require('express');
 
 // controllers
 const { getPeopleController } = require("../controllers/people/getPeople.controller.js");
-const { getPeopleByIdController } = require('../controllers/people/getPeopleById.controller.js');
+// const { getPeopleByIdController } = require('../controllers/people/getPeopleById.controller.js');
 const { postPeopleController } = require('../controllers/people/postPeople.controller.js');
 
 const peopleRouter = Router();
-
-peopleRouter.get('/people/:id', getPeopleByIdController);
-/**
- * @swagger
- * /people/{id}:
- *   get:
- *     summary: Obtener información de una persona por su ID.
- *     tags:
- *       - People
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *         description: El ID de la persona que se desea obtener.
- *     responses:
- *       200:
- *         description: > 
- *           Obtiene un objeto con la, el cual tiene una propiedad llamada data que es un array,
- *           el array contiene todas las informaciones de la persona.
- *       404:
- *         description: No fue encontrado nadie con ese ID.
- *       500:
- *         description: Error interno del servidor.
- */
 
 peopleRouter.get('/people', getPeopleController);
 /**
@@ -41,6 +15,18 @@ peopleRouter.get('/people', getPeopleController);
  *     summary: Obtener todas las personas.
  *     tags:
  *       - People
+ *     parameters:
+ *       - in: cualquier campo de la tabla
+ *         name: query
+ *         required: false
+ *         schema:
+ *           type: string
+ *         description: 
+ *          en blanco todos los registros con paginado de 10 
+ *          pageSize= items por pagina
+ *          pageNumber= numero de pagina
+ *          idOrder= con uno o varios campos de la tabla people con el criterio ASC,DESC separado por "," si son varios separados por ";"Ejemplo idGenre,DESC;fullName,ASC;
+ *          idOption= id uno o varios idOption de la tabla categories_options separado por "," Ejemplo 1,3 devuelve todos las personas con esas opciones
  *     responses:
  *       200:
  *         description: > 

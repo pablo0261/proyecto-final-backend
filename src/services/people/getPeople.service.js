@@ -55,12 +55,27 @@ const getPeopleService = async (params) => {
     if (!idOrder) {
         orderPeople.push(['fullName', 'ASC'])
     } else {
-        const orderField = idOrder.split(',')
-        orderPeople.push([orderField[0], orderField[1] ? orderField[1] : 'ASC'])
+
+        //armo arrays separados por ;
+        const orderField = idOrder.split(';')
+        orderField.map((order) => {
+            //armo array separado por ,
+            const field = order.split(',')
+            orderPeople.push([field[0], field[1] ? field[1] : 'ASC'])
+        })
     }
 
-    console.log(orderPeople)
     try {
+        //total de registros
+        const totalCount = await People.count(
+            {
+                where: {
+                    [Sequelize.Op.and]: filters
+                },
+            }
+        )
+
+        //registros
         let result = await People.findAll(
             {
                 limit: itemsPage,
@@ -104,6 +119,8 @@ const getPeopleService = async (params) => {
         }
         const count = result.length;
         const people = {
+            totalCount:totalCount,
+            totalOfPages: Math.ceil(totalCount / itemsPage),
             count: count,
             pageSize: parseInt(itemsPage),
             pageNumber: parseInt(page),
