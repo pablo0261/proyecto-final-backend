@@ -46,16 +46,13 @@
 
             console.log('Realizando tareas de mantenimiento.');
             // Ejecutar la tarea de actualización al iniciar el servidor
-            const allPeople = await People.findAll();
-            await Promise.all(allPeople.map(person => updateAges(person)));
+            updateAges()
 
             // Ejecutar la tarea de actualización cada día a las 00:00
             cron.schedule('0 0 * * *', async () => {
                 console.log('Realizando tareas programadas.');
                 //contorl de age
-                const allPeople = await People.findAll();
-                await Promise.all(allPeople.map(person => updateAges(person)));
-                
+                updateAges()    
 
                 console.log(`Server listening at ${PORT}`);
             });
