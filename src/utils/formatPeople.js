@@ -28,6 +28,7 @@ const formatPeople = (result) => {
             location: dataObject.location,
             country: dataObject.country,
             profession: dataObject.profession,
+            image:dataObject.image,
             categories: [], // Inicializar array para las categorías
         };
 
