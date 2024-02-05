@@ -3,6 +3,7 @@ const { Opportunities } = require('../../db');
 const { STATE_VIEW, STATE_PENDING, STATE_ACCEPTED, STATE_CANCELLED, STATE_RATINGPENDING, STATE_RATINGPROVIDERPENDING, STATE_RATINGCUSTOMERPENDING, STATE_COMPLETED, USER_CUSTOMER, USER_PROVIDER } = require('../../constants');
 const { getOpportunitiesService } = require('./getOpportunities.service');
 const { putRatingService } = require('../people/putRating.service');
+const postChatsService = require('../chats/postChats.service');
 
 const putOpportunitiesService = async (params) => {
     const {
@@ -75,6 +76,12 @@ const putOpportunitiesService = async (params) => {
                     // si esta todo OK paso a RatingPending    
                     opportunitie.dateEndService = currentDate
                     opportunitie.state = STATE_RATINGPENDING
+                    //envio automaticamente el chat 
+                    const chatToProvider={ idOpportunitie:opportunitie.idOpportunitie, idPeople:opportunitie.idProvider,message:'Por favor evalue al Cliente',isRating:true,isRated:false}
+                    postChatsService(chatToProvider)
+
+                    const chatToCustomer={ idOpportunitie:opportunitie.idOpportunitie, idPeople:opportunitie.idCustomer,message:'Por favor evalue el servicio recibido',isRating:true,isRated:false}
+                    postChatsService(chatToCustomer)
                     break;
 
                 case STATE_RATINGPENDING:

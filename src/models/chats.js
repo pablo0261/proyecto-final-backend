@@ -29,6 +29,10 @@ module.exports = (sequelize) => {
     isRating:{
         type:DataTypes.BOOLEAN,
         defaultValue:false
+    },
+    isRated:{
+        type:DataTypes.BOOLEAN,
+        defaultValue:false
     }
   },
     {
@@ -41,6 +45,10 @@ module.exports = (sequelize) => {
           unique: false,
           fields: ['idPeople']
         },
+        {
+            unique: false,
+            fields: ['idOpportunitie','dateMessage']
+          },
       ]
     });
 };

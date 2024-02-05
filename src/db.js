@@ -98,9 +98,24 @@ People.hasMany(Opportunities, {
     foreignKey: 'idProvider'
 })
 
+Chats.belongsTo(Opportunities, {
+    foreignKey: 'idOpportunitie'
+})
+
 Opportunities.hasMany(Chats, {
     foreignKey: 'idOpportunitie'
 })
+
+Categories_options.hasMany(Opportunities,{
+    foreignKey: 'idOption',
+    sourceKey:'idOption',
+    as: 'service'
+})
+Opportunities.belongsTo(Categories_options,{
+    foreignKey: 'idService',
+    targetKey:'idOption'
+})
+
 
 module.exports = {
     ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');

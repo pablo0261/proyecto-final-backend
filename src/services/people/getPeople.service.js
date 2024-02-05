@@ -27,6 +27,7 @@ const getPeopleService = async (params) => {
         'phone',
         'location',
         'country',
+        'image',
         'profession']
 
     const { idOption, idOrder, state, pageSize, pageNumber } = params
