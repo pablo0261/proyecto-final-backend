@@ -2,7 +2,7 @@ const { v4: uuidv4 } = require('uuid');
 const { Opportunities } = require('../../db');
 const { STATE_VIEW, STATE_PENDING, STATE_ACCEPTED, STATE_CANCELLED, STATE_RATINGPENDING, STATE_RATINGPROVIDERPENDING, STATE_RATINGCUSTOMERPENDING, STATE_COMPLETED, USER_CUSTOMER, USER_PROVIDER } = require('../../constants');
 const { getOpportunitiesService } = require('./getOpportunities.service');
-const { putRatingService } = require('../people/putRating.service');
+const { putRatingService } = require('../people/putPeople.service');
 const postChatsService = require('../chats/postChats.service');
 
 const putOpportunitiesService = async (params) => {
