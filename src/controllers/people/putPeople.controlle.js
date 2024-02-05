@@ -11,7 +11,7 @@ const putPeopleController = async (req, res) => {
     const params = req.body
     const { idPeople } = params
 
-    if (!idPeople) return res.status(400), json({ error: 'Falta el id de la persona' })
+    if (!idPeople) return res.status(400).json({ error: 'Falta el id de la persona' })
 
     try {
         // const errors = validator(params);
