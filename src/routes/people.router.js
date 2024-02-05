@@ -5,6 +5,8 @@ const { getPeopleController } = require("../controllers/people/getPeople.control
 // const { getPeopleByIdController } = require('../controllers/people/getPeopleById.controller.js');
 const { postPeopleController } = require('../controllers/people/postPeople.controller.js');
 const loginPeopleController = require('../controllers/logins/loginPeople.controller.js');
+const { getPeopleOptionsController } = require('../controllers/people_options/getPeopleOptions.controller.js');
+const postPeopleOptionsController = require('../controllers/people_options/postPeopleOptions.controller.js');
 
 const peopleRouter = Router();
 
@@ -79,5 +81,9 @@ peopleRouter.post('/people', postPeopleController);
  */
 
 peopleRouter.get('/people/login', loginPeopleController);
+
+peopleRouter.get('/people/options/:idPeople', getPeopleOptionsController);
+
+peopleRouter.post('/people/options', postPeopleOptionsController);
 
 module.exports = peopleRouter;
