@@ -5,6 +5,7 @@ const getPeopleOptionsController = async (req, res) => {
 
     try {
         const peopleOptions = await getPeopleOptionsService(idPeople);
+        res.status(200).json(peopleOptions);
 
         if (!peopleOptions) {
             return { error: "No fue encontrado datos de esa persona en peopleOptions" };
