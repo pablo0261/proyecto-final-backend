@@ -14,12 +14,12 @@ const putPeopleController = async (req, res) => {
     if (!idPeople) return res.status(400), json({ error: 'Falta el id de la persona' })
 
     try {
-        const errors = validator(params);
+        // const errors = validator(params);
 
-        if (Object.keys(errors).length !== 0) {
-            return res.status(400).json(errors);
-        }
-        
+        // if (Object.keys(errors).length !== 0) {
+        //     return res.status(400).json(errors);
+        // }
+
         const { result } = await putPeopleService(params)
         return res.status(200).json(result)
 
