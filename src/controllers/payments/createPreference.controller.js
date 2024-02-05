@@ -17,15 +17,15 @@ const createPreference = (req, res) => {
             }
         ],
         back_urls: {
-            success: "http://localhost:5173/feedback",//*aqui es donde vuelve luego de hacer la req a MP
+            success: "https://proyecto-final-front-ashy.vercel.app/feedback",//*aqui es donde vuelve luego de hacer la req a MP
             //Luego les indicaremos a donde necesitamos que vuelva
-            failure: "http://localhost:5173/feedback",//*aqui es donde vuelve luego de hacer la req a MP
+            failure: "https://proyecto-final-front-ashy.vercel.app/feedback",//*aqui es donde vuelve luego de hacer la req a MP
             //Luego les indicaremos a donde los llevará cuando la req sea failure.
             pending: "",
             // Inicialmente no vamos a utilizar el pending
         },
         auto_return: "approved",
-        "notification_url": "http://localhost:5173/feedback"
+        "notification_url": "https://proyecto-final-front-ashy.vercel.app/feedback"
 
     };
 
@@ -45,6 +45,7 @@ const createPreference = (req, res) => {
             res.json({
                 id: response.body.id
             });
+            console.log(response)
         }).catch(function (error) {
             console.log(error);
             res.status(500).send('Error al crear la preferencia');
