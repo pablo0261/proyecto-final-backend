@@ -9,6 +9,7 @@
 const { v4: uuidv4 } = require('uuid');
 const { postPeopleService } = require('../../services/people/postPeople.service');
 const { validator } = require("../../utils/validator.util");
+const { hashPassword } = require("../../utils/encrypt.util.js");
 
 const postPeopleController = async (req, res) => {
     const params = req.body
@@ -31,7 +32,12 @@ const postPeopleController = async (req, res) => {
         if (!fullName || !birthDate) { // tiene que venir name y fechanacimiento
             return res.status(400).json({ error: "Faltan Datos." })
         }
+        // encriptacion de la contraseña
+        params.password = await hashPassword(password);
+
     }
+
+
     try {
         const { result, created } = await postPeopleService(params)
 
