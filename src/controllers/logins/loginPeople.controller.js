@@ -3,6 +3,7 @@ const { getPeopleService } = require('../../services/people/getPeople.service');
 
 const loginPeopleController = async (req, res) => {
   const { email, password } = req.body;
+  
 
   if (!email) return res.status(400).json({ error: 'Falta email' });
   if (!password) return res.status(400).json({ error: 'Falta password' });
