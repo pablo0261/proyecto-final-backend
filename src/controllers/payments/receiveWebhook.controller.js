@@ -1,5 +1,4 @@
 
-
 const receiveWebhookController = (req, res) => {
     console.log(req.query);
 }
