@@ -3,8 +3,8 @@ const postPeopleOptionsService = require('../../services/people_options/postPeop
 const postPeopleOptionsController = async (req, res) => {
   const dataBody = req.body;
   try {
-    const { status, response } = await postPeopleOptionsService(dataBody);
-    res.status(status).json({ response });
+    const { status, result } = await postPeopleOptionsService(dataBody);
+    res.status(status).json({ result });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
