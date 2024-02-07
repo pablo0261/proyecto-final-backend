@@ -1,14 +1,17 @@
 const { Router } = require('express');
 
 // controllers
-const { getPeopleController } = require("../controllers/people/getPeople.controller.js");
+const { getPeopleController } = require('../controllers/people/getPeople.controller.js');
 // const { getPeopleByIdController } = require('../controllers/people/getPeopleById.controller.js');
 const { postPeopleController } = require('../controllers/people/postPeople.controller.js');
 const loginPeopleController = require('../controllers/logins/loginPeople.controller.js');
-const { getPeopleOptionsController } = require('../controllers/people_options/getPeopleOptions.controller.js');
+const {
+  getPeopleOptionsController,
+} = require('../controllers/people_options/getPeopleOptions.controller.js');
 const postPeopleOptionsController = require('../controllers/people_options/postPeopleOptions.controller.js');
 const { putPeopleController } = require('../controllers/people/putPeople.controlle.js');
 const deletePeopleOptionsContoller = require('../controllers/people_options/deletePeopleOptions.controller.js');
+const logoutPeopleController = require('../controllers/logins/logoutPeople.controller.js');
 
 const peopleRouter = Router();
 
@@ -91,5 +94,6 @@ peopleRouter.get('/people/options/:idPeople', getPeopleOptionsController);
 peopleRouter.post('/people/options', postPeopleOptionsController);
 
 peopleRouter.delete('/people/options', deletePeopleOptionsContoller);
+peopleRouter.put('/people/logout', logoutPeopleController);
 
 module.exports = peopleRouter;

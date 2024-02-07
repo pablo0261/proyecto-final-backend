@@ -6,8 +6,9 @@ module.exports = (sequelize) => {
   sequelize.define('people_logins', {
     id:{
       type: DataTypes.UUID,
-      allowNull:false,
-      primaryKey:true
+      allowNull: false,
+      primaryKey: true,
+      defaultValue: DataTypes.UUIDV4
     },
     idPeople:{
       type: DataTypes.UUID,
