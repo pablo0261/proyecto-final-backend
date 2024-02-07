@@ -1,12 +1,12 @@
 const { Router } = require("express");
 const router = Router();
 
-const categoriesRouter = require("./categoriesRouter.js");
-const peopleRouter = require("./people.router.js");
-const geolocationRouter = require("./geolocation.router.js");
-const opportunitiesRouter = require("./opportunitiesRouter.js");
-const paymentsRouter = require('./payments.Route.js');
-const chatsRouter = require("./chats.router.js");
+const categoriesRouter = require("./categories.route.js");
+const peopleRouter = require("./people.route.js");
+const geolocationRouter = require("./geolocation.route.js");
+const opportunitiesRouter = require("./opportunities.route.js");
+const paymentsRouter = require('./payments.route.js');
+const chatsRouter = require("./chats.route.js");
 
 router.use(categoriesRouter);
 router.use(peopleRouter);
