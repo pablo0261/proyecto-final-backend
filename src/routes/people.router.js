@@ -8,6 +8,7 @@ const loginPeopleController = require('../controllers/logins/loginPeople.control
 const { getPeopleOptionsController } = require('../controllers/people_options/getPeopleOptions.controller.js');
 const postPeopleOptionsController = require('../controllers/people_options/postPeopleOptions.controller.js');
 const { putPeopleController } = require('../controllers/people/putPeople.controlle.js');
+const deletePeopleOptionsContoller = require('../controllers/people_options/deletePeopleOptions.controller.js');
 
 const peopleRouter = Router();
 
@@ -81,12 +82,14 @@ peopleRouter.post('/people', postPeopleController);
  *         description: Error interno del servidor.
  */
 
+peopleRouter.put('/people', putPeopleController);
+
 peopleRouter.get('/people/login', loginPeopleController);
 
 peopleRouter.get('/people/options/:idPeople', getPeopleOptionsController);
 
-peopleRouter.put('/people', putPeopleController);
-
 peopleRouter.post('/people/options', postPeopleOptionsController);
+
+peopleRouter.delete('/people/options', deletePeopleOptionsContoller);
 
 module.exports = peopleRouter;
