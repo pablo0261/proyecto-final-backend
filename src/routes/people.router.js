@@ -8,6 +8,7 @@ const loginPeopleController = require('../controllers/logins/loginPeople.control
 const { getPeopleOptionsController } = require('../controllers/people_options/getPeopleOptions.controller.js');
 const postPeopleOptionsController = require('../controllers/people_options/postPeopleOptions.controller.js');
 const { putPeopleController } = require('../controllers/people/putPeople.controlle.js');
+const logoutPeopleController = require('../controllers/logins/logoutPeople.controller.js');
 
 const peopleRouter = Router();
 
@@ -88,5 +89,7 @@ peopleRouter.get('/people/options/:idPeople', getPeopleOptionsController);
 peopleRouter.put('/people', putPeopleController);
 
 peopleRouter.post('/people/options', postPeopleOptionsController);
+
+peopleRouter.put('/people/logout', logoutPeopleController);
 
 module.exports = peopleRouter;
