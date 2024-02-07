@@ -59,19 +59,19 @@ const io = socketIO(serverSocket,{
 // ...
 
 io.on('connection', (socket) => {
-    console.log(`Usuario conectado: ${socket.id}`);
+    // console.log(`Usuario conectado: ${socket.id}`);
 
-    // Maneja eventos de Socket.IO según tus necesidades
-    socket.on('mensaje', (data) => {
-        console.log('Mensaje recibido:', data);
-        // Broadcast a todos los clientes conectados
-        io.emit('mensaje', data);
-    });
+    // // Maneja eventos de Socket.IO según tus necesidades
+    // socket.on('mensaje', (data) => {
+    //     console.log('Mensaje recibido:', data);
+    //     // Broadcast a todos los clientes conectados
+    //     io.emit('mensaje ', {mensaje:socket.id});
+    // });
 
-    // Maneja la desconexión del socket
-    socket.on('disconnect', () => {
-        console.log(`Usuario desconectado: ${socket.id}`);
-    });
+    // // Maneja la desconexión del socket
+    // socket.on('disconnect', () => {
+    //     console.log(`Usuario desconectado: ${socket.id}`);
+    // });
 });
 
 
