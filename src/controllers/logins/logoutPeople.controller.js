@@ -12,13 +12,12 @@ const logoutPeopleController = async (req, res) => {
     try {
         const result = await logoutPeopleService(idPeople);
         if(result) {
-            return res.status(200).json({ message: 'Logout exitoso' });
+            return res.status(200).json(result);
         }
     } catch (error) {
         console.log(error);
         return res.status(500).json({ error: 'Error en el servidor' });
     }
-
 
 }
 
