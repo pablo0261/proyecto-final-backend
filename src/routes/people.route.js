@@ -5,9 +5,7 @@ const { getPeopleController } = require('../controllers/people/getPeople.control
 // const { getPeopleByIdController } = require('../controllers/people/getPeopleById.controller.js');
 const { postPeopleController } = require('../controllers/people/postPeople.controller.js');
 const loginPeopleController = require('../controllers/logins/loginPeople.controller.js');
-const {
-  getPeopleOptionsController,
-} = require('../controllers/people_options/getPeopleOptions.controller.js');
+const { getPeopleOptionsController } = require('../controllers/people_options/getPeopleOptions.controller.js');
 const postPeopleOptionsController = require('../controllers/people_options/postPeopleOptions.controller.js');
 const { putPeopleController } = require('../controllers/people/putPeople.controlle.js');
 const deletePeopleOptionsContoller = require('../controllers/people_options/deletePeopleOptions.controller.js');
