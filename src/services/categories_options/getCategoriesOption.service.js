@@ -1,7 +1,7 @@
-const { CategoriesOptions } = require("../../db");
+const { Categories_options } = require("../../db");
 
 const getCategoriesOption = async () => {
-  const categoriesOptionsData = await CategoriesOptions.findAll();
+  const categoriesOptionsData = await Categories_options.findAll();
   return categoriesOptionsData;
 };
 

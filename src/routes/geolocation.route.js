@@ -1,7 +1,7 @@
 const { Router } = require('express');
 
 // controllers
-const { getProvincesController } = require("../controllers/geolocation/getProvinces.controller");
+const { getProvincesController } = require("../controllers/geolocation/getProvinces.controller.js");
 const { getMunicipalitiesController} = require("../controllers/geolocation/getMunicipalities.controller.js");
 
 const geolocationRouter = Router();
