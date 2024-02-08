@@ -1,5 +1,5 @@
 const mercadopago = require("mercadopago");
-const { MP_TOKEN } = process.env;
+const { MP_TOKEN, MP_WEBWOOK } = process.env;
 
 
 const paymentController = async (req, res) => {
@@ -12,8 +12,8 @@ const paymentController = async (req, res) => {
     const result = await mercadopago.preferences.create({
         items: [
             {
-                title: "Plato sucio",
-                unit_price: 200,
+                title: "Subscripción",
+                unit_price: 1200,
                 currency_id: "ARS",
                 quantity: 1
             }
@@ -23,7 +23,7 @@ const paymentController = async (req, res) => {
             failure: "https://www.soyhenry.com",
             pending: "https://www.soyhenry.com",
         },
-        notification_url: "https://6c6d-2803-9800-9013-b4eb-aad2-ee62-a952-d2dd.ngrok-free.app/webhook",
+        notification_url: `${MP_WEBWOOK}/webhook`,
         metadata: {
             id_people: "",
             full_name: person.fullName,
