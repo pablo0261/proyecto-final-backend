@@ -1,8 +1,9 @@
 const mercadopago = require("mercadopago");
-const {postPeopleService} = require("../../services/people/postPeople.service")
+const { postPeopleService } = require("../../services/people/postPeople.service")
 const { validator } = require("../../utils/validator.util");
 const { hashPassword } = require("../../utils/encrypt.util.js");
 const { v4: uuidv4 } = require('uuid');
+const { postPeopleUtil } = require("../../utils/postPeople.util");
 
 
 const receiveWebhookController = async (req, res) => {
@@ -28,32 +29,13 @@ const receiveWebhookController = async (req, res) => {
                 params.idPeople = uuidv4();
             }
 
-            const { fullName, birthDate,
-                email, password,
-            } = req.body
+            const { params: validatedParams, errors } = await postPeopleUtil(params);
 
-
-            
-
-            // const errors = validator(params);
-
-            // if (Object.keys(errors).length !== 0) {
-            //     return res.status(400).json(errors);
-            // }
-
-            console.log("hola aqui estoy");
-
-
-            if (email && password) { 
-                if (!fullName || !birthDate) { 
-                    return res.status(400).json({ error: "Faltan Datos." })
-                }
-                // encriptacion de la contraseña
-                params.password = await hashPassword(password);
-
+            if (errors && Object.keys(errors).length !== 0) {
+                return res.status(400).json(errors);
             }
 
-            const result = await postPeopleService(params);
+            const result = await postPeopleService(validatedParams);
 
             console.log("RESULTADO: ", result);
         }
