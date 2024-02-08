@@ -1,26 +1,37 @@
 const mercadopago = require("mercadopago");
+const { MP_TOKEN } = process.env;
+
 
 const paymentController = async (req, res) => {
+    const person = req.body;
 
     mercadopago.configure({
-        access_token: "TEST-2497160309954110-010921-8f1c25f504b796d7a5f8eaee8bc5be5b-1632191008",
+        access_token: MP_TOKEN,
     });
 
     const result = await mercadopago.preferences.create({
         items: [
             {
-                title: "Taza de te",
-                unit_price: 100,
+                title: "Plato sucio",
+                unit_price: 200,
                 currency_id: "ARS",
                 quantity: 1
             }
         ],
         back_urls: {
-            success: "https://proyecto-final-front-ashy.vercel.app/",
-            failure: "https://proyecto-final-front-ashy.vercel.app/",
-            pending: "https://proyecto-final-front-ashy.vercel.app/",
+            success: "https://www.soyhenry.com",
+            failure: "https://www.soyhenry.com",
+            pending: "https://www.soyhenry.com",
         },
-        notification_url: "https://b13f-2803-9800-9013-b4eb-5ed8-c52-8a20-4896.ngrok-free.app/webhook"
+        notification_url: "https://6c6d-2803-9800-9013-b4eb-aad2-ee62-a952-d2dd.ngrok-free.app/webhook",
+        metadata: {
+            id_people: "",
+            full_name: person.fullName,
+            birth_date: person.birthDate,
+            email: person.email,
+            password: person.password,
+            type_of_person: person.typeOfPerson
+        }
     });
 
     const data = {
