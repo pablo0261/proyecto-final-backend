@@ -1,9 +1,12 @@
 const { v4: uuidv4 } = require('uuid');
-const { Opportunities } = require('../../db');
+const { Opportunities, Categories_options } = require('../../db');
 const { STATE_VIEW, STATE_PENDING, STATE_ACCEPTED, STATE_CANCELLED, STATE_RATINGPENDING, STATE_RATINGPROVIDERPENDING, STATE_RATINGCUSTOMERPENDING, STATE_COMPLETED, USER_CUSTOMER, USER_PROVIDER } = require('../../constants');
 const { getOpportunitiesService } = require('./getOpportunities.service');
 const { putRatingService } = require('../people/putPeople.service');
 const postChatsService = require('../chats/postChats.service');
+const { default: formatDate } = require('../../utils/formatDate');
+
+const CHAT_MESSAGE_PENDING = `Ha sido contratado para el %DIA% a las %HORA% hora(s), por %DURACION% hora(s) de %SERVICIO% por un valor de $%PRECIO%`
 
 const putOpportunitiesService = async (params) => {
     const {
@@ -34,6 +37,9 @@ const putOpportunitiesService = async (params) => {
 
         const opportunitie = await Opportunities.findByPk(idOpportunitie);
 
+        let newChat = {}
+        let message = ''
+
         //cancelar se puede en cualquier momento
         if (cancelled) {
             if (!reasonForCancelation) return { result: { message: 'Falta motivo de cancelacion' }, status: 400 }
@@ -60,6 +66,28 @@ const putOpportunitiesService = async (params) => {
                     opportunitie.timeOfService = timeOfService
                     opportunitie.durationOfService = durationOfService
                     opportunitie.state = STATE_PENDING
+
+                    //busco el servicio
+                    const service = await Categories_options.findByPk(idService)
+                    console.log(service.dataValues.description)
+                    
+                    //envio automaticamente el chat 
+
+                    newChat = {
+                        idOpportunitie: opportunitie.idOpportunitie,
+                        idPeople: opportunitie.idProvider,
+                        message: CHAT_MESSAGE_PENDING
+                            .replace('%DIA%', formatDate(dateOfService))
+                            .replace('%HORA%', timeOfService)
+                            .replace('%DURACION%', durationOfService)
+                            .replace('%SERVICIO%', service.dataValues.description)
+                            .replace('%PRECIO%', price),
+                        isRating: false,
+                        isRated: false
+                    }
+                    console.log(newChat)
+                    postChatsService(newChat)
+
                     break;
 
                 case STATE_PENDING:
@@ -77,11 +105,23 @@ const putOpportunitiesService = async (params) => {
                     opportunitie.dateEndService = currentDate
                     opportunitie.state = STATE_RATINGPENDING
                     //envio automaticamente el chat 
-                    const chatToProvider={ idOpportunitie:opportunitie.idOpportunitie, idPeople:opportunitie.idProvider,message:'Por favor evalue al Cliente',isRating:true,isRated:false}
-                    postChatsService(chatToProvider)
+                    newChat = {
+                        idOpportunitie: opportunitie.idOpportunitie,
+                        idPeople: opportunitie.idProvider,
+                        message: 'Por favor evalue al Cliente',
+                        isRating: true,
+                        isRated: false
+                    }
+                    postChatsService(newChat)
 
-                    const chatToCustomer={ idOpportunitie:opportunitie.idOpportunitie, idPeople:opportunitie.idCustomer,message:'Por favor evalue el servicio recibido',isRating:true,isRated:false}
-                    postChatsService(chatToCustomer)
+                    newChat = {
+                        idOpportunitie: opportunitie.idOpportunitie,
+                        idPeople: opportunitie.idCustomer,
+                        message: 'Por favor evalue el servicio recibido',
+                        isRating: true,
+                        isRated: false
+                    }
+                    postChatsService(newChat)
                     break;
 
                 case STATE_RATINGPENDING:
@@ -90,14 +130,14 @@ const putOpportunitiesService = async (params) => {
                 case STATE_COMPLETED:
                     if (!typeOfPerson) return { result: { message: 'Falta definir el tipo de persona' }, status: 400 }
                     if (!review) return { result: { message: 'Falta cargar el review' }, status: 400 }
-                
+
                     // si esta todo OK 
                     if (typeOfPerson === USER_CUSTOMER) {
                         //cargo el rating del customer al proveedor
                         opportunitie.ratingCustomer = rating ? rating : 0
                         opportunitie.dateRatingCustomer = currentDate
                         opportunitie.reviewCustomer = review
-                        opportunitie.state = opportunitie.dateRatingProvider? STATE_COMPLETED :STATE_RATINGPROVIDERPENDING 
+                        opportunitie.state = opportunitie.dateRatingProvider ? STATE_COMPLETED : STATE_RATINGPROVIDERPENDING
                         updateRating = true
                     }
                     if (typeOfPerson === USER_PROVIDER) {
@@ -105,7 +145,7 @@ const putOpportunitiesService = async (params) => {
                         opportunitie.ratingProvider = rating ? rating : 0
                         opportunitie.dateRatingProvider = currentDate
                         opportunitie.reviewProvider = review
-                        opportunitie.state = opportunitie.dateRatingCustomer? STATE_COMPLETED :STATE_RATINGCUSTOMERPENDING 
+                        opportunitie.state = opportunitie.dateRatingCustomer ? STATE_COMPLETED : STATE_RATINGCUSTOMERPENDING
                         updateRating = true
                     }
                     break;
