@@ -1,9 +1,17 @@
 const mercadopago = require("mercadopago");
 const { MP_TOKEN, MP_WEBWOOK } = process.env;
+const { validator } = require("../../utils/validator.util");
 
 
 const paymentController = async (req, res) => {
-    const person = req.body;
+    const params = req.body;
+
+    const errors = validator(params);
+
+    if (Object.keys(errors).length !== 0) {
+        return res.status(400).json(errors);
+    }
+
 
     mercadopago.configure({
         access_token: MP_TOKEN,
@@ -26,11 +34,11 @@ const paymentController = async (req, res) => {
         notification_url: `${MP_WEBWOOK}/webhook`,
         metadata: {
             id_people: "",
-            full_name: person.fullName,
-            birth_date: person.birthDate,
-            email: person.email,
-            password: person.password,
-            type_of_person: person.typeOfPerson
+            full_name: params.fullName,
+            birth_date: params.birthDate,
+            email: params.email,
+            password: params.password,
+            type_of_person: params.typeOfPerson
         }
     });
 
