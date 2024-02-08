@@ -1,17 +1,22 @@
 const mercadopago = require("mercadopago");
 const { MP_TOKEN, MP_WEBWOOK } = process.env;
 const { validator } = require("../../utils/validator.util");
-
+const { checkEmailExists } = require("../../utils/checkEmailExists.util.js");
 
 const paymentController = async (req, res) => {
     const params = req.body;
+
+    const emailExists = await checkEmailExists(params.email);
+
+    if (emailExists) {
+        return res.status(400).json({ error: "El correo electrónico ya está registrado." });
+    }
 
     const errors = validator(params);
 
     if (Object.keys(errors).length !== 0) {
         return res.status(400).json(errors);
     }
-
 
     mercadopago.configure({
         access_token: MP_TOKEN,
@@ -27,7 +32,7 @@ const paymentController = async (req, res) => {
             }
         ],
         back_urls: {
-            success: "https://proyecto-final-front-ashy.vercel.app/accessAccount",
+            success: "https://proyecto-final-front-ashy.vercel.app",
             failure: "https://proyecto-final-front-ashy.vercel.app",
             pending: "https://proyecto-final-front-ashy.vercel.app",
         },
