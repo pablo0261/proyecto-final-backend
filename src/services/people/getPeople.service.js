@@ -107,6 +107,7 @@ const getPeopleService = async (params) => {
                 include: [
                     {
                         model: People_options,
+                        where:{ isDeleted: false },
                         foreignKey: 'idPeople',
                         include:
                             [
