@@ -1,5 +1,5 @@
 const mercadopago = require("mercadopago");
-const { MP_TOKEN, MP_WEBWOOK } = process.env;
+const { MP_TOKEN, MP_WEBWOOK, MP_SUCCESS, MP_FAILURE, MP_PENDING } = process.env;
 const { validator } = require("../../utils/validator.util");
 const { checkEmailExists } = require("../../utils/checkEmailExists.util.js");
 
@@ -32,9 +32,9 @@ const paymentController = async (req, res) => {
             }
         ],
         back_urls: {
-            success: "https://proyecto-final-front-ashy.vercel.app",
-            failure: "https://proyecto-final-front-ashy.vercel.app",
-            pending: "https://proyecto-final-front-ashy.vercel.app",
+            success: MP_SUCCESS,
+            failure: MP_FAILURE,
+            pending: MP_PENDING
         },
         notification_url: `${MP_WEBWOOK}/webhook`,
         metadata: {
