@@ -5,6 +5,6 @@ const receiveWebhookController = require('../controllers/payments/receiveWebhook
 const paymentsRouter = Router();
 
 paymentsRouter.post('/payment', paymentController);
-paymentsRouter.get('/webhook', receiveWebhookController);
+paymentsRouter.post('/webhook', receiveWebhookController);
 
 module.exports = paymentsRouter;
