@@ -27,9 +27,9 @@ const paymentController = async (req, res) => {
             }
         ],
         back_urls: {
-            success: "https://www.soyhenry.com",
-            failure: "https://www.soyhenry.com",
-            pending: "https://www.soyhenry.com",
+            success: "https://proyecto-final-front-ashy.vercel.app/accessAccount",
+            failure: "https://proyecto-final-front-ashy.vercel.app",
+            pending: "https://proyecto-final-front-ashy.vercel.app",
         },
         notification_url: `${MP_WEBWOOK}/webhook`,
         metadata: {
