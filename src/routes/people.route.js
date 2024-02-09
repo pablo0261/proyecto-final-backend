@@ -85,7 +85,41 @@ peopleRouter.post('/people', postPeopleController);
 
 peopleRouter.put('/people', putPeopleController);
 
-peopleRouter.get('/people/login', loginPeopleController);
+peopleRouter.post('/people/login', loginPeopleController);
+/**
+ * @swagger
+ * /people/login:
+ *   post:
+ *     summary: Iniciar sesión de usuario.
+ *     tags:
+ *       - People
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/x-www-form-urlencoded:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 description: Correo electrónico del usuario.
+ *               password:
+ *                 type: string
+ *                 description: Contraseña del usuario.
+ *     responses:
+ *       200:
+ *         description: Inicio de sesión exitoso.
+ *       400:
+ *         description: Error en los datos de inicio de sesión.
+ *       401:
+ *         description: Credenciales de inicio de sesión no válidas.
+ *       500:
+ *         description: Error interno del servidor.
+ */
+
+
+
+
 
 peopleRouter.get('/people/options/:idPeople', getPeopleOptionsController);
 

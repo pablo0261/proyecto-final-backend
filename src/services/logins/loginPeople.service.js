@@ -1,5 +1,4 @@
 const { People, People_logins } = require('../../db');
-const { verifyPassword } = require("../../utils/encrypt.util");
 const { v4: uuidv4 } = require('uuid');
 
 const loginPeopleService = async (authenticatedPerson) => {

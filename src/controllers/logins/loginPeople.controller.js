@@ -21,8 +21,8 @@ const loginPeopleController = async (req, res) => {
         const data = await getPeopleService({ idPeople });
         return res.status(200).json(data);
     } catch (error) {
-        if (error.message === 'Contraseña incorrecta') {
-            return res.status(401).json({ error: 'Usuario o contraseña incorrectos' });
+        if (error.message) {
+            return res.status(401).json({ error: error.message });
         } else {
             return res.status(500).json({ error: 'Error interno del servidor' });
         }
