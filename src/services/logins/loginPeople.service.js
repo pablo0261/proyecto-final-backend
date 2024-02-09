@@ -7,34 +7,33 @@ const loginPeopleService = async (email, password) => {
     let passwordValid;
 
     try {
-        // const person = await People.findOne({
-        //     where: { email },
-        // });
+        const person = await People.findOne({
+            where: { email },
+        });
 
-        // if (!person) {
-        //     return null;
-        // }
+        if (!person) {
+            return null;
+        }
 
-        // passwordValid = person.password;
+        passwordValid = person.password;
 
-        // const compare = await verifyPassword(password, passwordValid);
+        const compare = await verifyPassword(password, passwordValid);
 
-        // if (!compare) {
-        //     return null;
-        // }
+        if (!compare) {
+            return null;
+        }
 
         const people = await People.findOne({
-            // where: { email, password: passwordValid },
-            where: { email, password },
+            where: { email, password: passwordValid },
         });
-    
+
         if (people) {
             const currentDate = new Date();
             const idPeople = people.idPeople;
-    
+
             people.logged = true;
             await people.save();
-    
+
             await People_logins.create({
                 id: uuidv4(),
                 idPeople,
@@ -45,14 +44,14 @@ const loginPeopleService = async (email, password) => {
             return null;
         }
 
-       
+
 
     } catch (error) {
         throw error;
     }
 
 
-    
+
 };
 
 module.exports = loginPeopleService;
