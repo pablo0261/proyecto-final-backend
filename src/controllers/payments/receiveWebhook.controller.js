@@ -32,8 +32,6 @@ const receiveWebhookController = async (req, res) => {
             params.emisionDate = convertDate(baseDate);
             params.paymentDay = add30Days(baseDate);
 
-            console.log("AQUIIIII: ", params)
-
             if (!params.idPeople) {
                 params.idPeople = uuidv4();
             }
@@ -46,7 +44,6 @@ const receiveWebhookController = async (req, res) => {
 
             const result = await postPeopleService(validatedParams);
 
-            console.log("RESULTADO: ", result);
         }
 
         res.sendStatus(204);

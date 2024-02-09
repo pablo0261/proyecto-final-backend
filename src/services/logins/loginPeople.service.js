@@ -1,57 +1,36 @@
 const { People, People_logins } = require('../../db');
 const { verifyPassword } = require("../../utils/encrypt.util");
-
 const { v4: uuidv4 } = require('uuid');
 
-const loginPeopleService = async (email, password) => {
-    let passwordValid;
+const loginPeopleService = async (authenticatedPerson) => {
 
+    const { email, password } = authenticatedPerson;
     try {
-        const person = await People.findOne({
-            where: { email },
+
+        const authenticatedPerson = await People.findOne({
+            where: { email, password },
         });
 
-        if (!person) {
-            return null;
+        if (!authenticatedPerson) {
+            throw new Error('Error en la autenticación');
         }
 
-        passwordValid = person.password;
+        const currentDate = new Date();
+        const idPeople = authenticatedPerson.idPeople;
 
-        const compare = await verifyPassword(password, passwordValid);
+        authenticatedPerson.logged = true;
+        await authenticatedPerson.save();
 
-        if (!compare) {
-            return null;
-        }
-
-        const people = await People.findOne({
-            where: { email, password: passwordValid },
+        await People_logins.create({
+            id: uuidv4(),
+            idPeople,
+            loginDate: currentDate,
         });
 
-        if (people) {
-            const currentDate = new Date();
-            const idPeople = people.idPeople;
-
-            people.logged = true;
-            await people.save();
-
-            await People_logins.create({
-                id: uuidv4(),
-                idPeople,
-                loginDate: currentDate,
-            });
-            return idPeople;
-        } else {
-            return null;
-        }
-
-
-
+        return idPeople;
     } catch (error) {
         throw error;
     }
-
-
-
 };
 
 module.exports = loginPeopleService;
