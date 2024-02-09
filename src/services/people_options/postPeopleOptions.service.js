@@ -17,9 +17,11 @@ const postPeopleOptionsService = async (dataBody) => {
 
     if (!option) return { status: 400, response: 'El id no corresponde a ninguna opcion' };
 
-    const category = option.dataValues.category;
+    const category = option.category;
 
-    if (category.dataValues.isService) {
+    //
+    // post para people service
+    if (category.isService) {
       const { price } = dataBody;
       if (!price) return { status: 400, response: 'Precio requerido' };
 
@@ -31,7 +33,7 @@ const postPeopleOptionsService = async (dataBody) => {
         isDeleted: false,
       };
 
-      const [res, create] = await People_options.findOrCreate({
+      const [optionCreate, create] = await People_options.findOrCreate({
         where: { idPeople, idOption },
         defaults: newData,
       });
@@ -39,9 +41,40 @@ const postPeopleOptionsService = async (dataBody) => {
       if (!create) {
         await People_options.update(newData, { where: { idPeople, idOption } });
       }
-      const result = await getPeopleService({ idPeople: idPeople });
-      // console.log(result)
-      return { result, status: create ? 201 : 200 };
+      const response = await getPeopleService({ idPeople: idPeople });
+      return { response, status: create ? 201 : 200 };
+    }
+
+    //
+    // post para people education
+    if (category.isEducation) {
+      const { institution, year, comment } = dataBody;
+
+      if (!institution) return { status: 400, response: 'institution es dato requerido' };
+      if (!year) return { status: 400, response: 'year es dato requerido' };
+      if (!comment) return { status: 400, response: 'comment es dato requerido' };
+
+      const newData = {
+        id: uuidv4(),
+        institution,
+        year,
+        comment,
+        isDeleted: false,
+      };
+
+      const [optionCreate, create] = await People_options.findOrCreate({
+        where: { idPeople, idOption },
+        defaults: newData,
+      });
+
+      if (!create) {
+        await People_options.update(newData, {
+          where: { idPeople, idOption },
+        });
+      }
+
+      const response = await getPeopleService({ idPeople });
+      return { response, status: create ? 201 : 200 };
     }
 
     // se agragaron posteriores condiciones para los formularios restantes
@@ -57,16 +90,16 @@ const postPeopleOptionsService = async (dataBody) => {
       isDeleted: false,
     };
 
-    const [res, create] = await People_options.findOrCreate({
-        where: { idPeople, idOption },
-        defaults: newData,
+    const [optionCreate, create] = await People_options.findOrCreate({
+      where: { idPeople, idOption },
+      defaults: newData,
     });
 
     if (!create) {
-        await People_options.update(newData, { where: { idPeople, idOption } });
+      await People_options.update(newData, { where: { idPeople, idOption } });
     }
-    const result = await getPeopleService({ idPeople: idPeople })
-    return { result, status: create ? 201 : 200 };
+    const response = await getPeopleService({ idPeople: idPeople });
+    return { response, status: create ? 201 : 200 };
 };
 
 module.exports = postPeopleOptionsService;
