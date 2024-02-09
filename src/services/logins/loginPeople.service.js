@@ -24,6 +24,8 @@ const loginPeopleService = async (email, password) => {
             return null;
         }
 
+        return compare;
+
     } catch (error) {
         throw error;
     }
