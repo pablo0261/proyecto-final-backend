@@ -20,28 +20,28 @@ const postPeopleOptionsService = async (dataBody) => {
     const category = option.dataValues.category;
 
     if (category.dataValues.isService) {
-        const { price } = dataBody;
-        if (!price) return { status: 400, response: 'Precio requerido' };
+      const { price } = dataBody;
+      if (!price) return { status: 400, response: 'Precio requerido' };
 
-        const newData = {
-            id: uuidv4(),
-            idPeople,
-            idOption,
-            price,
-        };
+      const newData = {
+        id: uuidv4(),
+        idPeople,
+        idOption,
+        price,
+        isDeleted: false,
+      };
 
-        const [res, create] = await People_options.findOrCreate({
-            where: { idPeople, idOption },
-            defaults: newData,
-        });
+      const [res, create] = await People_options.findOrCreate({
+        where: { idPeople, idOption },
+        defaults: newData,
+      });
 
-        if (!create) {
-            await People_options.update(newData, { where: { idPeople, idOption } });
-        }
-        const result = await getPeopleService({ idPeople: idPeople })
-        console.log(result)
-        return { result, status: create ? 201 : 200 };
-
+      if (!create) {
+        await People_options.update(newData, { where: { idPeople, idOption } });
+      }
+      const result = await getPeopleService({ idPeople: idPeople });
+      // console.log(result)
+      return { result, status: create ? 201 : 200 };
     }
 
     // se agragaron posteriores condiciones para los formularios restantes
@@ -51,9 +51,10 @@ const postPeopleOptionsService = async (dataBody) => {
 
     // accion por default
     const newData = {
-        id: uuidv4(),
-        idPeople,
-        idOption,
+      id: uuidv4(),
+      idPeople,
+      idOption,
+      isDeleted: false,
     };
 
     const [res, create] = await People_options.findOrCreate({

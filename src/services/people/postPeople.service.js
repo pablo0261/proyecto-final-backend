@@ -4,6 +4,8 @@ const { getPeopleService } = require('./getPeople.service');
 const { PEOPLE_STATE_ACTIVE } = require('../../constants');
 
 const postPeopleService = async (params) => {
+
+    
     const { idPeople, fullName, address, idLocation, geoposition, birthDate, idGenre, state,
         aboutMe, typeOfPerson, email, password, externalLogin, weekCalendar, price,
         phone, location, country, profession } = params;
@@ -62,18 +64,21 @@ const postPeopleService = async (params) => {
                 loginDate: currentDate,
             });
 
-            const payments = await Payments.create({
+            const payment = await Payments.create({
                 idPayment: uuidv4(),
-                idPeople,
-                emisionDate: currentDate,
-                dueDate: currentDate,
-                paymentDate: currentDate,
-                price,
+                idPeople: params.idPeople,
+                emisionDate: params.emisionDate,
+                dueDate: params.paymentDay, 
+                paymentDay: params.paymentDay,
+                methodOfPayment: params.methodOfPayment,
+                price: params.price,
+                responseApi: params.responseApi
             });
         }
         const result = await getPeopleService({ idPeople: idPeople })
         return { result, created };
     } catch (error) {
+        console.log("peopleService: ", error);
         throw error;
     }
 };

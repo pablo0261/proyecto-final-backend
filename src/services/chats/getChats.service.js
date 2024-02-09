@@ -17,7 +17,7 @@ const getChatsService = async (params) => {
                     include: [
                         {
                             model: Categories_options,
-                            attributes: ['description'],
+                            attributes: ['idOption','description'],
                         }],
                 }],
 
