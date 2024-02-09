@@ -1,6 +1,6 @@
 
 const { Sequelize, Op } = require("sequelize");
-const { Opportunities, conn } = require("../../db.js");
+const { Opportunities, People, conn } = require("../../db.js");
 const { PAGESIZE } = require("../../constants/index.js");
 
 const getOpportunitiesService = async (params) => {
@@ -26,6 +26,7 @@ const getOpportunitiesService = async (params) => {
 
 
     const { idOrder, pageSize, pageNumber } = params
+    const { idProvider, idCustomer } = params
     const filters = []
 
     //armo un objeto solo con los campos de people asi no me da error el sequelize por filtrar nombre de campo inexistente
@@ -41,21 +42,22 @@ const getOpportunitiesService = async (params) => {
     const itemsPage = pageSize ? pageSize : PAGESIZE
     const offset = (page - 1) * itemsPage;
 
-    //order
-    const orders = []
-    if (!idOrder) {
-        orders.push(['dateView', 'ASC'])
-    } else {
 
-        //armo arrays separados por ;
-        const orderField = idOrder.split(';')
-        orderField.map((order) => {
-            //armo array separado por ,
-            const field = order.split(',')
-            orders.push([field[0], field[1] ? field[1] : 'ASC'])
-        })
-    }
     try {
+        //order
+        const orders = []
+        if (!idOrder) {
+            orders.push(['dateView', 'ASC'])
+        } else {
+
+            //armo arrays separados por ;
+            const orderField = idOrder.split(';')
+            orderField.map((order) => {
+                //armo array separado por ,
+                const field = order.split(',')
+                orders.push([field[0], field[1] ? field[1] : 'ASC'])
+            })
+        }
         //total de registros
         const totalCount = await Opportunities.count(
             {
@@ -66,16 +68,34 @@ const getOpportunitiesService = async (params) => {
         )
 
         //registros
-        let result = await Opportunities.findAll(
-            {
-                limit: itemsPage,
-                offset: offset,
-                where: {
-                    [Sequelize.Op.and]: filters
-                },
-                order: orders,
+        let options = {
+            limit: itemsPage,
+            offset: offset,
+            where: {
+                [Sequelize.Op.and]: filters
             },
-        )
+            order: orders
+        }
+
+        if (idProvider) {
+            options.include = [
+                {
+                    model: People,
+                    attributes: ['fullName', 'image'],
+                    as: 'customer'
+                }]
+        }
+        else {
+            if (idCustomer) {
+                options.include = [
+                    {
+                        model: People,
+                        attributes: ['fullName', 'image'],
+                        as: 'provider'
+                    }]
+            }
+        }
+        let result = await Opportunities.findAll(options)
 
         const count = result.length;
         const opportunities = {
@@ -90,7 +110,8 @@ const getOpportunitiesService = async (params) => {
         return { opportunities, status: totalCount === 0 ? 409 : 200 };
 
     } catch (error) {
-        throw error;
+        console.log(error)
+        return ({ error: error.message, status: 500 });
     }
 }
 

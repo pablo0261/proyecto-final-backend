@@ -11,7 +11,7 @@ const getOpportunitiesController = async (req, res) => {
 
         return res.status(status).json(opportunities);
     } catch (error) {
-        return res.status(500).send(error);
+        return res.status(500).json(error);
     }
 };
 
