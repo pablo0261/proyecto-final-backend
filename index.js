@@ -42,7 +42,7 @@
             console.log('Conexión establecida correctamente con la base de datos.');
 
             // Sincronizar el modelo con la base de datos (si es necesario)
-            await conn.sync({ alter: SYNC_FORCE });
+            await conn.sync({ force: SYNC_FORCE });
 
             console.log('Realizando tareas de mantenimiento.');
             // Ejecutar la tarea de actualización al iniciar el servidor

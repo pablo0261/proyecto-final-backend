@@ -64,13 +64,15 @@ const postPeopleService = async (params) => {
                 loginDate: currentDate,
             });
 
-            const payments = await Payments.create({
+            const payment = await Payments.create({
                 idPayment: uuidv4(),
-                idPeople,
-                emisionDate: currentDate,
-                dueDate: currentDate,
-                paymentDate: currentDate,
-                price,
+                idPeople: params.idPeople,
+                emisionDate: params.emisionDate,
+                dueDate: params.paymentDay, 
+                paymentDay: params.paymentDay,
+                methodOfPayment: params.methodOfPayment,
+                price: params.price,
+                responseApi: params.responseApi
             });
         }
         const result = await getPeopleService({ idPeople: idPeople })
