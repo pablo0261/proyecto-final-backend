@@ -4,28 +4,28 @@ const { verifyPassword } = require("../../utils/encrypt.util");
 const { v4: uuidv4 } = require('uuid');
 
 const loginPeopleService = async (email, password) => {
-    // inicio de la comparacion de password
     let passwordValid;
 
     try {
-        const person = await People.findOne({
-            where: { email },
-        });
+        // const person = await People.findOne({
+        //     where: { email },
+        // });
 
-        if (!person) {
-            return null;
-        }
+        // if (!person) {
+        //     return null;
+        // }
 
-        passwordValid = person.password;
+        // passwordValid = person.password;
 
-        const compare = await verifyPassword(password, passwordValid);
+        // const compare = await verifyPassword(password, passwordValid);
 
-        if (!compare) {
-            return null;
-        }
+        // if (!compare) {
+        //     return null;
+        // }
 
         const people = await People.findOne({
-            where: { email, password: passwordValid },
+            // where: { email, password: passwordValid },
+            where: { email, password },
         });
     
         if (people) {
@@ -50,7 +50,6 @@ const loginPeopleService = async (email, password) => {
     } catch (error) {
         throw error;
     }
-    // final de la comparacion de password
 
 
     
