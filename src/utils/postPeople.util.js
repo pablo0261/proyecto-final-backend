@@ -20,7 +20,7 @@ const postPeopleUtil = async (params) => {
         if (!fullName || !birthDate) {
             return { params: null, errors: { error: "Faltan Datos." } };
         }
-        // params.password = await hashPassword(password);
+        params.password = await hashPassword(password);
     }
 
     return { params, errors: null };
