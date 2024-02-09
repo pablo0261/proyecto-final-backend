@@ -24,7 +24,28 @@ const loginPeopleService = async (email, password) => {
             return null;
         }
 
-        return compare;
+        const people = await People.findOne({
+            where: { email, password: passwordValid },
+        });
+    
+        if (people) {
+            const currentDate = new Date();
+            const idPeople = people.idPeople;
+    
+            people.logged = true;
+            await people.save();
+    
+            await People_logins.create({
+                id: uuidv4(),
+                idPeople,
+                loginDate: currentDate,
+            });
+            return idPeople;
+        } else {
+            return null;
+        }
+
+       
 
     } catch (error) {
         throw error;
@@ -32,26 +53,7 @@ const loginPeopleService = async (email, password) => {
     // final de la comparacion de password
 
 
-    const people = await People.findOne({
-        where: { email, password: passwordValid },
-    });
-
-    if (people) {
-        const currentDate = new Date();
-        const idPeople = people.idPeople;
-
-        people.logged = true;
-        await people.save();
-
-        await People_logins.create({
-            id: uuidv4(),
-            idPeople,
-            loginDate: currentDate,
-        });
-        return idPeople;
-    } else {
-        return null;
-    }
+    
 };
 
 module.exports = loginPeopleService;
