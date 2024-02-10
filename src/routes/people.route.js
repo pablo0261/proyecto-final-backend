@@ -19,14 +19,79 @@ peopleRouter.get('/people', getPeopleController);
  * /people:
  *   get:
  *     summary: Obtener todas las personas.
+ *     description: |
+ *       Esta operación permite obtener todas las personas que coincidan con los criterios de búsqueda especificados.
+ *       Puedes filtrar las personas por su nombre completo, ubicación, provincia, fecha de nacimiento, edad, estado, tipo de persona, correo electrónico, calificación promedio, etc.
+ *       Los parámetros de consulta son opcionales y pueden combinarse para refinar la búsqueda.
+ *       Si no se utiliza ningun parametro, se devolverá todas las personas.
  *     tags:
  *       - People
- *     responses:
+ *     parameters:
+ *       - in: query
+ *         name: fullName
+ *         schema:
+ *           type: string
+ *         description: Nombre completo de la persona.
+ *       - in: query
+ *         name: idLocation
+ *         schema:
+ *           type: integer
+ *         description: ID de la ubicación de la persona.
+ *       - in: query
+ *         name: locationName
+ *         schema:
+ *           type: string
+ *         description: Nombre de la ubicación de la persona.
+ *       - in: query
+ *         name: idProvince
+ *         schema:
+ *           type: string
+ *         description: ID de la provincia de la persona.
+ *       - in: query
+ *         name: provinceName
+ *         schema:
+ *           type: string
+ *         description: Nombre de la provincia de la persona.
+ *       - in: query
+ *         name: birthDate año-dia-mes
+ *         schema:
+ *           type: string
+ *           format: date
+ *         description: Fecha de nacimiento de la persona.
+ *       - in: query
+ *         name: age
+ *         schema:
+ *           type: integer
+ *         description: Edad de la persona.
+ *       - in: query
+ *         name: state
+ *         schema:
+ *           type: string
+ *         description: Estado de la persona.
+ *       - in: query
+ *         name: typeOfPerson
+ *         schema:
+ *           type: string
+ *         description: Tipo de persona.
+ *       - in: query
+ *         name: email
+ *         schema:
+ *           type: string
+ *         description: Correo electrónico de la persona.
+ *       - in: query
+ *         name: averageRating
+ *         schema:
+ *           type: string
+ *         description: Calificación promedio de la persona.
+ *     responses: 
  *       200:
- *         description: Retorna todas las personas.
+ *         description: Retorna todas las personas que coinciden con los criterios de búsqueda.
+ *       404:
+ *         description: No se encontraron registros de personas.
  *       500:
  *         description: Error interno del servidor.
  */
+
 
 peopleRouter.post('/people', postPeopleController);
 
