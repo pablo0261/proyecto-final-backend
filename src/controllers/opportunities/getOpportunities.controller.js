@@ -7,9 +7,8 @@ const { getOpportunitiesService } = require("../../services/opportunities/getOpp
 const getOpportunitiesController = async (req, res) => {
     try {
 
-        const { opportunities, status } = await getOpportunitiesService(req.query);
-
-        return res.status(status).json(opportunities);
+        const { opportunities } = await getOpportunitiesService(req.query);
+        return res.status(200).json(opportunities);
     } catch (error) {
         return res.status(500).json(error);
     }
