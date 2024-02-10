@@ -5,18 +5,18 @@ const getPeopleOptionsController = async (req, res) => {
 
     try {
         const peopleOptions = await getPeopleOptionsService(idPeople);
-        res.status(200).json(peopleOptions);
 
         if (!peopleOptions) {
-            return { error: "No fue encontrado datos de esa persona en peopleOptions" };
+            return res.status(404).json({ error: "No se encontraron datos de esa persona en peopleOptions" });
         }
 
-        return peopleOptions;
-
+        return res.status(200).json(peopleOptions);
 
     } catch (error) {
-        return { error: "Error interno en la busqueda de los peopleOptions" }
+        console.error("Error interno en la búsqueda de los peopleOptions:", error);
+        return res.status(500).json({ error: "Error interno en la búsqueda de los peopleOptions" });
     }
+
 }
 
 module.exports = { getPeopleOptionsController };
