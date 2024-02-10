@@ -53,7 +53,7 @@ peopleRouter.get('/people', getPeopleController);
  *           type: string
  *         description: Nombre de la provincia de la persona.
  *       - in: query
- *         name: birthDate año-dia-mes
+ *         name: birthDate YY-MM-DD
  *         schema:
  *           type: string
  *           format: date
@@ -93,10 +93,55 @@ peopleRouter.get('/people', getPeopleController);
  */
 
 
-peopleRouter.post('/people', postPeopleController);
-
+// peopleRouter.post('/people', postPeopleController);
 
 peopleRouter.put('/people', putPeopleController);
+/**
+ * @swagger
+ * /people:
+ *   put:
+ *     summary: Editar los datos de una persona.
+ *     description: |
+ *       Permite editar los datos de una persona existente. 
+ *       Se requieren las siguientes propiedades básicas: idPeople, fullName, birthDate, email, password, typeOfPerson.
+ *     tags:
+ *       - People
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/x-www-form-urlencoded:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               idPeople:
+ *                 type: string
+ *                 description: ID único de la persona.
+ *               fullName:
+ *                 type: string
+ *                 description: Nombre completo de la persona.
+ *               birthDate:
+ *                 type: string
+ *                 format: date
+ *                 description: Fecha de nacimiento de la persona en formato YYYY-MM-DD.
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 description: Correo electrónico de la persona.
+ *               password:
+ *                 type: string
+ *                 description: Contraseña de la persona.
+ *               typeOfPerson:
+ *                 type: string
+ *                 description: Tipo de persona.
+ *     responses:
+ *       200:
+ *         description: Datos de la persona actualizados correctamente.
+ *       400:
+ *         description: Error en los datos proporcionados. Falta el id de la persona.
+ *       500:
+ *         description: Error interno del servidor.
+ */
+
 
 peopleRouter.post('/people/login', loginPeopleController);
 /**
