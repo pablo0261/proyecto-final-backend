@@ -30,7 +30,7 @@ const getCategoriesOption = async (parameters = {}) => {
     filters: parameters,
     data: categoriesOptionsData,
   };
-  return { status: 200, response: categoriesOptions };
+  return { status: 200, response: { categoriesOptions } };
 };
 
 module.exports = getCategoriesOption;
