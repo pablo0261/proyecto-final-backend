@@ -5,7 +5,7 @@ const getCategoriesOptions = async (req, res) => {
     const optionsData = await getCategoriesOption();
 
     if (!optionsData) {
-      res.status(404).json({ error: "No hay datos en categories_options" });
+      res.status(204).json({ error: "No hay datos en categories_options" });
       return;
     }
 
