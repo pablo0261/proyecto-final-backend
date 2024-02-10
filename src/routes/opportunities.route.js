@@ -11,11 +11,11 @@ const opportunitiesRouter = Router();
 opportunitiesRouter.get('/opportunities', getOpportunitiesController);
 /**
  * @swagger
- * /people:
+ * /opportunities:
  *   get:
  *     summary: Obtener todas las personas.
  *     tags:
- *       - People
+ *       - Opportunities
  *     parameters:
  *       - in: cualquier campo de la tabla
  *         name: query
@@ -43,11 +43,11 @@ opportunitiesRouter.get('/opportunities', getOpportunitiesController);
 opportunitiesRouter.post('/opportunities', postOpportunitiesController);
 /**
  * @swagger
- * /people:
+ * /opportunities:
  *   post:
  *     summary: Registrar una nueva persona.
  *     tags:
- *       - People
+ *       - Opportunities
  *     requestBody:
  *       description: Datos de la persona a registrar.
  *       required: true
