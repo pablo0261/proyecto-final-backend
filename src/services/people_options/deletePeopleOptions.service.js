@@ -8,7 +8,7 @@ const deletePeopleOptionsService = async ({ idPeople, idOption }) => {
   );
 
   if (numOfRowsDeleted === 0) {
-    return { status: 404, response: 'No hay registros' };
+    return { status: 204, response: 'No hay registros' };
   }
 
   const people = await getPeopleService({ idPeople });

@@ -4,7 +4,7 @@ const getCategories = async (req, res) => {
   try {
     const data = await getCategoriesServise();
     if (!data) {
-      res.status(404).json({ error: 'No hay datos' });
+      res.status(204).json({ error: 'No hay datos' });
       return;
     }
     res.status(200).json(data);
