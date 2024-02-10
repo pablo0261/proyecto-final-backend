@@ -11,17 +11,25 @@ module.exports = (sequelize) => {
             primaryKey: true
         },
         typeOfQuestion: {
-            type: DataTypes.ENUM(TYPE_OF_QUESTION_FAQ,TYPE_OF_QUESTION_QAA),
+            type: DataTypes.ENUM(TYPE_OF_QUESTION_FAQ, TYPE_OF_QUESTION_QAA),
             allowNull: false,
         },
         destination: {
-            type: DataTypes.ENUM(USER_ADMINISTRATOR,USER_CUSTOMER,USER_PROVIDER,USER_EXTERNAL),
+            type: DataTypes.ENUM(USER_ADMINISTRATOR, USER_CUSTOMER, USER_PROVIDER, USER_EXTERNAL),
             allowNull: false,
         },
-        priority:{
-            type:DataTypes.INTEGER
+        priority: {
+            type: DataTypes.INTEGER
         },
         senderMail: {
+            type: DataTypes.STRING,
+            allowNull: true,
+        },
+        fullName: {
+            type: DataTypes.STRING,
+            allowNull: true
+        },
+        title: {
             type: DataTypes.STRING,
             allowNull: true,
         },
