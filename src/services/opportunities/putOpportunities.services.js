@@ -4,7 +4,7 @@ const { STATE_VIEW, STATE_PENDING, STATE_ACCEPTED, STATE_CANCELLED, STATE_RATING
 const { getOpportunitiesService } = require('./getOpportunities.service');
 const { putRatingService } = require('../people/putPeople.service');
 const postChatsService = require('../chats/postChats.service');
-const { default: formatDate } = require('../../utils/formatDate');
+const { formatDate } = require('../../utils/formatDate');
 
 const CHAT_MESSAGE_PENDING = `Ha sido contratado para el %DIA% a las %HORA% hora(s), por %DURACION% hora(s) de %SERVICIO% por un valor de $%PRECIO%`
 
