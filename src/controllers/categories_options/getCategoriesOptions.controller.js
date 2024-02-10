@@ -1,4 +1,4 @@
-const getCategoriesOption = require("../../services/categories_options/getCategoriesOption.service");
+const getCategoriesOption = require('../../services/categories_options/getCategoriesOption.service');
 
 const getCategoriesOptions = async (req, res) => {
   try {
@@ -11,7 +11,6 @@ const getCategoriesOptions = async (req, res) => {
 
     const { status, response } = await getCategoriesOption();
     res.status(status).json(response);
-
   } catch (error) {
     res.status(500).send({ error: error.message });
   }

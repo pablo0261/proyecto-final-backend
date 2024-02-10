@@ -23,7 +23,7 @@ server.use(bodyParser.json({ limit: '50mb' }));
 server.use(cookieParser());
 server.use(morgan('dev'));
 server.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin',ACCESS_CONTROL_ALLOW_ORIGIN); // update to match the domain you will make the request from
+    res.header('Access-Control-Allow-Origin', ACCESS_CONTROL_ALLOW_ORIGIN); // update to match the domain you will make the request from
     res.header('Access-Control-Allow-Credentials', 'true');
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
     res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
@@ -48,30 +48,52 @@ server.use((err, req, res, next) => { // eslint-disable-line no-unused-vars
 });
 
 const serverSocket = http.createServer(server); // Crea un servidor HTTP
-const io = socketIO(serverSocket,{
+const io = socketIO(serverSocket, {
     cors: {
-        origin: 'http://localhost:5173', // Reemplazar con el origen de tu aplicación React
+        origin: ACCESS_CONTROL_ALLOW_ORIGIN, // Reemplazar con el origen de tu aplicación React
         methods: ['GET', 'POST'],
         credentials: true
     }
 }); // Crea una instancia de socket.io y la asocia con el servidor HTTP
 
 // ...
+let connectedUsers = []
 
 io.on('connection', (socket) => {
-    // console.log(`Usuario conectado: ${socket.id}`);
 
-    // // Maneja eventos de Socket.IO según tus necesidades
-    // socket.on('mensaje', (data) => {
-    //     console.log('Mensaje recibido:', data);
-    //     // Broadcast a todos los clientes conectados
-    //     io.emit('mensaje ', {mensaje:socket.id});
-    // });
+    socket.on('join-request', (idPeople) => {
+        socket.idPeople = idPeople
+        connectedUsers.push({ idPeople: idPeople })
+        console.log('Usuarios Conectados:', connectedUsers)
+    })
+    socket.on('logout-request', (idPeople) => {
+        socket.idPeople = idPeople
+        connectedUsers = connectedUsers.filter(people => people.idPeople !== idPeople)
+        console.log('Usuarios Conectados:', connectedUsers)
+    })
 
-    // // Maneja la desconexión del socket
-    // socket.on('disconnect', () => {
-    //     console.log(`Usuario desconectado: ${socket.id}`);
-    // });
+    socket.on('join-chat', ({ idPeople, idOpportunitie }) => {
+        socket.idPeople = idPeople
+        socket.idOpportunitie = idOpportunitie
+        connectedUsers.forEach(usuario => {
+            // Verificamos si el idPeople coincide con el pasado como parámetro
+            if (usuario.idPeople === idPeople) {
+                // Si coincide, agregamos la propiedad idChat al objeto
+                usuario.idOpportunitie = idOpportunitie;
+            }
+        });
+        // connectedUsers = connectedUsers.filter(people => people.idPeople !== idPeople)
+        console.log('Usuarios Conectados:a', connectedUsers)
+    })
+    socket.on('send-chat', ({ idOpportunitie, idCustomer, idProvider }) => {
+        const customerConnected = connectedUsers.find((usr) => usr.idPeople === idCustomer)
+        if (customerConnected) socket.emit('render-chat', { idOpportunitie: idOpportunitie, idPeople: idCustomer });
+
+        const providerConnected = connectedUsers.find((usr) => usr.idPeople === idProvider)
+        if (providerConnected) socket.emit('render-chat', { idOpportunitie: idOpportunitie, idPeople: idProvider });
+
+    })
+
 });
 
 

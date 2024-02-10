@@ -19,6 +19,7 @@ const postPeopleController = async (req, res) => {
         return res.status(200).json(result);
 
     } catch (error) {
+        console.log("AQUI: ", error);
         if (error.name === 'SequelizeUniqueConstraintError') {
             return res.status(409).json({ error: "Ya existe un registro con el mismo idPeople o email." });
         }

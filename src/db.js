@@ -90,13 +90,16 @@ People.hasMany(Payments, {
     foreignKey: 'idPeople'
 })
 
-People.hasMany(Opportunities, {
-    foreignKey: 'idCustomer'
-})
+// Una oportunidad pertenece a un proveedor (People)
+Opportunities.belongsTo(People, { as: 'provider', foreignKey: 'idProvider' });
 
-People.hasMany(Opportunities, {
-    foreignKey: 'idProvider'
-})
+// Una oportunidad pertenece a un cliente (People)
+Opportunities.belongsTo(People, { as: 'customer', foreignKey: 'idCustomer' });
+
+People.hasMany(Opportunities, { as: 'providerOpportunities', foreignKey: 'idProvider' });
+
+// Una persona puede tener muchas oportunidades como cliente
+People.hasMany(Opportunities, { as: 'customerOpportunities', foreignKey: 'idCustomer' });
 
 Chats.belongsTo(Opportunities, {
     foreignKey: 'idOpportunitie'
@@ -106,14 +109,14 @@ Opportunities.hasMany(Chats, {
     foreignKey: 'idOpportunitie'
 })
 
-Categories_options.hasMany(Opportunities,{
+Categories_options.hasMany(Opportunities, {
     foreignKey: 'idOption',
-    sourceKey:'idOption',
+    sourceKey: 'idOption',
     as: 'service'
 })
-Opportunities.belongsTo(Categories_options,{
+Opportunities.belongsTo(Categories_options, {
     foreignKey: 'idService',
-    targetKey:'idOption'
+    targetKey: 'idOption'
 })
 
 

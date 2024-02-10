@@ -2,8 +2,8 @@ const { Chats, Opportunities } = require('../../db');
 const { v4: uuidv4 } = require('uuid');
 
 const postChatsService = async (params) => {
-    const { idOpportunitie, idPeople, message ,isRating,isRated} = params
-    try {   
+    const { idOpportunitie, idPeople, message, isRating, isRated } = params
+    try {
         const idChat = uuidv4()
         const dateMessage = new Date();
 
@@ -24,7 +24,7 @@ const postChatsService = async (params) => {
         return { chat, create };
 
     } catch (error) {
-        throw error;
+        return { error: error.message };
 
     };
 }

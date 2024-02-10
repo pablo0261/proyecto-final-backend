@@ -1,12 +1,12 @@
 const mercadopago = require("mercadopago");
 const { postPeopleService } = require("../../services/people/postPeople.service")
-const { validator } = require("../../utils/validator.util");
-const { hashPassword } = require("../../utils/encrypt.util.js");
 const { v4: uuidv4 } = require('uuid');
 const { postPeopleUtil } = require("../../utils/postPeople.util");
-
+const { convertDate } = require("../../utils/convertDate.util");
+const { add30Days } = require("../../utils/add30Days.util");
 
 const receiveWebhookController = async (req, res) => {
+
     const payment = req.query;
     let data = null;
 
@@ -23,7 +23,14 @@ const receiveWebhookController = async (req, res) => {
                 email: data.response.metadata.email,
                 password: data.response.metadata.password,
                 typeOfPerson: data.response.metadata.type_of_person,
+                methodOfPayment: data.response.payment_method.id,
+                price: data.response.transaction_details.total_paid_amount,
+                responseApi: payment["data.id"]
             }
+
+            let baseDate = data.response.date_approved;
+            params.emisionDate = convertDate(baseDate);
+            params.paymentDay = add30Days(baseDate);
 
             if (!params.idPeople) {
                 params.idPeople = uuidv4();
@@ -37,7 +44,6 @@ const receiveWebhookController = async (req, res) => {
 
             const result = await postPeopleService(validatedParams);
 
-            console.log("RESULTADO: ", result);
         }
 
         res.sendStatus(204);

@@ -19,73 +19,161 @@ peopleRouter.get('/people', getPeopleController);
  * /people:
  *   get:
  *     summary: Obtener todas las personas.
+ *     description: |
+ *       Esta operación permite obtener todas las personas que coincidan con los criterios de búsqueda especificados.
+ *       Puedes filtrar las personas por su nombre completo, ubicación, provincia, fecha de nacimiento, edad, estado, tipo de persona, correo electrónico, calificación promedio, etc.
+ *       Los parámetros de consulta son opcionales y pueden combinarse para refinar la búsqueda.
+ *       Si no se utiliza ningun parametro, se devolverá todas las personas.
  *     tags:
  *       - People
  *     parameters:
- *       - in: cualquier campo de la tabla
- *         name: query
- *         required: false
+ *       - in: query
+ *         name: fullName
  *         schema:
  *           type: string
- *         description:
- *          en blanco todos los registros con paginado de 10
- *          pageSize= items por pagina
- *          pageNumber= numero de pagina
- *          idOrder= con uno o varios campos de la tabla people con el criterio ASC,DESC separado por "," si son varios separados por ";"Ejemplo idGenre,DESC;fullName,ASC;
- *          idOption= id uno o varios idOption de la tabla categories_options separado por "," Ejemplo 1,3 devuelve todos las personas con esas opciones
- *     responses:
+ *         description: Nombre completo de la persona.
+ *       - in: query
+ *         name: idLocation
+ *         schema:
+ *           type: integer
+ *         description: ID de la ubicación de la persona.
+ *       - in: query
+ *         name: locationName
+ *         schema:
+ *           type: string
+ *         description: Nombre de la ubicación de la persona.
+ *       - in: query
+ *         name: idProvince
+ *         schema:
+ *           type: string
+ *         description: ID de la provincia de la persona.
+ *       - in: query
+ *         name: provinceName
+ *         schema:
+ *           type: string
+ *         description: Nombre de la provincia de la persona.
+ *       - in: query
+ *         name: birthDate YY-MM-DD
+ *         schema:
+ *           type: string
+ *           format: date
+ *         description: Fecha de nacimiento de la persona.
+ *       - in: query
+ *         name: age
+ *         schema:
+ *           type: integer
+ *         description: Edad de la persona.
+ *       - in: query
+ *         name: state
+ *         schema:
+ *           type: string
+ *         description: Estado de la persona.
+ *       - in: query
+ *         name: typeOfPerson
+ *         schema:
+ *           type: string
+ *         description: Tipo de persona.
+ *       - in: query
+ *         name: email
+ *         schema:
+ *           type: string
+ *         description: Correo electrónico de la persona.
+ *       - in: query
+ *         name: averageRating
+ *         schema:
+ *           type: string
+ *         description: Calificación promedio de la persona.
+ *     responses: 
  *       200:
- *         description: >
- *           Obtiene un objeto llamado people con dos propiedades: count y data.
- *           count: contiene la cantidad de personas registradas.
- *           data: contiene un array de objetos, cada objeto contiene una persona y sus propiedades.
+ *         description: Retorna todas las personas que coinciden con los criterios de búsqueda.
  *       404:
- *         description: No hay registro de personas.
+ *         description: No se encontraron registros de personas.
  *       500:
  *         description: Error interno del servidor.
  */
 
-peopleRouter.post('/people', postPeopleController);
+
+// peopleRouter.post('/people', postPeopleController);
+
+peopleRouter.put('/people', putPeopleController);
 /**
  * @swagger
  * /people:
- *   post:
- *     summary: Registrar una nueva persona.
+ *   put:
+ *     summary: Editar los datos de una persona.
+ *     description: |
+ *       Permite editar los datos de una persona existente. 
+ *       Se requieren las siguientes propiedades básicas: idPeople, fullName, birthDate, email, password, typeOfPerson.
  *     tags:
  *       - People
  *     requestBody:
- *       description: Datos de la persona a registrar.
  *       required: true
  *       content:
- *         application/json:
+ *         application/x-www-form-urlencoded:
  *           schema:
  *             type: object
  *             properties:
- *               name:
+ *               idPeople:
  *                 type: string
- *               age:
- *                 type: integer
+ *                 description: ID único de la persona.
+ *               fullName:
+ *                 type: string
+ *                 description: Nombre completo de la persona.
+ *               birthDate:
+ *                 type: string
+ *                 format: date
+ *                 description: Fecha de nacimiento de la persona en formato YYYY-MM-DD.
  *               email:
  *                 type: string
+ *                 format: email
+ *                 description: Correo electrónico de la persona.
  *               password:
  *                 type: string
+ *                 description: Contraseña de la persona.
  *               typeOfPerson:
  *                 type: string
- *               birthDate:
- *                 type: date
+ *                 description: Tipo de persona.
  *     responses:
- *       201:
- *         description: >
- *           Persona registrada exitosamente. Obtiene un objeto con todos los datos de la persona creada.
+ *       200:
+ *         description: Datos de la persona actualizados correctamente.
  *       400:
- *         description: Datos de la persona no válidos o incompletos.
+ *         description: Error en los datos proporcionados. Falta el id de la persona.
  *       500:
  *         description: Error interno del servidor.
  */
 
-peopleRouter.put('/people', putPeopleController);
 
-peopleRouter.get('/people/login', loginPeopleController);
+peopleRouter.post('/people/login', loginPeopleController);
+/**
+ * @swagger
+ * /people/login:
+ *   post:
+ *     summary: Iniciar sesión de usuario.
+ *     tags:
+ *       - People
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/x-www-form-urlencoded:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 description: Correo electrónico del usuario.
+ *               password:
+ *                 type: string
+ *                 description: Contraseña del usuario.
+ *     responses:
+ *       200:
+ *         description: Inicio de sesión exitoso.
+ *       400:
+ *         description: Error en los datos de inicio de sesión.
+ *       401:
+ *         description: Credenciales de inicio de sesión no válidas.
+ *       500:
+ *         description: Error interno del servidor.
+ */
 
 peopleRouter.get('/people/options/:idPeople', getPeopleOptionsController);
 

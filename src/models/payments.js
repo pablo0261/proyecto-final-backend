@@ -31,7 +31,7 @@ module.exports = (sequelize) => {
       type:DataTypes.DECIMAL(12,2)
     },
     responseApi:{
-        type:DataTypes.JSON,
+        type:DataTypes.STRING,
         allowNull:true
     }
 
