@@ -27,10 +27,10 @@ categoriesRouter.get("/categories", getCategories);
 //  *         description: Error interno del servidor.
 //  */
 
-categoriesRouter.get("/categoriesoptions", getCategoriesOptions);
+categoriesRouter.get("/categories/options", getCategoriesOptions);
 // /**
 //  * @swagger
-//  * /categoriesoptions:
+//  * /categories/options:
 //  *   get:
 //  *     summary: Obtener opciones de categorías.
 //  *     tags:
