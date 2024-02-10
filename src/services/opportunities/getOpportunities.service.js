@@ -107,8 +107,8 @@ const getOpportunitiesService = async (params) => {
             filter: filters,
             data: result
         }
-        return { opportunities, status: totalCount === 0 ? 204 : 200 };
-
+          return { opportunities };
+        
     } catch (error) {
         console.log(error)
         return ({ error: error.message, status: 500 });
