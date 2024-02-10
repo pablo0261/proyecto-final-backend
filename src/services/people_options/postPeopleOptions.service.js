@@ -6,16 +6,21 @@ const postPeopleOptionsService = async (dataBody) => {
     const { idPeople, idOption } = dataBody;
 
     if (!idPeople || !idOption) {
-        return { status: 400, response: 'id de persona y id de opcion son datos requeridos' };
+      return {
+        status: 400,
+        response: { response: 'id de persona y id de opcion son datos requeridos' },
+      };
     }
 
     const option = await Categories_options.findByPk(idOption, {
-        include: {
-            model: Categories,
-        },
+      include: {
+        model: Categories,
+      },
     });
 
-    if (!option) return { status: 400, response: 'El id no corresponde a ninguna opcion' };
+    if (!option) {
+      return { status: 400, response: { response: 'El id no corresponde a ninguna opcion' } };
+    }
 
     const category = option.category;
 
@@ -23,7 +28,7 @@ const postPeopleOptionsService = async (dataBody) => {
     // post para people service
     if (category.isService) {
       const { price } = dataBody;
-      if (!price) return { status: 400, response: 'Precio requerido' };
+      if (!price) return { status: 400, response: { response: 'Precio requerido' } };
 
       const newData = {
         id: uuidv4(),
@@ -50,9 +55,9 @@ const postPeopleOptionsService = async (dataBody) => {
     if (category.isEducation) {
       const { institution, year, comment } = dataBody;
 
-      if (!institution) return { status: 400, response: 'institution es dato requerido' };
-      if (!year) return { status: 400, response: 'year es dato requerido' };
-      if (!comment) return { status: 400, response: 'comment es dato requerido' };
+      if (!institution) return { status: 400, response: { response: 'institution es dato requerido' } };
+      if (!year) return { status: 400, response: { response: 'year es dato requerido' } };
+      if (!comment) return { status: 400, response: { response: 'comment es dato requerido' } };
 
       const newData = {
         id: uuidv4(),
