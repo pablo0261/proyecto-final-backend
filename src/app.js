@@ -88,9 +88,10 @@ io.on('connection', (socket) => {
     socket.on('send-chat', ({ idOpportunitie, idCustomer, idProvider }) => {
         const customerConnected = connectedUsers.find((usr) => usr.idPeople === idCustomer)
         if (customerConnected) socket.emit('render-chat', { idOpportunitie: idOpportunitie, idPeople: idCustomer });
-
+        console.log(customerConnected)
         const providerConnected = connectedUsers.find((usr) => usr.idPeople === idProvider)
         if (providerConnected) socket.emit('render-chat', { idOpportunitie: idOpportunitie, idPeople: idProvider });
+        console.log(providerConnected)
 
     })
 
