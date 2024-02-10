@@ -1,15 +1,16 @@
-const getCategoriesOption = require("../../services/categories_options/getCategoriesOption.service");
+const getCategoriesOption = require('../../services/categories_options/getCategoriesOption.service');
 
 const getCategoriesOptions = async (req, res) => {
   try {
-    const optionsData = await getCategoriesOption();
+    const { description, idCategorie } = req.body;
 
-    if (!optionsData) {
-      res.status(204).json({ error: "No hay datos en categories_options" });
-      return;
+    if (description || idCategorie) {
+      const { status, response } = await getCategoriesOption({ description, idCategorie });
+      return res.status(status).json(response);
     }
 
-    res.status(200).json(optionsData);
+    const { status, response } = await getCategoriesOption();
+    res.status(status).json(response);
   } catch (error) {
     res.status(500).send({ error: error.message });
   }

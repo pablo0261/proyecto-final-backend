@@ -2,12 +2,15 @@ const getCategoriesServise = require('../../services/categories/getCategories.se
 
 const getCategories = async (req, res) => {
   try {
-    const data = await getCategoriesServise();
-    if (!data) {
-      res.status(204).json({ error: 'No hay datos' });
-      return;
+    const { description, idCategorie } = req.body;
+
+    if (description || idCategorie) {
+      const { status, response } = await getCategoriesServise({ description, idCategorie });
+      return res.status(status).json(response);
     }
-    res.status(200).json(data);
+
+    const { status, response } = await getCategoriesServise();
+    return res.status(status).json(response);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
