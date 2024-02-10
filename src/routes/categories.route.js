@@ -4,6 +4,7 @@ const { Router } = require("express");
 const getCategories = require("../controllers/categories/getCategories.controller");
 const getCategoriesOptions = require("../controllers/categories_options/getCategoriesOptions.controller");
 const postCategories = require("../controllers/categories/postCategories.controller");
+const postCategoriesOptionsController = require("../controllers/categories_options/postCategoriesOptions.controller");
 
 const categoriesRouter = Router();
 
@@ -67,5 +68,7 @@ categoriesRouter.post("/categories", postCategories);
 //  *       500:
 //  *         description: Error interno del servidor.
 //  */
+
+categoriesRouter.post("/categories/options", postCategoriesOptionsController);
 
 module.exports = categoriesRouter;
