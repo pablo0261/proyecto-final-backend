@@ -5,7 +5,7 @@ const postPeopleOptionsController = async (req, res) => {
     const dataBody = req.body;
 
     const { status, response } = await postPeopleOptionsService(dataBody);
-    res.status(status).json({ response });
+    res.status(status).json(response);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
