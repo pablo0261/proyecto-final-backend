@@ -72,6 +72,28 @@ io.on('connection', (socket) => {
         console.log('Usuarios Conectados:', connectedUsers)
     })
 
+    socket.on('join-chat', ({ idPeople, idOpportunitie }) => {
+        socket.idPeople = idPeople
+        socket.idOpportunitie = idOpportunitie
+        connectedUsers.forEach(usuario => {
+            // Verificamos si el idPeople coincide con el pasado como parámetro
+            if (usuario.idPeople === idPeople) {
+                // Si coincide, agregamos la propiedad idChat al objeto
+                usuario.idOpportunitie = idOpportunitie;
+            }
+        });
+        // connectedUsers = connectedUsers.filter(people => people.idPeople !== idPeople)
+        console.log('Usuarios Conectados:a', connectedUsers)
+    })
+    socket.on('send-chat', ({ idOpportunitie, idCustomer, idProvider }) => {
+        const customerConnected = connectedUsers.find((usr) => usr.idPeople === idCustomer)
+        if (customerConnected) socket.emit('render-chat', { idOpportunitie: idOpportunitie, idPeople: idCustomer });
+
+        const providerConnected = connectedUsers.find((usr) => usr.idPeople === idProvider)
+        if (providerConnected) socket.emit('render-chat', { idOpportunitie: idOpportunitie, idPeople: idProvider });
+
+    })
+
 });
 
 
