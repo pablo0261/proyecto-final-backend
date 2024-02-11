@@ -23,10 +23,11 @@ const putRatingService = async (idPeople) => {
         people.countRating = result[0].dataValues.countRating ? result[0].dataValues.countRating : 0
         people.averageRating = result[0].dataValues.averageRating ? result[0].dataValues.averageRating : 0
         await people.save()
+        return {people}
 
 
     } catch (error) {
-        return { error: error.message, status: 500 };
+        throw error;
     };
 }
 

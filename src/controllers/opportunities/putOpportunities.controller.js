@@ -3,9 +3,9 @@ const { putOpportunitiesService } = require("../../services/opportunities/putOpp
 const putOpportunitiesController = async (req, res) => {
 
     try {
-        const { result, status } = await putOpportunitiesService(req.body)
+        const { result} = await putOpportunitiesService(req.body)
         
-        return res.status(status).json(result)
+        return res.status(200).json(result)
 
     } catch (error) {
 
