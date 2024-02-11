@@ -110,8 +110,7 @@ const getOpportunitiesService = async (params) => {
           return { opportunities };
         
     } catch (error) {
-        console.log(error)
-        return ({ error: error.message, status: 500 });
+        throw error
     }
 }
 

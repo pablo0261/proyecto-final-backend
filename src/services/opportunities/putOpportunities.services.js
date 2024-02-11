@@ -170,11 +170,11 @@ const putOpportunitiesService = async (params) => {
         if (updateRating) putRatingService(typeOfPerson === USER_CUSTOMER ? opportunitie.idProvider : opportunitie.idCustomer)
         const filter = people.typeOfPerson === USER_CUSTOMER ? { idCustomer: idPeople } : { idProvider: idPeople }
         result = await getOpportunitiesService(filter)
-        return { result, status: 200 };
+        return { result};
 
 
     } catch (error) {
-        return { error: error.message, status: 500 };
+        throw error
     };
 }
 

@@ -1,11 +1,11 @@
-const {postOpportunitiesService} = require('../../services/opportunities/postOpportunities.services');
+const { postOpportunitiesService } = require('../../services/opportunities/postOpportunities.services');
 
 const postOpportunitiesController = async (req, res) => {
 
     try {
-        const { result, status } = await postOpportunitiesService(req.body)
-        
-        return res.status(status).json(result)
+        const { result, created } = await postOpportunitiesService(req.body)
+
+        return res.status(created ? 201 : 200).json(result)
 
     } catch (error) {
 
