@@ -9,7 +9,7 @@ const deletePeopleOptionsContoller = async (req, res) => {
 
     const { status, response } = await deletePeopleOptionsService({ idPeople, idOption });
 
-    res.status(status).json({ response });
+    res.status(status).json(response);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

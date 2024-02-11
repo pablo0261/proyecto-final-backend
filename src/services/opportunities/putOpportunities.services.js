@@ -168,8 +168,8 @@ const putOpportunitiesService = async (params) => {
         await opportunitie.save(opportunitie);
         //actualizo el rating de la persona que ranquearon
         if (updateRating) putRatingService(typeOfPerson === USER_CUSTOMER ? opportunitie.idProvider : opportunitie.idCustomer)
-
-        result = await getOpportunitiesService({ idOpportunitie: idOpportunitie })
+        const filter = people.typeOfPerson === USER_CUSTOMER ? { idCustomer: idPeople } : { idProvider: idPeople }
+        result = await getOpportunitiesService(filter)
         return { result, status: 200 };
 
 
