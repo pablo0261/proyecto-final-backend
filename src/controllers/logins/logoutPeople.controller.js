@@ -3,8 +3,6 @@ const logoutPeopleService = require('../../services/logins/logoutPeople.service.
 const logoutPeopleController = async (req, res) => {
     const { idPeople } = req.body;
 
-    console.log(idPeople);
-
     if (!idPeople) {
         return res.status(400).json({ error: 'Falta el id de la persona.' });
     }
