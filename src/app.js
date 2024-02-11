@@ -51,8 +51,8 @@ const serverSocket = http.createServer(server); // Crea un servidor HTTP
 const io = socketIO(serverSocket, {
     cors: {
         origin: ACCESS_CONTROL_ALLOW_ORIGIN, // Reemplazar con el origen de tu aplicación React
-        methods: ['GET', 'POST'],
-        credentials: true
+        //     methods: ['GET', 'POST'],
+        //     credentials: true
     }
 }); // Crea una instancia de socket.io y la asocia con el servidor HTTP
 
@@ -62,12 +62,14 @@ let connectedUsers = []
 io.on('connection', (socket) => {
 
     socket.on('join-request', (idPeople) => {
-        socket.idPeople = idPeople
-        connectedUsers.push({ idPeople: idPeople })
+        const foundUSerSocket = connectedUsers.find((user) => {
+            return user.idPeople === idPeople && user.idSocket === socket.id
+        })
+        if (!foundUSerSocket) connectedUsers.push({ idPeople: idPeople, idSocket: socket.id })
+
         console.log('Usuarios Conectados:', connectedUsers)
     })
     socket.on('logout-request', (idPeople) => {
-        socket.idPeople = idPeople
         connectedUsers = connectedUsers.filter(people => people.idPeople !== idPeople)
         console.log('Usuarios Conectados:', connectedUsers)
     })
@@ -85,16 +87,36 @@ io.on('connection', (socket) => {
         // connectedUsers = connectedUsers.filter(people => people.idPeople !== idPeople)
         console.log('Usuarios Conectados:a', connectedUsers)
     })
-    socket.on('send-chat', ({ idOpportunitie, idCustomer, idProvider }) => {
-        const customerConnected = connectedUsers.find((usr) => usr.idPeople === idCustomer)
-        if (customerConnected) socket.emit('render-chat', { idOpportunitie: idOpportunitie, idPeople: idCustomer });
-        console.log(customerConnected)
-        const providerConnected = connectedUsers.find((usr) => usr.idPeople === idProvider)
-        if (providerConnected) socket.emit('render-chat', { idOpportunitie: idOpportunitie, idPeople: idProvider });
-        console.log(providerConnected)
+    socket.on('send-chat', (params) => {
+        const { idOpportunitie, idCustomer, idProvider, idChat } = params
+        io.emit('render-chat', {
+            idOpportunitie: idOpportunitie,
+            idPeople: idProvider,
+            idChat: idChat
+        });
+        io.emit('render-chat', {
+            idOpportunitie: idOpportunitie,
+            idPeople: idCustomer,
+            idChat: idChat
+        });
 
+        // connectedUsers.map((user) => {
+        //     if (user.idPeople === idCustomer) {
+        //         io.emit('render-chat', {
+        //             idOpportunitie: idOpportunitie,
+        //             idPeople: idCustomer,
+        //             idChat: idChat
+        //         });
+        //     }
+        //     if (user.idPeople === idProvider) {
+        //         io.emit('render-chat', {
+        //             idOpportunitie: idOpportunitie,
+        //             idPeople: idProvider,
+        //             idChat: idChat
+        //         });
+        //     }
+        // })
     })
-
 });
 
 
