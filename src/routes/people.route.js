@@ -92,7 +92,7 @@ peopleRouter.get('/people', getPeopleController);
  *         description: Error interno del servidor.
  */
 
-// peopleRouter.post('/people', postPeopleController);
+peopleRouter.post('/people', postPeopleController);
 
 peopleRouter.put('/people', putPeopleController);
 /**
@@ -382,6 +382,53 @@ peopleRouter.get('/people/options/:idPeople', getPeopleOptionsController);
 
 
 peopleRouter.post('/people/options', postPeopleOptionsController);
+/**
+ * @swagger
+ * /people/options:
+ *   post:
+ *     summary: Crear una nueva opción para una persona.
+ *     tags:
+ *       - People Options
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/x-www-form-urlencoded:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               idPeople:
+ *                 type: string
+ *                 description: ID de la persona asociada a la opción.
+ *               idOption:
+ *                 type: integer
+ *                 description: ID de la opción.
+ *               price:
+ *                 type: number
+ *                 description: Precio de la opción.
+ *               institution:
+ *                 type: string
+ *                 description: Institución relacionada con la opción.
+ *               year:
+ *                 type: integer
+ *                 description: Año relacionado con la opción.
+ *               comment:
+ *                 type: string
+ *                 description: Comentario relacionado con la opción.
+ *             required:
+ *               - idPeople
+ *               - idOption
+ *     responses:
+ *       201:
+ *         description: Opción creada exitosamente.
+ *       200:
+ *         description: Opción actualizada exitosamente.
+ *       400:
+ *         description: Error en los datos de la opción.
+ *       404:
+ *         description: El ID de la opción no corresponde a ninguna opción existente.
+ *       500:
+ *         description: Error interno del servidor.
+ */
 
 peopleRouter.delete('/people/options', deletePeopleOptionsContoller);
 peopleRouter.put('/people/logout', logoutPeopleController);
