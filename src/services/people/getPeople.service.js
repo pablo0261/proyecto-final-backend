@@ -75,7 +75,6 @@ const getPeopleService = async (params) => {
     if (!idOrder) {
         orderPeople.push(['fullName', 'ASC'])
     } else {
-
         //armo arrays separados por ;
         const orderField = idOrder.split(';')
         orderField.map((order) => {
@@ -107,6 +106,7 @@ const getPeopleService = async (params) => {
                 include: [
                     {
                         model: People_options,
+                        required: false,
                         where:{ isDeleted: false },
                         foreignKey: 'idPeople',
                         include:
@@ -153,7 +153,7 @@ const getPeopleService = async (params) => {
 
         return { people };
     } catch (error) {
-        throw error;
+        throw new Error('No hay registros.');
     }
 }
 

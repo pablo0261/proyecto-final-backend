@@ -9,4 +9,4 @@ const formatDate = (fechaRecibida) => {
     return `${dia < 10 ? '0' : ''}${dia}-${mes < 10 ? '0' : ''}${mes}-${año}`;
 
 }
-module.exports = formatDate
+module.exports = {formatDate}

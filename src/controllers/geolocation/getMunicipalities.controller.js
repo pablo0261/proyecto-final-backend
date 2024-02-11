@@ -10,7 +10,7 @@ const getMunicipalitiesController = async (req, res) => {
             return res.status(200).json(data);
         }
 
-        return res.status(404).send('Municipalidad no encontrada.');
+        return res.status(204).send('Municipalidad no encontrada.');
 
     } catch (error) {
         res.status(500).send("Error interno del servidor.");

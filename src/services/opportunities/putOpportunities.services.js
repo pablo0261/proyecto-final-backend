@@ -1,10 +1,10 @@
 const { v4: uuidv4 } = require('uuid');
-const { Opportunities, Categories_options } = require('../../db');
+const { Opportunities, Categories_options, People } = require('../../db');
 const { STATE_VIEW, STATE_PENDING, STATE_ACCEPTED, STATE_CANCELLED, STATE_RATINGPENDING, STATE_RATINGPROVIDERPENDING, STATE_RATINGCUSTOMERPENDING, STATE_COMPLETED, USER_CUSTOMER, USER_PROVIDER } = require('../../constants');
 const { getOpportunitiesService } = require('./getOpportunities.service');
 const { putRatingService } = require('../people/putPeople.service');
 const postChatsService = require('../chats/postChats.service');
-const { default: formatDate } = require('../../utils/formatDate');
+const { formatDate } = require('../../utils/formatDate');
 
 const CHAT_MESSAGE_PENDING = `Ha sido contratado para el %DIA% a las %HORA% hora(s), por %DURACION% hora(s) de %SERVICIO% por un valor de $%PRECIO%`
 
@@ -37,18 +37,29 @@ const putOpportunitiesService = async (params) => {
 
         const opportunitie = await Opportunities.findByPk(idOpportunitie);
 
+        const people = await People.findByPk(idPeople);
+
         let newChat = {}
         let message = ''
 
         //cancelar se puede en cualquier momento
         if (cancelled) {
             if (!reasonForCancelation) return { result: { message: 'Falta motivo de cancelacion' }, status: 400 }
-            if (!idPeopleWhoCancel) return { result: { message: 'Falta persona que cancelo' }, status: 400 }
 
             opportunitie.dateCancelled = currentDate
             opportunitie.reasonForCancelation = reasonForCancelation
-            opportunitie.idPeopleWhoCancel = idPeopleWhoCancel
+            opportunitie.idPeopleWhoCancel = idPeople
             opportunitie.state = STATE_CANCELLED
+
+            newChat = {
+                idOpportunitie: opportunitie.idOpportunitie,
+                idPeople: idPeople,
+                message: 'El servicio fue Cancelado!',
+                isRating: false,
+                isRated: false
+            }
+            postChatsService(newChat)
+
         } else {
             switch (opportunitie.state) {
                 case STATE_VIEW:
@@ -70,7 +81,7 @@ const putOpportunitiesService = async (params) => {
                     //busco el servicio
                     const service = await Categories_options.findByPk(idService)
                     console.log(service.dataValues.description)
-                    
+
                     //envio automaticamente el chat 
 
                     newChat = {
@@ -85,7 +96,6 @@ const putOpportunitiesService = async (params) => {
                         isRating: false,
                         isRated: false
                     }
-                    console.log(newChat)
                     postChatsService(newChat)
 
                     break;
@@ -158,8 +168,8 @@ const putOpportunitiesService = async (params) => {
         await opportunitie.save(opportunitie);
         //actualizo el rating de la persona que ranquearon
         if (updateRating) putRatingService(typeOfPerson === USER_CUSTOMER ? opportunitie.idProvider : opportunitie.idCustomer)
-
-        result = await getOpportunitiesService({ idOpportunitie: idOpportunitie })
+        const filter = people.typeOfPerson === USER_CUSTOMER ? { idCustomer: idPeople } : { idProvider: idPeople }
+        result = await getOpportunitiesService(filter)
         return { result, status: 200 };
 
 
