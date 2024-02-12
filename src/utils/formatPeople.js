@@ -1,7 +1,20 @@
 const formatPeople = (result) => {
-    
     return result.map((data) => {
-        const dataObject=data.dataValues
+        const dataObject = data.dataValues
+        //armo el weekC en base al week calendar
+        if (dataObject.weekCalendar === null) {
+            // Si es null, crear un nuevo array con 21 elementos, todos establecidos en false
+            dataObject.weekCalendar = new Array(21).fill(false);
+        } else {
+            // Si no es null, verificar si la longitud del array es menor que 21
+            if (dataObject.weekCalendar.length < 21) {
+                // Si es menor, extender el array a 21 elementos con false
+                while (dataObject.weekCalendar.length < 21) {
+                    dataObject.weekCalendar.push(false);
+                }
+            }
+        }
+
         const peopleData = {
             idPeople: dataObject.idPeople,
             fullName: dataObject.fullName,
@@ -28,7 +41,7 @@ const formatPeople = (result) => {
             location: dataObject.location,
             country: dataObject.country,
             profession: dataObject.profession,
-            image:dataObject.image,
+            image: dataObject.image,
             categories: [], // Inicializar array para las categorías
         };
 
