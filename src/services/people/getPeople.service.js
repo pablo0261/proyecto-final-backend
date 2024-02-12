@@ -28,7 +28,8 @@ const getPeopleService = async (params) => {
         'location',
         'country',
         'image',
-        'profession']
+        'profession',
+        'weekCalendar']
 
     const { idOption, idOrder, state, pageSize, pageNumber } = params
 
