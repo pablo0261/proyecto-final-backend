@@ -11,7 +11,7 @@ const getPeopleController = async (req, res) => {
     return res.status(204).send('No hay registro de personas.');
 
   } catch (error) {
-    return res.status(500).send("Error interno del servidor.");
+    return res.status(500).json({error:error.message});
   }
 };
 

@@ -35,6 +35,7 @@ const getPeopleService = async (params) => {
 
     const filters = []
 
+
     //armo un objeto solo con los campos de people asi no me da error el sequelize por filtrar nombre de campo inexistente
     let filterPeople = Object.fromEntries(
         Object.entries(params).filter(([key]) => peopleFields.includes(key)))
@@ -50,10 +51,12 @@ const getPeopleService = async (params) => {
     //primer paso los de l aptabla people
     filters.push(filterPeople)
 
+    const filterServices = [] //usada para buscar el minimo valor de los servicios filtrados
     // peopleoptions        
     if (idOption) {
         // convierto a array 
-        const lengthOption = idOption.split(',').length
+        const options = idOption.split(',')
+        const lengthOption = options.length
         // armo consulta sql para filtrar los people con esas opciones
         // la lengh sirve para saber si se cumplen todas las condiciones
         filters.push({
@@ -64,7 +67,32 @@ const getPeopleService = async (params) => {
             }
         })
 
+        //uso for por el map no espera el await
+        for (const option of options) {
+            //busco si options es servicio
+            const categorie = await Categories_options.findOne({
+                where: { idOption: option },
+                include: [
+                    {
+                        model: Categories,
+                        attributes: ['isService']
+                    }
+                ]
+            })
+            //agrego los services filtrados
+            if (categorie.dataValues.category.dataValues.isService === true) {
+                filterServices.push(option)
+            }
+        }
     }
+    //agrego service 1 CUIDADO si no hay filtros de servicios
+    if (filterServices.length === 0) filterServices.push('1')
+
+    const idServicesFiltered = filterServices.join()
+    const priceMin = '(SELECT COALESCE(MIN("price"),0) ' +
+        'FROM "people_options" ' +
+        'WHERE "people_options"."idPeople" = "people"."idPeople" ' +
+        'AND "people_options"."idOption" IN(' + idServicesFiltered + '))'
 
     //paginado
     const page = pageNumber ? pageNumber : 1
@@ -81,7 +109,14 @@ const getPeopleService = async (params) => {
         orderField.map((order) => {
             //armo array separado por ,
             const field = order.split(',')
-            orderPeople.push([field[0], field[1] ? field[1] : 'ASC'])
+            //si ordeno por price ordeno por people_options
+            if (field[0] === 'price') {
+                // orderPeople.push([{ model: People_options },field[0], field[1] ? field[1] : 'ASC'])
+                orderPeople.push([Sequelize.literal(priceMin)
+                    , field[1] ? field[1] : 'ASC'])
+            } else {
+                orderPeople.push([field[0], field[1] ? field[1] : 'ASC'])
+            }
         })
     }
 
@@ -99,7 +134,10 @@ const getPeopleService = async (params) => {
             {
                 limit: itemsPage,
                 offset: offset,
-                attributes: peopleFields,
+                attributes: [
+                    ...peopleFields,
+                    [Sequelize.literal(priceMin), 'minPrice']
+                ],
                 where: {
                     [Sequelize.Op.and]: filters
                 },
@@ -108,7 +146,7 @@ const getPeopleService = async (params) => {
                     {
                         model: People_options,
                         required: false,
-                        where:{ isDeleted: false },
+                        where: { isDeleted: false },
                         foreignKey: 'idPeople',
                         include:
                             [
@@ -121,6 +159,7 @@ const getPeopleService = async (params) => {
                                     ],
                                 },
                             ]
+
                     },
                 ],
             },
@@ -148,13 +187,14 @@ const getPeopleService = async (params) => {
             pageSize: parseInt(itemsPage),
             pageNumber: parseInt(page),
             filter: filterPeople,
+            //          order: orderPeople,
             options: idOption,
             data: formatPeople(result)
         }
 
         return { people };
     } catch (error) {
-        throw new Error('No hay registros.');
+        throw error
     }
 }
 

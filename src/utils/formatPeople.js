@@ -42,6 +42,7 @@ const formatPeople = (result) => {
             country: dataObject.country,
             profession: dataObject.profession,
             image: dataObject.image,
+            minPrice: dataObject.minPrice,
             categories: [], // Inicializar array para las categorías
         };
 
