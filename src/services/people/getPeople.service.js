@@ -92,6 +92,7 @@ const getPeopleService = async (params) => {
     const priceMin = '(SELECT COALESCE(MIN("price"),0) ' +
         'FROM "people_options" ' +
         'WHERE "people_options"."idPeople" = "people"."idPeople" ' +
+        'AND "people_options"."isDeleted"=false '+
         'AND "people_options"."idOption" IN(' + idServicesFiltered + '))'
 
     //paginado
