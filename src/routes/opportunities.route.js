@@ -20,7 +20,7 @@ opportunitiesRouter.get('/opportunities', getOpportunitiesController);
  *       - Opportunities
  *     parameters:
  *       - in: query
- *         name: status
+ *         name: state
  *         schema:
  *           type: string
  *         description: | 
