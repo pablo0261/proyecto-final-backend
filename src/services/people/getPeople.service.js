@@ -89,6 +89,7 @@ const getPeopleService = async (params) => {
     if (filterServices.length === 0) filterServices.push('1')
 
     const idServicesFiltered = filterServices.join()
+    //armo funcion para encontrar el valor de servicio minimo
     const priceMin = '(SELECT COALESCE(MIN("price"),0) ' +
         'FROM "people_options" ' +
         'WHERE "people_options"."idPeople" = "people"."idPeople" ' +

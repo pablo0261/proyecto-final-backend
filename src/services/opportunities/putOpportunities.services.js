@@ -9,7 +9,7 @@ const { putPeopleService } = require('../people/putPeople.service');
 const postChatsService = require('../chats/postChats.service');
 const { formatDate } = require('../../utils/formatDate');
 
-const CHAT_MESSAGE_PENDING = `Ha sido contratado para el %DIA% a las %HORA% hora(s), por %DURACION% hora(s) de %SERVICIO% por un valor de $%PRECIO%`
+const CHAT_MESSAGE_PENDING = `Lo he contratado para el %DIA% a las %HORA% hora(s), por %DURACION% hora(s) de %SERVICIO% por un valor de $%PRECIO%`
 
 const putOpportunitiesService = async (params) => {
     const {
@@ -21,7 +21,6 @@ const putOpportunitiesService = async (params) => {
         durationOfService,
         price,
         reasonForCancelation,
-        idPeopleWhoCancel,
         dateEndService,
         typeOfPerson,
         rating,
@@ -89,7 +88,7 @@ const putOpportunitiesService = async (params) => {
 
                     newChat = {
                         idOpportunitie: opportunitie.idOpportunitie,
-                        idPeople: opportunitie.idProvider,
+                        idPeople: opportunitie.idCustomer,
                         message: CHAT_MESSAGE_PENDING
                             .replace('%DIA%', formatDate(dateOfService))
                             .replace('%HORA%', timeOfService)
@@ -120,8 +119,8 @@ const putOpportunitiesService = async (params) => {
                     //envio automaticamente el chat 
                     newChat = {
                         idOpportunitie: opportunitie.idOpportunitie,
-                        idPeople: opportunitie.idProvider,
-                        message: 'Por favor evalue al Cliente',
+                        idPeople: opportunitie.idCustomer,
+                        message: 'Por favor ingrese su evaluacion', 
                         isRating: true,
                         isRated: false
                     }
@@ -129,7 +128,7 @@ const putOpportunitiesService = async (params) => {
 
                     newChat = {
                         idOpportunitie: opportunitie.idOpportunitie,
-                        idPeople: opportunitie.idCustomer,
+                        idPeople: opportunitie.idProvider,
                         message: 'Por favor evalue el servicio recibido',
                         isRating: true,
                         isRated: false
