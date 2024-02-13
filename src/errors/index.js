@@ -12,7 +12,15 @@ class ServerError extends Error {
   }
 }
 
+class ConflictError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = 'conflict error';
+  }
+}
+
 module.exports = {
   ValidationsError,
   ServerError,
+  ConflictError,
 };
