@@ -11,13 +11,13 @@ const {
 const getLandingStatsService = async () => {
 
     try {
-        const oportunidadesAceptadas = 90;
+        const oportunidadesAceptadas = 105;
         const cantidadDeOportunidades = 200;
-        const successfulConnections = (oportunidadesAceptadas / cantidadDeOportunidades) * 100;
+        const successfulConnections = `${(oportunidadesAceptadas / cantidadDeOportunidades) * 100}%`;
 
-        const services = 526;
-        const families = 2581;
-        const providers = 1896;
+        const services = 25;
+        const families = 250;
+        const providers = 134;
 
 
         return data = { successfulConnections, services, families, providers };
