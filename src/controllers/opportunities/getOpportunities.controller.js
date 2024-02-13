@@ -1,6 +1,3 @@
-// const {
-//   getOpportunitiesService,
-// } = require("../../services/opportunities/opportunities.service");
 
 const { getOpportunitiesService } = require("../../services/opportunities/getOpportunities.service");
 
