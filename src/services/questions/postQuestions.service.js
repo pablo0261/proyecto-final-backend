@@ -85,45 +85,7 @@ const postQuestionsService = async (questionsData) => {
   }
 
   return { response: 'El tipo de pregunta no esta definida' };
-  //! reclamos y consultas:
-  // tipo de cuestion TYPE_OF_QUESTION_QAA *
-  // destinatario administrador *
-  // receiverMail
-  // nombre *
-  // senderMail *
-  // titulo *
-  // mensage *
-  // respuesta pendiente
-
-  //! FAQs
-  // tipo de cuestion TYPE_OF_QUESTION_FAQ *
-  // destinatario cliente o pprovedor o usuario externo *
-  // titulo *
-  // mensaje *
-
-  //   try {
-  //     // Genera un UUID para idQuestion
-  //     const idQuestion = uuidv4();
-
-  //     // Crea la pregunta con el UUID generado
-  //     const newQuestion = await Questions.create({
-  //       idQuestion, // Asigna el UUID generado
-  //       typeOfQuestion,
-  //       destination,
-  //       priority,
-  //       senderMail,
-  //       fullName,
-  //       title,
-  //       receiverMail,
-  //       message,
-  //       response,
-  //     });
-
-  //     return newQuestion;
-  //   } catch (error) {
-  //     console.error('Error creating question:', error);
-  //     throw new Error('Internal server error');
-  //   }
+  
 };
 
 module.exports = postQuestionsService;

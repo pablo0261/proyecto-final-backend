@@ -2,29 +2,6 @@ const { ValidationsError, ServerError, ConflictError } = require('../../errors')
 const postQuestionsService = require('../../services/questions/postQuestions.service');
 
 const postQuestionsController = async (req, res) => {
-  // const {
-  //   typeOfQuestion,
-  //   destination,
-  //   priority,
-  //   senderMail,
-  //   fullName,
-  //   title,
-  //   receiverMail,
-  //   message,
-  //   response,
-  // } = req.body;
-
-  // const newQuestion = await createQuestion(
-  //   typeOfQuestion,
-  //   destination,
-  //   priority,
-  //   senderMail,
-  //   fullName,
-  //   title,
-  //   receiverMail,
-  //   message,
-  //   response
-  // );
   try {
     const response = await postQuestionsService(req.body);
 
