@@ -22,6 +22,8 @@ const postQuestionsService = async (questionsData) => {
 
   const idQuestion = uuidv4();
 
+  //
+  // caso para consultas o reclamos
   if (typeOfQuestion === TYPE_OF_QUESTION_QAA) {
     const newQuestionQAA = {
       idQuestion,
@@ -39,7 +41,7 @@ const postQuestionsService = async (questionsData) => {
 
     const [question, create] = await Questions.findOrCreate({
       where: { title, message },
-      defaults: { newQuestionQAA },
+      defaults: newQuestionQAA,
     });
 
     if (!create) throw new ConflictError('La pregunta ya esta en curso');
@@ -48,6 +50,8 @@ const postQuestionsService = async (questionsData) => {
     return { response: 'QAA creada exitosamente' };
   }
 
+  //
+  // caso para preguntas frecuentes
   if (typeOfQuestion === TYPE_OF_QUESTION_FAQ) {
     const newQuestionFAQ = {
       idQuestion,
@@ -62,7 +66,7 @@ const postQuestionsService = async (questionsData) => {
 
     const [question, create] = await Questions.findOrCreate({
       where: { title, message },
-      defaults: { newQuestionFAQ },
+      defaults: newQuestionFAQ,
     });
 
     if (!create) throw new ConflictError('La pregunta ya fue creada');
@@ -85,7 +89,6 @@ const postQuestionsService = async (questionsData) => {
   }
 
   return { response: 'El tipo de pregunta no esta definida' };
-  
 };
 
 module.exports = postQuestionsService;
