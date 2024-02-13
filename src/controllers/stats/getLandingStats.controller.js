@@ -2,7 +2,7 @@ const { getLandingStatsService } = require("../../services/stats/getLandingStats
 
 
 const getLandingStatsController = async (req, res) => {
-
+    
     try {
         const data = await getLandingStatsService();
         
