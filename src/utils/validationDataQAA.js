@@ -1,14 +1,9 @@
-const { USER_ADMINISTRATOR, TYPE_OF_QUESTION_QAA } = require('../constants');
+const { USER_ADMINISTRATOR } = require('../constants');
 const { ValidationsError } = require('../errors');
 const REGEX = require('../helpers/regex.helpers');
 
 const validationDataQAA = (data) => {
-  const { typeOfQuestion, destination, senderMail, fullName, title, message } = data;
-
-  if (!typeOfQuestion) throw new ValidationsError('Tipo de pregunta es requerido');
-  if (typeOfQuestion !== TYPE_OF_QUESTION_QAA) {
-    throw new ValidationsError(`Tipo de pregunta debe ser "${TYPE_OF_QUESTION_QAA}"`);
-  }
+  const { destination, senderMail, fullName, title, message } = data;
 
   if (!destination) throw new ValidationsError('Destinatario es requerido');
   if (destination !== USER_ADMINISTRATOR) {

@@ -2,7 +2,8 @@ const { TYPE_OF_QUESTION_QAA, TYPE_OF_QUESTION_FAQ } = require('../../constants'
 const { Questions } = require('../../db');
 const { v4: uuidv4 } = require('uuid'); // Importa la función para generar UUIDs
 const validationDataQAA = require('../../utils/validationDataQAA');
-const { ServerError } = require('../../errors');
+const validationDataFAQ = require('../../utils/validationDataFAQ');
+const { ServerError, ValidationsError } = require('../../errors');
 
 const postQuestionsService = async (questionsData) => {
   const {
@@ -16,6 +17,8 @@ const postQuestionsService = async (questionsData) => {
     message,
     response,
   } = questionsData;
+
+  if (!typeOfQuestion) throw new ValidationsError('Tipo de pregunta es requerido');
 
   const idQuestion = uuidv4();
 
@@ -32,16 +35,13 @@ const postQuestionsService = async (questionsData) => {
       response,
     };
 
-    if (!response) {
-    }
-
     validationDataQAA(newQuestionQAA);
 
-    const questions = Questions.create(newQuestionQAA);
-    if (!questions) {
+    const question = await Questions.create(newQuestionQAA);
+    if (!question) {
       throw new ServerError('Error al crear nueva pregunta');
     }
-    return questions;
+    return { response: 'QAA creada exitosamente' };
   }
 
   if (typeOfQuestion === TYPE_OF_QUESTION_FAQ) {
@@ -53,9 +53,30 @@ const postQuestionsService = async (questionsData) => {
       title,
       message,
     };
+
+    validationDataFAQ(newQuestionFAQ);
+    const question = await Questions.create(newQuestionFAQ);
+    if (!question) {
+      throw new ServerError('Error al crear nueva pregunta');
+    }
+
+    const allQuestionsFAQ = await Questions.findAll({
+      where: { typeOfQuestion: TYPE_OF_QUESTION_FAQ },
+      attributes: {
+        exclude: ['response'],
+      },
+    });
+
+    const questions = {
+      count: allQuestionsFAQ.length,
+      filter: TYPE_OF_QUESTION_FAQ,
+      data: allQuestionsFAQ,
+    };
+
+    return { questions };
   }
 
-  return { response: 'se resive peticion' };
+  return { response: 'El tipo de pregunta no esta definida' };
   //! reclamos y consultas:
   // tipo de cuestion TYPE_OF_QUESTION_QAA *
   // destinatario administrador *
