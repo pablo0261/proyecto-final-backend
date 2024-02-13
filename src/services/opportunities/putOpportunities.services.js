@@ -2,7 +2,10 @@ const { v4: uuidv4 } = require('uuid');
 const { Opportunities, Categories_options, People } = require('../../db');
 const { STATE_VIEW, STATE_PENDING, STATE_ACCEPTED, STATE_CANCELLED, STATE_RATINGPENDING, STATE_RATINGPROVIDERPENDING, STATE_RATINGCUSTOMERPENDING, STATE_COMPLETED, USER_CUSTOMER, USER_PROVIDER } = require('../../constants');
 const { getOpportunitiesService } = require('./getOpportunities.service');
-const { putRatingService } = require('../people/putPeople.service');
+// const { putRatingService } = require('../people/putPeople.service');
+const { putRatingService } = require("../../services/people/putRating.service");
+const { putPeopleService } = require('../people/putPeople.service');
+
 const postChatsService = require('../chats/postChats.service');
 const { formatDate } = require('../../utils/formatDate');
 
@@ -170,7 +173,7 @@ const putOpportunitiesService = async (params) => {
         if (updateRating) putRatingService(typeOfPerson === USER_CUSTOMER ? opportunitie.idProvider : opportunitie.idCustomer)
         const filter = people.typeOfPerson === USER_CUSTOMER ? { idCustomer: idPeople } : { idProvider: idPeople }
         result = await getOpportunitiesService(filter)
-        return { result};
+        return { result };
 
 
     } catch (error) {
