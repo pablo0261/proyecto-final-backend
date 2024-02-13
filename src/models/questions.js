@@ -44,6 +44,7 @@ module.exports = (sequelize) => {
         response: {
             type: DataTypes.TEXT,
             allowNull: false,
+            defaultValue: 'pendiente'
         }
     })
 };

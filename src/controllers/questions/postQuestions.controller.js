@@ -1,36 +1,45 @@
-const createQuestion = require("../../services/questions/postQuestionsForm.service");
+const { ValidationsError, ServerError } = require('../../errors');
+const postQuestionsService = require('../../services/questions/postQuestionsForm.service');
 
-const postQuestions = async (req, res) => {
+const postQuestionsController = async (req, res) => {
+  // const {
+  //   typeOfQuestion,
+  //   destination,
+  //   priority,
+  //   senderMail,
+  //   fullName,
+  //   title,
+  //   receiverMail,
+  //   message,
+  //   response,
+  // } = req.body;
+
+  // const newQuestion = await createQuestion(
+  //   typeOfQuestion,
+  //   destination,
+  //   priority,
+  //   senderMail,
+  //   fullName,
+  //   title,
+  //   receiverMail,
+  //   message,
+  //   response
+  // );
   try {
-    const {
-      typeOfQuestion,
-      destination,
-      priority,
-      senderMail,
-      fullName,
-      title,
-      receiverMail,
-      message,
-      response,
-    } = req.body;
+    const response = await postQuestionsService(req.body);
 
-    const newQuestion = await createQuestion(
-      typeOfQuestion,
-      destination,
-      priority,
-      senderMail,
-      fullName,
-      title,
-      receiverMail,
-      message,
-      response
-    );
-
-    res.status(201).json(newQuestion);
+    res.status(201).json(response);
   } catch (error) {
-    console.error("Error creating question:", error);
-    res.status(500).json({ error: error.message || "Internal server error" });
+    if (error instanceof ValidationsError) {
+      return res.status(404).json({ error: error.message });
+    }
+
+    if (error instanceof ServerError) {
+      return res.status(500).json({ error: error.message });
+    }
+
+    res.status(500).json({ error: error.message || 'Internal server error' });
   }
 };
 
-module.exports = postQuestions;
+module.exports = postQuestionsController;
