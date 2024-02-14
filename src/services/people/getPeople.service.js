@@ -54,8 +54,7 @@ const getPeopleService = async (params) => {
 
     //sequelize acepta filtros como array de objetosç
     //primer paso los de l aptabla people
-    console.log(filterPeople)
-
+    
     filters.push(filterPeople)
 
     const filterServices = [] //usada para buscar el minimo valor de los servicios filtrados
