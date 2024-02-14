@@ -1,27 +1,50 @@
+const { Op } = require('sequelize');
 const {
     People,
-    People_options,
-    Categories,
     Categories_options,
-    People_logins,
     Opportunities,
-    Payments,
 } = require("../../db.js");
 
 const getLandingStatsService = async () => {
-
     try {
-        const oportunidadesAceptadas = 90;
-        const cantidadDeOportunidades = 200;
-        const successfulConnections = (oportunidadesAceptadas / cantidadDeOportunidades) * 100;
+        const opportunitiesCount = await Opportunities.count();
+        const opportunitiesAccepted = await Opportunities.findAll({
+            where: {
+                state: {
+                    [Op.notIn]: ['view', 'cancelled']
+                }
+            }
+        });
 
-        const services = 526;
-        const families = 2581;
-        const providers = 1896;
+        // Conexiones con exito
+        const acceptedCount = opportunitiesAccepted.length;
+        const successfulConnections = ((acceptedCount / opportunitiesCount) * 100).toFixed(2) + '%';
+
+        // Cantidad de servicios
+        const services = await Categories_options.count({
+            where: {
+                idCategorie: 1
+            }
+        });
+
+        // Cantidad de clientes
+        const customerCount = await People.count({
+            where: {
+                typeOfPerson: 'customer'
+            }
+        });
+
+        // Cantidad de proveedores
+        const providerCount = await People.count({
+            where: {
+                typeOfPerson: 'provider'
+            }
+        });
 
 
-        return data = { successfulConnections, services, families, providers };
-
+        return {
+            successfulConnections, services, customerCount, providerCount
+        }
     } catch (error) {
         console.log("LandingStats: ", error);
         throw error;
