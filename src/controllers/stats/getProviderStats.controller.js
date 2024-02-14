@@ -1,19 +1,21 @@
 const { getProviderStatsService } = require("../../services/stats/getProviderStats.service.js");
 
 const getProviderStatsController = async (req, res) => {
-
+    const {idPeople}=req.query
     try {
-        const data = await getProviderStatsService();
-
-        if (!data) {
-            res.status(400).send("No hay datos disponibles.");
+        // code
+        if(!idPeople) return res.status(200).json({error:"deberia enviar el idPeople"});
+        
+        const data = await getProviderStatsService(idPeople)
+        if (data) {
+            return res.status(200).json(data);
         }
 
         return res.status(200).json(data);
 
     } catch (error) {
         console.log("ProviderStatsError: ", error);
-        res.status(500).send("Error interno del servidor.");
+        return res.status(500).json({ error: error.message });
     }
 }
 
