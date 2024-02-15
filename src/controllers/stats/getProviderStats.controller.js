@@ -4,7 +4,7 @@ const getProviderStatsController = async (req, res) => {
     const {idPeople}=req.query
     try {
         // code
-        if(!idPeople) return res.status(200).json({error:"deberia enviar el idPeople"});
+        //if(!idPeople) return res.status(200).json({error:"deberia enviar el idPeople"});
         
         const data = await getProviderStatsService(idPeople)
         if (data) {
