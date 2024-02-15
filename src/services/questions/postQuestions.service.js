@@ -4,6 +4,7 @@ const { v4: uuidv4 } = require('uuid'); // Importa la función para generar UUID
 const validationDataQAA = require('../../utils/validationDataQAA');
 const validationDataFAQ = require('../../utils/validationDataFAQ');
 const { ServerError, ValidationsError, ConflictError } = require('../../errors');
+const REGEX = require('../../helpers/regex.helpers');
 
 const postQuestionsService = async (questionsData) => {
   const {
@@ -19,6 +20,9 @@ const postQuestionsService = async (questionsData) => {
   } = questionsData;
 
   if (!typeOfQuestion) throw new ValidationsError('Tipo de pregunta es requerido');
+  if (!REGEX.SOLO_LETRAS.test(typeOfQuestion)) {
+    throw new ValidationsError('Tipo de pregunta debe contener solo letras');
+  }
 
   const idQuestion = uuidv4();
 
@@ -88,7 +92,7 @@ const postQuestionsService = async (questionsData) => {
     return { questions };
   }
 
-  return { response: 'El tipo de pregunta no esta definida' };
+  throw new ValidationsError('El tipo de pregunta no existe');
 };
 
 module.exports = postQuestionsService;
