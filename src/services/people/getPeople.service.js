@@ -32,7 +32,7 @@ const getPeopleService = async (params) => {
         'weekCalendar']
 
     const { idOption, idOrder, state, pageSize, pageNumber } = params
-    const { fullName } = params
+    const { idPeople,fullName } = params
 
     const filters = []
 
@@ -46,15 +46,17 @@ const getPeopleService = async (params) => {
         filterPeople.fullName = { [Op.startsWith]: fullName }
     }
     //activos si no viene por params
-    if (state) {
-        filterPeople.state = state
-    } else {
-        filterPeople.state = PEOPLE_STATE_ACTIVE
+    if (!idPeople) {
+        if (state) {
+            filterPeople.state = state
+        } else {
+            filterPeople.state = PEOPLE_STATE_ACTIVE
+        }
     }
 
     //sequelize acepta filtros como array de objetosç
     //primer paso los de l aptabla people
-    
+
     filters.push(filterPeople)
 
     const filterServices = [] //usada para buscar el minimo valor de los servicios filtrados
