@@ -53,12 +53,7 @@ const getProviderStatsService = async (idPeople) => {
             ],
             where: whereProvider
         });
-        query.forEach(value => {
-            mostSearchedCategories.push({
-                servicio: value.dataValues.Servicio,
-                cantidad: value.dataValues.Cantidad
-            })
-        })
+       
         let indicadoresPersonales = {
             ratingPromedio: query[0].dataValues.Promedio,
             cantidadEvaluaciones: query[0].dataValues.Cantidad

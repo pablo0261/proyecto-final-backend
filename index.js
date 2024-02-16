@@ -39,18 +39,18 @@
     async function startServer() {
         try {
             await conn.authenticate();
-            console.log('Conexión establecida correctamente con la base de datos.');
+            console.log('Connection successfully established with the database...');
 
             // Sincronizar el modelo con la base de datos (si es necesario)
             await conn.sync({ alter: SYNC_FORCE });
 
-            console.log('Realizando tareas de mantenimiento.');
+            console.log('Performing maintenance tasks...');
             // Ejecutar la tarea de actualización al iniciar el servidor
             updateAges()
 
             // Ejecutar la tarea de actualización cada día a las 00:00
             cron.schedule('0 0 * * *', async () => {
-                console.log('Realizando tareas programadas.');
+                console.log('Performing scheduled tasks...');
                 //contorl de age
                 updateAges()    
 
@@ -62,7 +62,7 @@
                 console.log(`Server listening at ${PORT}`);
             });
         } catch (error) {
-            console.error('Error al iniciar el servidor:', error);
+            console.error('Error starting server!', error);
         }
     }
 
