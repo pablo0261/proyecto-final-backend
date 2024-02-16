@@ -8,24 +8,23 @@ const geolocationRouter = Router();
 
 geolocationRouter.get('/provinces', getProvincesController);
 /**
- * @swagger
- * /provinces:
- *   get:
- *     summary: Obtener todas las provincias.
- *     tags:
- *       - Geolocation
- *     responses:
- *       200:
- *         description: > 
- *           Obtiene un objeto con dos propiedades: count y data.
- *           count: contiene la cantidad de provincias registradas.
- *           data: contiene un array de objetos, cada objeto contiene las informaciones de cada provincia.  
- *       404:
- *         description: No hay registro de provincias.
- *       500:
- *         description: Error interno del servidor.
- */
-
+* @swagger
+* /provinces:
+*   get:
+*     summary: Obtener todas las provincias.
+*     tags:
+*       - Geolocation
+*     responses:
+*       200:
+*         description: > 
+*           Obtiene un objeto con dos propiedades: count y data.
+*           count: contiene la cantidad de provincias registradas.
+*           data: contiene un array de objetos, cada objeto contiene las informaciones de cada provincia.  
+*       404:
+*         description: No hay registro de provincias.
+*       500:
+*         description: Error interno del servidor.
+*/
 
 geolocationRouter.get('/municipalities', getMunicipalitiesController);
 // /**

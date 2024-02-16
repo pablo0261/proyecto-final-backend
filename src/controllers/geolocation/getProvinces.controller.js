@@ -6,7 +6,7 @@ const getProvincesController = async (req, res) => {
         const data = await getProvincesService(id, name);
 
         if (!data) {
-            return res.status(204).send('No hay registro de provincias.');
+            return res.status(404).send('No hay registro de provincias.');
         }
 
         return res.status(200).json(data);
