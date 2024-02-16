@@ -65,7 +65,6 @@ const getPeopleService = async (params) => {
     if (fullName) {
         filters.push(Sequelize.literal(`UPPER("fullName") LIKE '${fullName.toUpperCase()}%'`))
     }
-    console.log(filters)        
 
     const filterServices = [] //usada para buscar el minimo valor de los servicios filtrados
     // peopleoptions        
