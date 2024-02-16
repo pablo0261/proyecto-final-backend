@@ -14,6 +14,9 @@ const { formatDate } = require("../../utils/formatDate.js");
 const getProviderStatsService = async (idPeople) => {
 
     try {
+        const whereProvider = {}
+        if (idPeople) whereProvider.idProvider = idPeople
+
         let query = []
         //servicios mas solicitados
         query = await Opportunities.findAll({
@@ -45,15 +48,17 @@ const getProviderStatsService = async (idPeople) => {
         //promedio de calificaciones del proveedor logueado
         query = await Opportunities.findAll({
             attributes: [
-                ['idProvider', 'idProvider'],
                 [Sequelize.fn('AVG', Sequelize.col('"opportunities"."ratingCustomer"')), 'Promedio'],
                 [Sequelize.fn('COUNT', Sequelize.col('"opportunities"."ratingCustomer"')), 'Cantidad']
             ],
-            where: {
-                idProvider: idPeople
-            },
-            group: ['idProvider'],
+            where: whereProvider
         });
+        query.forEach(value => {
+            mostSearchedCategories.push({
+                servicio: value.dataValues.Servicio,
+                cantidad: value.dataValues.Cantidad
+            })
+        })
         let indicadoresPersonales = {
             ratingPromedio: query[0].dataValues.Promedio,
             cantidadEvaluaciones: query[0].dataValues.Cantidad
@@ -62,58 +67,46 @@ const getProviderStatsService = async (idPeople) => {
         //cantidad de oportunidades
         query = await Opportunities.findAll({
             attributes: [
-                ['idProvider', 'idProvider'],
                 [Sequelize.fn('COUNT', Sequelize.col('"opportunities"."idOpportunitie"')), 'Cantidad']
             ],
-            where: {
-                idProvider: idPeople
-            },
-            group: ['idProvider'],
+            where: whereProvider
         });
         indicadoresPersonales.cantidadOportunidades = query[0].dataValues.Cantidad
 
         //cantidad de oportunidades exitosas
+        let whereSucccess = whereProvider
+        whereSucccess.idService = { [Sequelize.Op.ne]: 0 }
+
         query = await Opportunities.findAll({
             attributes: [
-                ['idProvider', 'idProvider'],
                 [Sequelize.fn('COUNT', Sequelize.col('"opportunities"."idOpportunitie"')), 'Cantidad']
             ],
-            where: {
-                idProvider: idPeople,
-                idService: {
-                    [Sequelize.Op.ne]: 0
-                }
-            },
-            group: ['idProvider'],
+            where: whereSucccess
         });
         indicadoresPersonales.cantidadContrataciones = query[0].dataValues.Cantidad
 
         //cantidad de oportunidades en view
+        let whereView = whereProvider
+        whereView.state = STATE_VIEW
+
         query = await Opportunities.findAll({
             attributes: [
-                ['idProvider', 'idProvider'],
                 [Sequelize.fn('COUNT', Sequelize.col('"opportunities"."idOpportunitie"')), 'Cantidad']
             ],
-            where: {
-                idProvider: idPeople,
-                state: STATE_VIEW
-            },
-            group: ['idProvider'],
+            where: whereView
         });
         indicadoresPersonales.cantidadViews = query[0].dataValues.Cantidad
 
         //servicios contratados del proveedor
+        let whereHiring = whereProvider
+        whereHiring.idService = { [Sequelize.Op.ne]: 0 }
+
         query = await Opportunities.findAll({
             attributes: [
                 [Sequelize.literal('"categories_option"."description"'), 'Servicio'],
                 [Sequelize.fn('COUNT', Sequelize.col('"opportunities"."idService"')), 'Cantidad']
             ],
-            where: {
-                idProvider: idPeople,
-                idService: {
-                    [Sequelize.Op.ne]: 0
-                }
-            },
+            where: whereHiring,
             include: [{
                 model: Categories_options,
                 as: 'categories_option',
@@ -131,6 +124,9 @@ const getProviderStatsService = async (idPeople) => {
         })
 
         //ultimo comentario
+        let whereLastComment = whereProvider
+        whereLastComment.state = [STATE_COMPLETED, STATE_RATINGPROVIDERPENDING]
+
         query = await Opportunities.findOne({
             attributes: [
                 ['ratingCustomer', 'rating'],
@@ -140,10 +136,7 @@ const getProviderStatsService = async (idPeople) => {
                 [Sequelize.literal('"customer"."fullName"'), 'persona'],
 
             ],
-            where: {
-                idProvider: idPeople,
-                state: [STATE_COMPLETED, STATE_RATINGPROVIDERPENDING]
-            },
+            where: whereLastComment,
             include: [
                 {
                     model: Categories_options,
@@ -167,7 +160,7 @@ const getProviderStatsService = async (idPeople) => {
         }
 
         //historial de contrataciones
-        
+
         //salida
         const data = {
             indicadoresPersonales: indicadoresPersonales,

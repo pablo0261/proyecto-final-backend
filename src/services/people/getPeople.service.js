@@ -32,30 +32,40 @@ const getPeopleService = async (params) => {
         'weekCalendar']
 
     const { idOption, idOrder, state, pageSize, pageNumber } = params
-    const { fullName } = params
+    const { idPeople,fullName } = params
 
     const filters = []
 
 
     //armo un objeto solo con los campos de people asi no me da error el sequelize por filtrar nombre de campo inexistente
+    //exceto si viene fullName que lo majejo mas abajo
     let filterPeople = Object.fromEntries(
-        Object.entries(params).filter(([key]) => peopleFields.includes(key)))
+        Object.entries(params).filter(([key]) => {
+            if (key === 'fullName') {
+                return false; // Excluye el campo fullname
+            }
+            return peopleFields.includes(key);
+        })
+    );
 
-    // starts with si viene fullname
-    if (fullName) {
-        filterPeople.fullName = { [Op.startsWith]: fullName }
-    }
     //activos si no viene por params
-    if (state) {
-        filterPeople.state = state
-    } else {
-        filterPeople.state = PEOPLE_STATE_ACTIVE
+    if (!idPeople) {
+        if (state) {
+            filterPeople.state = state
+        } else {
+            filterPeople.state = PEOPLE_STATE_ACTIVE
+        }
     }
 
     //sequelize acepta filtros como array de objetosç
     //primer paso los de l aptabla people
-    
+
     filters.push(filterPeople)
+    // starts with si viene fullname
+    if (fullName) {
+        filters.push(Sequelize.literal(`UPPER("fullName") LIKE '${fullName.toUpperCase()}%'`))
+    }
+    console.log(filters)        
 
     const filterServices = [] //usada para buscar el minimo valor de los servicios filtrados
     // peopleoptions        
@@ -195,6 +205,7 @@ const getPeopleService = async (params) => {
             pageSize: parseInt(itemsPage),
             pageNumber: parseInt(page),
             filter: filterPeople,
+            filterFullName: fullName? fullName:"",
             //          order: orderPeople,
             options: idOption,
             data: formatPeople(result)

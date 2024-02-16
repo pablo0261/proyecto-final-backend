@@ -14,7 +14,7 @@ const validationDataQAA = (data) => {
   if (!REGEX.EMAIL.test(senderMail)) throw new ValidationsError('Email no valido');
 
   if (!fullName) throw new ValidationsError('Nombre de quien envia es requerido');
-  if (!REGEX.LETRAS_CON_ESPACIOS.test(fullName)) {
+  if (!REGEX.SOLO_LETRAS.test(fullName)) {
     throw new ValidationsError('Nombre no valido');
   }
 
