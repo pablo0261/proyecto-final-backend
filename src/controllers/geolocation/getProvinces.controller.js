@@ -5,15 +5,14 @@ const getProvincesController = async (req, res) => {
     try {
         const data = await getProvincesService(id, name);
 
-        if (data) {
-            return res.status(200).json(data);
+        if (!data) {
+            return res.status(404).send('No hay registro de provincias.');
         }
 
-        return res.status(204).send('Provincia no encontrada.');
+        return res.status(200).json(data);
 
     } catch (error) {
         res.status(500).send("Error interno del servidor.");
-
     }
 }
 
