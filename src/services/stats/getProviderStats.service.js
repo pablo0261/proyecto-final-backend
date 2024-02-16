@@ -53,9 +53,9 @@ const getProviderStatsService = async (idPeople) => {
             ],
             where: whereProvider
         });
-       
         let indicadoresPersonales = {
-            ratingPromedio: query[0].dataValues.Promedio,
+           
+            ratingPromedio: parseFloat(query[0].dataValues.Promedio),
             cantidadEvaluaciones: query[0].dataValues.Cantidad
         }
 
