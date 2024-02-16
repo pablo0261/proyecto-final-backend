@@ -1,29 +1,45 @@
 const { Categories, Categories_options } = require('../../db');
 const { Op } = require('sequelize');
+const { notFoundError, ValidationsError } = require('../../errors');
 
 const getCategoriesServise = async (parameters = {}) => {
   //
-  // array de filtros
-  const filters = [];
+  // filtros
+  const categoryFilters = [];
+  const optionFilters = {};
+
   Object.entries(parameters).map(([key, value]) => {
     const obj = {};
     if (value) {
-      if (key === 'description') return filters.push({ description: { [Op.iLike]: value } });
-      obj[key] = value;
-      return filters.push(obj);
+      if (key === 'description') return categoryFilters.push({ description: { [Op.iLike]: value } });
+      if (key !== 'isDeleted') {
+        obj[key] = value;
+        return categoryFilters.push(obj);
+      }
     }
   });
 
+  // filtro por opciones borradas
+  let { isDeleted } = parameters;
+  if (isDeleted) {
+    if (isDeleted === 'false') isDeleted = false;
+    if (isDeleted === 'true') isDeleted = true;
+    if (typeof isDeleted !== 'boolean') throw new ValidationsError('isDeleted debe ser true o false');
+    optionFilters.isDeleted = isDeleted;
+  }
+
   const categoriesData = await Categories.findAll({
-    where: { [Op.and]: filters },
+    where: { [Op.and]: categoryFilters },
     include: {
       model: Categories_options,
-      attributes: ['idOption', 'description'],
+      where: optionFilters,
+      attributes: ['idOption', 'description', 'isDeleted'],
     },
   });
 
   if (!categoriesData[0]) {
-    return { status: 404, response: 'Sin ningun resultado' };
+    // return { status: 404, response: 'Sin ningun resultado' };
+    throw new notFoundError('Sin ningun resultado');
   }
 
   const count = categoriesData.length;
@@ -32,7 +48,7 @@ const getCategoriesServise = async (parameters = {}) => {
     filters: parameters,
     data: categoriesData,
   };
-  return { status: 200, response: { categories } };
+  return { categories };
 };
 
 module.exports = getCategoriesServise;
