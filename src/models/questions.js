@@ -43,8 +43,16 @@ module.exports = (sequelize) => {
         },
         response: {
             type: DataTypes.TEXT,
-            allowNull: false,
+            allowNull: true,
             defaultValue: 'pendiente'
+        },
+        dateMessage: {
+            type: DataTypes.DATEONLY,
+            allowNull: true,
+        },
+        dateResponse: {
+            type: DataTypes.DATEONLY,
+            allowNull: true
         }
     })
 };

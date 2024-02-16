@@ -38,13 +38,16 @@ const getPeopleService = async (params) => {
 
 
     //armo un objeto solo con los campos de people asi no me da error el sequelize por filtrar nombre de campo inexistente
+    //exceto si viene fullName que lo majejo mas abajo
     let filterPeople = Object.fromEntries(
-        Object.entries(params).filter(([key]) => peopleFields.includes(key)))
+        Object.entries(params).filter(([key]) => {
+            if (key === 'fullName') {
+                return false; // Excluye el campo fullname
+            }
+            return peopleFields.includes(key);
+        })
+    );
 
-    // starts with si viene fullname
-    if (fullName) {
-        filterPeople.fullName = { [Op.startsWith]: fullName }
-    }
     //activos si no viene por params
     if (!idPeople) {
         if (state) {
@@ -58,6 +61,11 @@ const getPeopleService = async (params) => {
     //primer paso los de l aptabla people
 
     filters.push(filterPeople)
+    // starts with si viene fullname
+    if (fullName) {
+        filters.push(Sequelize.literal(`UPPER("fullName") LIKE '${fullName.toUpperCase()}%'`))
+    }
+    console.log(filters)        
 
     const filterServices = [] //usada para buscar el minimo valor de los servicios filtrados
     // peopleoptions        
@@ -197,6 +205,7 @@ const getPeopleService = async (params) => {
             pageSize: parseInt(itemsPage),
             pageNumber: parseInt(page),
             filter: filterPeople,
+            filterFullName: fullName? fullName:"",
             //          order: orderPeople,
             options: idOption,
             data: formatPeople(result)
