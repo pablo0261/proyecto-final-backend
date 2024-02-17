@@ -9,7 +9,7 @@ const {
     Payments,
 } = require("../../db.js");
 
-const { STATE_VIEW, STATE_COMPLETED, STATE_RATINGPROVIDERPENDING } = require("../../constants/index.js");
+const { STATE_VIEW, STATE_COMPLETED, STATE_RATINGPROVIDERPENDING, STATE_ACCEPTED, STATE_RATINGCUSTOMERPENDING, STATE_RATINGPENDING } = require("../../constants/index.js");
 const { formatDate } = require("../../utils/formatDate.js");
 
 const getProviderStatsService = async (idPeople) => {
@@ -71,15 +71,29 @@ const getProviderStatsService = async (idPeople) => {
 
         indicadoresPersonales.cantidadOportunidades = query ? query[0].dataValues.Cantidad : 0
 
-        //cantidad de oportunidades exitosas
+        //cantidad de servicios solicitados
         let whereSucccess = whereProvider
-        whereSucccess.idService = { [Sequelize.Op.ne]: 0 }
+        whereSucccess.idService = { [Sequelize.Op.ne]: 0}
 
         query = await Opportunities.findAll({
             attributes: [
                 [Sequelize.fn('COUNT', Sequelize.col('"opportunities"."idOpportunitie"')), 'Cantidad']
             ],
             where: whereSucccess
+        });
+
+        indicadoresPersonales.cantidadSolicitudes = query ? query[0].dataValues.Cantidad : 0
+
+        //cantidad de oportunidades exitosas
+        let whereAccepted = whereProvider
+        whereAccepted.idService = { [Sequelize.Op.ne]: 0}
+        whereAccepted.state = [STATE_COMPLETED, STATE_RATINGPROVIDERPENDING,STATE_ACCEPTED,STATE_RATINGCUSTOMERPENDING,STATE_RATINGPENDING]
+
+        query = await Opportunities.findAll({
+            attributes: [
+                [Sequelize.fn('COUNT', Sequelize.col('"opportunities"."idOpportunitie"')), 'Cantidad']
+            ],
+            where: whereAccepted
         });
 
         indicadoresPersonales.cantidadContrataciones = query ? query[0].dataValues.Cantidad : 0
