@@ -1,54 +1,48 @@
-const { TYPE_OF_QUESTION_FAQ, TYPE_OF_QUESTION_QAA } = require('../../constants');
+const {
+  TYPE_OF_QUESTION_FAQ,
+  TYPE_OF_QUESTION_QAA,
+  QUESTION_STATUS_PENDING,
+  QUESTION_STATUS_COMPLETED,
+} = require('../../constants');
+
+const REGEX = require('../../helpers/regex.helpers');
 const { Questions } = require('../../db');
 const { ValidationsError } = require('../../errors');
+const { Op } = require('sequelize');
 
-const getQuestionsService = async (type) => {
-  if (type) {
-    if (type === TYPE_OF_QUESTION_FAQ) {
-      const allQuestionsFAQ = await Questions.findAll({
-        where: { typeOfQuestion: TYPE_OF_QUESTION_FAQ },
-        attributes: {
-          exclude: ['response', 'priority', 'senderMail', 'fullName', 'receiverMail'],
-        },
-      });
+const getQuestionsService = async (parameters = {}) => {
+  const { typeOfQuestion, senderMail, questionStatus } = parameters;
 
-      const questions = {
-        count: allQuestionsFAQ.length,
-        filter: { typeOfQuestion: TYPE_OF_QUESTION_FAQ },
-        data: allQuestionsFAQ,
-      };
-
-      return { questions };
-    }
-
-    if (type === TYPE_OF_QUESTION_QAA) {
-      const allQuestionsQAA = await Questions.findAll({
-        where: { typeOfQuestion: TYPE_OF_QUESTION_QAA },
-        attributes: {
-          exclude: ['priority'],
-        },
-      });
-
-      const questions = {
-        count: allQuestionsQAA.length,
-        filter: { typeOfQuestion: TYPE_OF_QUESTION_QAA },
-        data: allQuestionsQAA,
-      };
-
-      return { questions };
-    }
-    throw new ValidationsError(`No hay un tipo de pregunta '${type}' definido`);
+  // validaciones
+  if (![TYPE_OF_QUESTION_FAQ, TYPE_OF_QUESTION_QAA].includes(typeOfQuestion) && typeOfQuestion) {
+    throw new ValidationsError(
+      `typeOfQuestion debe ser ${TYPE_OF_QUESTION_FAQ} o ${TYPE_OF_QUESTION_QAA}`
+    );
   }
 
+  if (![QUESTION_STATUS_PENDING, QUESTION_STATUS_COMPLETED].includes(questionStatus) && questionStatus) {
+    throw new ValidationsError(
+      `questionStatus debe ser ${QUESTION_STATUS_PENDING} o ${QUESTION_STATUS_COMPLETED}`
+    );
+  }
+
+  if (!REGEX.EMAIL.test(senderMail) && senderMail) throw new ValidationsError('email no valido');
+
+  // array de filtros
+  const filters = Object.entries(parameters).map(([key, value]) => {
+    const obj = {};
+    if (value) obj[key] = value;
+    return obj;
+  });
+
   const allQuestions = await Questions.findAll({
-    order: [
-        ['typeOfQuestion', 'ASC'],
-    ],
+    where: { [Op.and]: filters },
+    order: [['typeOfQuestion', 'ASC']],
   });
 
   const questions = {
     count: allQuestions.length,
-    filter: {},
+    filter: parameters,
     data: allQuestions,
   };
 
