@@ -2,6 +2,7 @@ const { People, People_logins, Payments } = require('../../db');
 const { v4: uuidv4 } = require('uuid');
 const { getPeopleService } = require('./getPeople.service');
 const { PEOPLE_STATE_ACTIVE } = require('../../constants');
+const { customers } = require('mercadopago');
 
 const postPeopleService = async (params) => {
 
@@ -55,7 +56,7 @@ const postPeopleService = async (params) => {
             // Si no se creó, se actualiza el usuario que contiene el idPeople
             await People.update(newData, { where: { idPeople: newData.idPeople } });
 
-        } else {
+        } else if(created && typeOfPerson === "provider") {
             // Si se creó una nueva entrada, guardamos el login y el pago
 
             const logins = await People_logins.create({
