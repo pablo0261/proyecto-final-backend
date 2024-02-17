@@ -8,6 +8,7 @@ const { putPeopleService } = require('../people/putPeople.service');
 
 const postChatsService = require('../chats/postChats.service');
 const { formatDate } = require('../../utils/formatDate');
+const { sendMailService } = require('../sendMail/sendMail.service');
 
 const CHAT_MESSAGE_PENDING = `Lo he contratado para el %DIA% a las %HORA% hora(s), por %DURACION% hora(s) de %SERVICIO% por un valor de $%PRECIO%`
 
@@ -41,6 +42,11 @@ const putOpportunitiesService = async (params) => {
 
         const people = await People.findByPk(idPeople);
 
+        const customer = await People.findByPk(opportunitie.idCustomer);
+        const provider = await People.findByPk(opportunitie.idProvider);
+
+        //busco el servicio
+        const service = await Categories_options.findByPk(opportunitie.idService)
         let newChat = {}
         let message = ''
 
@@ -61,6 +67,13 @@ const putOpportunitiesService = async (params) => {
                 isRated: false
             }
             postChatsService(newChat)
+            //enviarMail
+            sendMailService(
+                people.typeOfPerson === USER_CUSTOMER ? provider.email : customer.email, //to
+                'El servicio fue Cancelado!',
+                `El servicio ${service.description} del dia ${formatDate(dateOfService)} fue cancelado!`
+            )
+
 
         } else {
             switch (opportunitie.state) {
@@ -80,9 +93,6 @@ const putOpportunitiesService = async (params) => {
                     opportunitie.durationOfService = durationOfService
                     opportunitie.state = STATE_PENDING
 
-                    //busco el servicio
-                    const service = await Categories_options.findByPk(idService)
-                    console.log(service.dataValues.description)
 
                     //envio automaticamente el chat 
 
@@ -93,12 +103,20 @@ const putOpportunitiesService = async (params) => {
                             .replace('%DIA%', formatDate(dateOfService))
                             .replace('%HORA%', timeOfService)
                             .replace('%DURACION%', durationOfService)
-                            .replace('%SERVICIO%', service.dataValues.description)
+                            .replace('%SERVICIO%', service.description)
                             .replace('%PRECIO%', price),
                         isRating: false,
                         isRated: false
                     }
                     postChatsService(newChat)
+                    //enviarMail
+                    newChat.message = newChat.message +
+                        `\nMi nombre es ${customer.fullName}, por favor ingrese en  https://carewithlove.onrender.com para confirmar la contratacion`
+                    sendMailService(
+                        people.typeOfPerson === USER_CUSTOMER ? provider.email : customer.email, //to
+                        'Servicio contratado!',
+                        newChat.message
+                    )
 
                     break;
 
@@ -120,12 +138,22 @@ const putOpportunitiesService = async (params) => {
                     newChat = {
                         idOpportunitie: opportunitie.idOpportunitie,
                         idPeople: opportunitie.idCustomer,
-                        message: 'Por favor ingrese su evaluacion', 
+                        message: 'Por favor ingrese su evaluacion',
                         isRating: true,
                         isRated: false
                     }
                     postChatsService(newChat)
 
+                    //enviar mail
+                    sendMailService(
+                        customer.email,
+                        'Evaluacion de servicio',
+                        `Por favor evalue el servicio de ${service.description} realizado por ${provider.fullName}\n` +
+                        `ingresando en https://carewithlove.onrender.com\n\n` +
+                        `Muchas Gracias !!!`
+                    )
+
+                    //enviar chat
                     newChat = {
                         idOpportunitie: opportunitie.idOpportunitie,
                         idPeople: opportunitie.idProvider,
@@ -134,6 +162,15 @@ const putOpportunitiesService = async (params) => {
                         isRated: false
                     }
                     postChatsService(newChat)
+                    //enviar mail 
+                    sendMailService(
+                        provider.email,
+                        'Evaluacion de servicio',
+                        `Por favor evalue a ${customer.fullName} por el servicio de ${service.description}\n` +
+                        `ingresando en https://carewithlove.onrender.com\n\n` +
+                        `Muchas Gracias !!!`
+                    )
+
                     break;
 
                 case STATE_RATINGPENDING:
