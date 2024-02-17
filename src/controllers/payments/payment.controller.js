@@ -51,6 +51,8 @@ const paymentController = async (req, res) => {
         urlPayment: result.body.init_point
     }
 
+    console.log("wook", MP_WEBWOOK)
+
     return res.status(200).json(data);
 
 }
