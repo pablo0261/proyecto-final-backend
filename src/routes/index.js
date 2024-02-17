@@ -8,7 +8,8 @@ const opportunitiesRouter = require("./opportunities.route.js");
 const paymentsRouter = require("./payments.route.js");
 const chatsRouter = require("./chats.route.js");
 const questionsRouter = require("./questions.route.js");
-const statsRouter = require("./stats.route.js")
+const statsRouter = require("./stats.route.js");
+const sendMailRouter = require("./sendMail.route.js");
 
 router.use(categoriesRouter);
 router.use(peopleRouter);
@@ -18,5 +19,6 @@ router.use(paymentsRouter);
 router.use(chatsRouter);
 router.use(questionsRouter);
 router.use(statsRouter);
+router.use(sendMailRouter)
 
 module.exports = router;

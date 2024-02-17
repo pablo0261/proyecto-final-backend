@@ -8,6 +8,7 @@ const {
     Opportunities,
     Payments,
 } = require("../../db.js");
+
 const { STATE_VIEW, STATE_COMPLETED, STATE_RATINGPROVIDERPENDING } = require("../../constants/index.js");
 const { formatDate } = require("../../utils/formatDate.js");
 
@@ -38,6 +39,7 @@ const getProviderStatsService = async (idPeople) => {
             order: [[Sequelize.fn('COUNT', Sequelize.col('"opportunities"."idService"')), 'DESC']]
         });
         const mostSearchedCategories = []
+        console.log(query)
         query.forEach(value => {
             mostSearchedCategories.push({
                 servicio: value.dataValues.Servicio,
@@ -53,15 +55,10 @@ const getProviderStatsService = async (idPeople) => {
             ],
             where: whereProvider
         });
-        query.forEach(value => {
-            mostSearchedCategories.push({
-                servicio: value.dataValues.Servicio,
-                cantidad: value.dataValues.Cantidad
-            })
-        })
         let indicadoresPersonales = {
-            ratingPromedio: query[0].dataValues.Promedio,
-            cantidadEvaluaciones: query[0].dataValues.Cantidad
+
+            ratingPromedio: query ? parseFloat(query[0].dataValues.Promedio) : 0,
+            cantidadEvaluaciones: query ? query[0].dataValues.Cantidad : 0
         }
 
         //cantidad de oportunidades
@@ -71,7 +68,8 @@ const getProviderStatsService = async (idPeople) => {
             ],
             where: whereProvider
         });
-        indicadoresPersonales.cantidadOportunidades = query[0].dataValues.Cantidad
+
+        indicadoresPersonales.cantidadOportunidades = query ? query[0].dataValues.Cantidad : 0
 
         //cantidad de oportunidades exitosas
         let whereSucccess = whereProvider
@@ -83,7 +81,8 @@ const getProviderStatsService = async (idPeople) => {
             ],
             where: whereSucccess
         });
-        indicadoresPersonales.cantidadContrataciones = query[0].dataValues.Cantidad
+
+        indicadoresPersonales.cantidadContrataciones = query ? query[0].dataValues.Cantidad : 0
 
         //cantidad de oportunidades en view
         let whereView = whereProvider
@@ -95,7 +94,7 @@ const getProviderStatsService = async (idPeople) => {
             ],
             where: whereView
         });
-        indicadoresPersonales.cantidadViews = query[0].dataValues.Cantidad
+        indicadoresPersonales.cantidadViews = query ? query[0].dataValues.Cantidad : 0
 
         //servicios contratados del proveedor
         let whereHiring = whereProvider
@@ -152,11 +151,11 @@ const getProviderStatsService = async (idPeople) => {
         });
 
         const lastComment = {
-            rating: query.dataValues.rating,
-            fecha: formatDate(query.dataValues.fecha),
-            review: query.dataValues.review,
-            cliente: query.dataValues.customer.fullName,
-            servicio: query.dataValues.service
+            rating: query ? query.dataValues.rating : 0,
+            fecha: query ? formatDate(query.dataValues.fecha) : "",
+            review: query ? query.dataValues.review : "Sin comentarios cargados",
+            cliente: query ? query.dataValues.customer.fullName : 0,
+            servicio: query ? query.dataValues.service : ''
         }
 
         //historial de contrataciones

@@ -77,24 +77,19 @@ const getOpportunitiesService = async (params) => {
             order: orders
         }
 
-        if (idProvider) {
-            options.include = [
-                {
-                    model: People,
-                    attributes: ['fullName', 'image'],
-                    as: 'customer'
-                }]
-        }
-        else {
-            if (idCustomer) {
-                options.include = [
-                    {
-                        model: People,
-                        attributes: ['fullName', 'image'],
-                        as: 'provider'
-                    }]
-            }
-        }
+        options.include = [
+            {
+                model: People,
+                attributes: ['fullName', 'image'],
+                as: 'customer'
+            }]
+        options.include.push(
+            {
+                model: People,
+                attributes: ['fullName', 'image'],
+                as: 'provider'
+            })
+
         let result = await Opportunities.findAll(options)
 
         const count = result.length;
@@ -107,8 +102,8 @@ const getOpportunitiesService = async (params) => {
             filter: filters,
             data: result
         }
-          return { opportunities };
-        
+        return { opportunities };
+
     } catch (error) {
         throw error
     }
