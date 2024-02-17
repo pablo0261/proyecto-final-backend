@@ -5,6 +5,7 @@ const getCategories = require("../controllers/categories/getCategories.controlle
 const getCategoriesOptions = require("../controllers/categories_options/getCategoriesOptions.controller");
 const postCategories = require("../controllers/categories/postCategories.controller");
 const postCategoriesOptionsController = require("../controllers/categories_options/postCategoriesOptions.controller");
+const deleteCategoriesOptionsController = require("../controllers/categories_options/deleteCategoriesOptions.controller");
 
 const categoriesRouter = Router();
 
@@ -70,5 +71,7 @@ categoriesRouter.post("/categories", postCategories);
 //  */
 
 categoriesRouter.post("/categories/options", postCategoriesOptionsController);
+
+categoriesRouter.delete("/categories/options", deleteCategoriesOptionsController);
 
 module.exports = categoriesRouter;

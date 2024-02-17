@@ -1,18 +1,22 @@
+const { notFoundError, ValidationsError } = require('../../errors');
 const getCategoriesOption = require('../../services/categories_options/getCategoriesOption.service');
 
 const getCategoriesOptions = async (req, res) => {
   try {
-    const { description, idCategorie } = req.body;
+    const { description, idCategorie, isDeleted } = req.query;
 
-    if (description || idCategorie) {
-      const { status, response } = await getCategoriesOption({ description, idCategorie });
-      return res.status(status).json(response);
+    const response = await getCategoriesOption({ description, idCategorie, isDeleted });
+    res.status(200).json(response);
+  } catch (error) {
+    if (error instanceof notFoundError) {
+      return res.status(404).json({ error: error.message });
     }
 
-    const { status, response } = await getCategoriesOption();
-    res.status(status).json(response);
-  } catch (error) {
-    res.status(500).send({ error: error.message });
+    if (error instanceof ValidationsError) {
+      return res.status(400).json({ error: error.message });
+    }
+
+    res.status(500).json({ error: error.message || 'Internal server error' });
   }
 };
 
