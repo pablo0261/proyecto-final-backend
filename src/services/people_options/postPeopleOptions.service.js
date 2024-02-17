@@ -82,6 +82,38 @@ const postPeopleOptionsService = async (dataBody) => {
       return { response, status: create ? 201 : 200 };
     }
 
+    // post para people education
+    if (category.isExperience) {
+        const { institution, year, comment,description } = dataBody;
+  
+        if (!institution) return { status: 400, response: { response: 'institution es dato requerido' } };
+        if (!year) return { status: 400, response: { response: 'year es dato requerido' } };
+        if (!comment) return { status: 400, response: { response: 'comment es dato requerido' } };
+        if (!description) return { status: 400, response: { response: 'description es dato requerido' } };
+        
+        const newData = {
+          id: uuidv4(),
+          institution,
+          year,
+          comment,
+          description,
+          isDeleted: false,
+        };
+  
+        const [optionCreate, create] = await People_options.findOrCreate({
+          where: { idPeople, idOption },
+          defaults: newData,
+        });
+  
+        if (!create) {
+          await People_options.update(newData, {
+            where: { idPeople, idOption },
+          });
+        }
+  
+        const response = await getPeopleService({ idPeople });
+        return { response, status: create ? 201 : 200 };
+      }
     // se agragaron posteriores condiciones para los formularios restantes
     //
     //
