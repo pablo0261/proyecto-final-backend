@@ -3,39 +3,49 @@ const { Op } = require('sequelize');
 
 const paidMembershipsService = async (filter) => {
 
-    console.log("idPeople: ", filter.idPeople);
+    const whereCondition = {};
+    if (filter.idPeople) whereCondition.idPeople = filter.idPeople;
+    if (filter.onlyDebts) whereCondition.paymentDay = null;
+
     try {
-
-        const whereCondition = filter.idPeople ? { paymentDay: null, idPeople: filter.idPeople } : { paymentDay: null };
-
-        const countNullPaymentDay = await Payments.count({
+        const deudas = await Payments.findAll({
             where: whereCondition
         });
 
-        const payment = await Payments.findOne({
-            attributes: ['price'],
-            where: whereCondition
+        let cantidadDeudas = 0;
+        let totalDeuda = 0;
+        const data = [];
+        let result = null;
+
+
+
+        deudas.forEach(deuda => {
+            if (deuda.dataValues.paymentDay === null) {
+                cantidadDeudas++;
+                totalDeuda += parseFloat(deuda.dataValues.price);
+                data.push(deuda.dataValues);
+            } else if (deuda.dataValues.paymentDay !== null) {
+                data.push(deuda.dataValues);
+            }
         });
 
-        const fixedPrice = payment ? payment.price : 0;
+        if (whereCondition.paymentDay === null) {
+            result = {
+                cantidadDeudas,
+                totalDeuda,
+                data
+            }
+        } else {
+            result = { data }
+        }
 
-        const total = countNullPaymentDay * fixedPrice;
 
-        const nullPaymentDayRecords = await Payments.findAll({
-            where: whereCondition
-        });
-
-        const info = {
-            count: countNullPaymentDay,
-            total: total,
-            data: nullPaymentDayRecords
-        };
-
-        return info;
+        return result
     } catch (error) {
-        console.log("service: ", error);
+        console.log("Error al procesar deudas: ", error);
         throw error;
     }
+
 }
 
 module.exports = { paidMembershipsService };
