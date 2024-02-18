@@ -1,12 +1,12 @@
 const { People, People_logins, Payments } = require('../../db');
 const { v4: uuidv4 } = require('uuid');
 const { getPeopleService } = require('./getPeople.service');
-const { PEOPLE_STATE_ACTIVE } = require('../../constants');
+const { PEOPLE_STATE_ACTIVE, PEOPLE_STATE_UNVERIFIED } = require('../../constants');
 const { customers } = require('mercadopago');
 
 const postPeopleService = async (params) => {
 
-    
+
     const { idPeople, fullName, address, idLocation, geoposition, birthDate, idGenre, state,
         aboutMe, typeOfPerson, email, password, externalLogin, weekCalendar, price,
         phone, location, country, profession } = params;
@@ -22,7 +22,6 @@ const postPeopleService = async (params) => {
             geoposition,
             birthDate,
             idGenre,
-            state: !state ? PEOPLE_STATE_ACTIVE : state,
             aboutMe,
             dateOfAdmission: currentDate,
             typeOfPerson,
@@ -34,7 +33,12 @@ const postPeopleService = async (params) => {
             country,
             profession
         };
-        
+        //estado inicial
+        if (typeOfPerson === "provider") {
+            newData.state = state ? state : PEOPLE_STATE_UNVERIFIED
+        }else{
+            newData.state = state ? state : PEOPLE_STATE_ACTIVE
+        }    
         //age
         if (birthDate) {
             const birthDateToDate = new Date(birthDate);
@@ -45,7 +49,7 @@ const postPeopleService = async (params) => {
             ) {
                 age--; // Resta 1 año si aún no ha cumplido años este año
             }
-            newData.age=age
+            newData.age = age
         }
         const [found, created] = await People.findOrCreate({
             where: { idPeople: newData.idPeople },
@@ -56,7 +60,7 @@ const postPeopleService = async (params) => {
             // Si no se creó, se actualiza el usuario que contiene el idPeople
             await People.update(newData, { where: { idPeople: newData.idPeople } });
 
-        } else if(created && typeOfPerson === "provider") {
+        } else if (created && typeOfPerson === "provider") {
             // Si se creó una nueva entrada, guardamos el login y el pago
 
             const logins = await People_logins.create({
@@ -69,7 +73,7 @@ const postPeopleService = async (params) => {
                 idPayment: uuidv4(),
                 idPeople: params.idPeople,
                 emisionDate: params.emisionDate,
-                dueDate: params.paymentDay, 
+                dueDate: params.paymentDay,
                 paymentDay: params.paymentDay,
                 methodOfPayment: params.methodOfPayment,
                 price: params.price,
