@@ -15,8 +15,6 @@ const { formatDate } = require("../../utils/formatDate.js");
 const getProviderStatsService = async (idPeople) => {
 
     try {
-        const whereProvider = {}
-        if (idPeople) whereProvider.idProvider = idPeople
 
         let query = []
         //servicios mas solicitados
@@ -38,8 +36,8 @@ const getProviderStatsService = async (idPeople) => {
             group: ['categories_option.description'],
             order: [[Sequelize.fn('COUNT', Sequelize.col('"opportunities"."idService"')), 'DESC']]
         });
+
         const mostSearchedCategories = []
-        console.log(query)
         query.forEach(value => {
             mostSearchedCategories.push({
                 servicio: value.dataValues.Servicio,
@@ -53,10 +51,9 @@ const getProviderStatsService = async (idPeople) => {
                 [Sequelize.fn('AVG', Sequelize.col('"opportunities"."ratingCustomer"')), 'Promedio'],
                 [Sequelize.fn('COUNT', Sequelize.col('"opportunities"."ratingCustomer"')), 'Cantidad']
             ],
-            where: whereProvider
+            where: idPeople ? { idProvider: idPeople } : {}
         });
         let indicadoresPersonales = {
-
             ratingPromedio: query ? parseFloat(query[0].dataValues.Promedio) : 0,
             cantidadEvaluaciones: query ? query[0].dataValues.Cantidad : 0
         }
@@ -66,14 +63,13 @@ const getProviderStatsService = async (idPeople) => {
             attributes: [
                 [Sequelize.fn('COUNT', Sequelize.col('"opportunities"."idOpportunitie"')), 'Cantidad']
             ],
-            where: whereProvider
+            where: idPeople ? { idProvider: idPeople } : {}
         });
-
         indicadoresPersonales.cantidadOportunidades = query ? query[0].dataValues.Cantidad : 0
 
         //cantidad de servicios solicitados
-        let whereSucccess = whereProvider
-        whereSucccess.idService = { [Sequelize.Op.ne]: 0}
+        let whereSucccess = idPeople ? { idProvider: idPeople } : {}
+        whereSucccess.idService = { [Sequelize.Op.ne]: 0 }
 
         query = await Opportunities.findAll({
             attributes: [
@@ -85,9 +81,9 @@ const getProviderStatsService = async (idPeople) => {
         indicadoresPersonales.cantidadSolicitudes = query ? query[0].dataValues.Cantidad : 0
 
         //cantidad de oportunidades exitosas
-        let whereAccepted = whereProvider
-        whereAccepted.idService = { [Sequelize.Op.ne]: 0}
-        whereAccepted.state = [STATE_COMPLETED, STATE_RATINGPROVIDERPENDING,STATE_ACCEPTED,STATE_RATINGCUSTOMERPENDING,STATE_RATINGPENDING]
+        let whereAccepted = idPeople ? { idProvider: idPeople } : {}
+        whereAccepted.idService = { [Sequelize.Op.ne]: 0 }
+        whereAccepted.state = [STATE_COMPLETED, STATE_RATINGPROVIDERPENDING, STATE_ACCEPTED, STATE_RATINGCUSTOMERPENDING, STATE_RATINGPENDING]
 
         query = await Opportunities.findAll({
             attributes: [
@@ -99,7 +95,7 @@ const getProviderStatsService = async (idPeople) => {
         indicadoresPersonales.cantidadContrataciones = query ? query[0].dataValues.Cantidad : 0
 
         //cantidad de oportunidades en view
-        let whereView = whereProvider
+        let whereView = idPeople ? { idProvider: idPeople } : {}
         whereView.state = STATE_VIEW
 
         query = await Opportunities.findAll({
@@ -111,7 +107,7 @@ const getProviderStatsService = async (idPeople) => {
         indicadoresPersonales.cantidadViews = query ? query[0].dataValues.Cantidad : 0
 
         //servicios contratados del proveedor
-        let whereHiring = whereProvider
+        let whereHiring = idPeople ? { idProvider: idPeople } : {}
         whereHiring.idService = { [Sequelize.Op.ne]: 0 }
 
         query = await Opportunities.findAll({
@@ -123,11 +119,12 @@ const getProviderStatsService = async (idPeople) => {
             include: [{
                 model: Categories_options,
                 as: 'categories_option',
-                attributes: [], // Debes especificar las columnas que deseas seleccionar de la tabla incluida
+                attributes: [],
             }],
             group: ['categories_option.description'],
             order: [[Sequelize.fn('COUNT', Sequelize.col('"opportunities"."idService"')), 'DESC']]
         });
+
         const mostSearchedServices = []
         query.forEach(value => {
             mostSearchedServices.push({
@@ -137,7 +134,7 @@ const getProviderStatsService = async (idPeople) => {
         })
 
         //ultimo comentario
-        let whereLastComment = whereProvider
+        let whereLastComment = idPeople ? { idProvider: idPeople } : {}
         whereLastComment.state = [STATE_COMPLETED, STATE_RATINGPROVIDERPENDING]
 
         query = await Opportunities.findOne({
@@ -172,13 +169,43 @@ const getProviderStatsService = async (idPeople) => {
             servicio: query ? query.dataValues.service : ''
         }
 
-        //historial de contrataciones
+        //historial de contrataciones ultimp mes por semana
+        const currentDate = new Date();
+        const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+        let whereOpportunitiesByWeek = idPeople ? { idProvider: idPeople } : {}
+        whereOpportunitiesByWeek.dateView = {
+            [Sequelize.Op.gte]: firstDayOfMonth,
+            [Sequelize.Op.lte]: currentDate
+        }
+
+
+        query = await Opportunities.findAll({
+            attributes: [
+                [Sequelize.literal(`EXTRACT('week' FROM "dateView") - EXTRACT('week' FROM date_trunc('month', "dateView")) + 1`), 'week'],
+                [Sequelize.fn('SUM', Sequelize.literal('CASE WHEN ("idService" = 0 or "idService" is null) THEN 1 ELSE 0 END')), 'countOpp'],
+                [Sequelize.fn('SUM', Sequelize.literal('CASE WHEN "idService" != 0 THEN 1 ELSE 0 END')), 'countServices'],
+                [Sequelize.fn('SUM', Sequelize.literal(`CASE WHEN "state" in('${STATE_ACCEPTED}','${STATE_COMPLETED}','${STATE_RATINGPROVIDERPENDING}',
+                '${STATE_RATINGCUSTOMERPENDING}','${STATE_RATINGPENDING}') THEN 1 ELSE 0 END`)), 'countAccepted']
+            ],
+            where: whereOpportunitiesByWeek,
+            group: [Sequelize.literal(`EXTRACT('week' FROM "dateView") - EXTRACT('week' FROM date_trunc('month', "dateView")) + 1`)],
+            order: [Sequelize.literal(`EXTRACT('week' FROM "dateView") - EXTRACT('week' FROM date_trunc('month', "dateView")) + 1`)]
+
+        })
+        const opportunitiesByWeek = { ejex: [], Oportunidades: [], Solicitudes: [], Contrataciones: [] }
+        query.forEach(value => {
+            opportunitiesByWeek.ejex.push(value.dataValues.week)
+            opportunitiesByWeek.Oportunidades.push(value.dataValues.countOpp)
+            opportunitiesByWeek.Solicitudes.push(value.dataValues.countServices)
+            opportunitiesByWeek.Contrataciones.push(value.dataValues.countAccepted)
+        })
 
         //salida
         const data = {
             indicadoresPersonales: indicadoresPersonales,
             serviciosMasBuscados: mostSearchedCategories,
             misServiciosMasContratados: mostSearchedServices,
+            opportunidadesPorSemana: opportunitiesByWeek,
             ultimoComentario: lastComment
         }
         return { data }
