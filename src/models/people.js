@@ -1,5 +1,6 @@
 const { DataTypes, INTEGER } = require('sequelize');
-const { USER_CUSTOMER, USER_PROVIDER, USER_ADMINISTRATOR, PEOPLE_STATE_ACTIVE, PEOPLE_STATE_DELETED, PEOPLE_STATE_INACTIVE, PEOPLE_STATE_FIRST_PAYMENT_PENDING, PEOPLE_STATE_PENDING_DEBT } = require('../constants');
+const { USER_CUSTOMER, USER_PROVIDER, USER_ADMINISTRATOR,
+    PEOPLE_STATE_ACTIVE, PEOPLE_STATE_DELETED, PEOPLE_STATE_INACTIVE, PEOPLE_STATE_UNVERIFIED } = require('../constants');
 
 // Exportamos una funcion que define el modelo
 // Luego le injectamos la conexion a sequelize.
@@ -40,7 +41,7 @@ module.exports = (sequelize) => {
         },
         state: {
             type: DataTypes.ENUM,
-            values: [PEOPLE_STATE_ACTIVE, PEOPLE_STATE_DELETED, PEOPLE_STATE_INACTIVE,PEOPLE_STATE_FIRST_PAYMENT_PENDING,PEOPLE_STATE_PENDING_DEBT],
+            values: [PEOPLE_STATE_ACTIVE, PEOPLE_STATE_DELETED, PEOPLE_STATE_INACTIVE, PEOPLE_STATE_UNVERIFIED],
             allowNull: false,
         },
         aboutMe: {
