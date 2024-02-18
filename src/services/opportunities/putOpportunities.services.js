@@ -46,7 +46,8 @@ const putOpportunitiesService = async (params) => {
         const provider = await People.findByPk(opportunitie.idProvider);
 
         //busco el servicio
-        const service = await Categories_options.findByPk(opportunitie.idService)
+        const service = await Categories_options.findByPk(opportunitie.idService ? opportunitie.idService : idService)
+
         let newChat = {}
         let message = ''
 
