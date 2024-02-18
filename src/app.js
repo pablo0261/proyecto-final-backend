@@ -65,6 +65,10 @@ io.on('connection', (socket) => {
         const foundUSerSocket = connectedUsers.find((user) => {
             return user.idPeople === idPeople && user.idSocket === socket.id
         })
+        connectedUsers.filter((user) => {
+            user.idPeople != null
+        })
+
         if (!foundUSerSocket) connectedUsers.push({ idPeople: idPeople, idSocket: socket.id })
 
         console.log('Usuarios Conectados:', connectedUsers)
@@ -87,6 +91,7 @@ io.on('connection', (socket) => {
         // connectedUsers = connectedUsers.filter(people => people.idPeople !== idPeople)
         console.log('Usuarios Conectados:a', connectedUsers)
     })
+
     socket.on('send-chat', (params) => {
         const { idOpportunitie, idCustomer, idProvider, idChat } = params
         io.emit('render-chat', {
@@ -99,23 +104,12 @@ io.on('connection', (socket) => {
             idPeople: idCustomer,
             idChat: idChat
         });
-
-        // connectedUsers.map((user) => {
-        //     if (user.idPeople === idCustomer) {
-        //         io.emit('render-chat', {
-        //             idOpportunitie: idOpportunitie,
-        //             idPeople: idCustomer,
-        //             idChat: idChat
-        //         });
-        //     }
-        //     if (user.idPeople === idProvider) {
-        //         io.emit('render-chat', {
-        //             idOpportunitie: idOpportunitie,
-        //             idPeople: idProvider,
-        //             idChat: idChat
-        //         });
-        //     }
-        // })
+    })
+    socket.on('disconnect', () => {
+        connectedUsers.filter((user) => {
+            user.idSocket != socket
+        })
+        console.log('Usuarios Conectados:', connectedUsers)
     })
 });
 
