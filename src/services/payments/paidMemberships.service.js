@@ -1,41 +1,47 @@
-const { Payments } = require('../../db.js');
+const { Payments, sequelize } = require('../../db.js');
+const { Op } = require('sequelize');
 
 const paidMembershipsService = async (filter) => {
+
     try {
-        if (!filter) {
-            const count = await Payments.count({ where: { paymentDay: null } });
+        const countNullPaymentDay = await Payments.count({
+            where: {
+                paymentDay: null
+            }
+        });
 
-            const result = await Payments.findOne({
-                attributes: [
-                    [sequelize.fn('sum', sequelize.col('price')), 'total']
-                ],
-                where: { paymentDay: null }
-            });
+        const payment = await Payments.findOne({
+            attributes: ['price'],
+            where: {
+                paymentDay: null
+            }
+        });
 
-            const total = result.dataValues.total;
+        const fixedPrice = payment ? payment.price : 0;
+        const countTimesPrice = countNullPaymentDay * fixedPrice;
 
-            const paymentDays = await Payments.findAll({
-                attributes: ['paymentDay']
-            });
+        const nullPaymentDayRecords = await Payments.findAll({
+            where: {
+                paymentDay: null
+            }
+        });
 
-            const paymentDaysArray = paymentDays.map(payment => payment.paymentDay);
 
-            const data = {
-                count,
-                total,
-                paymentDays: paymentDaysArray
-            };
 
-            return data;
-        } else {
-            // Handle case where filter is provided
-            // Add your logic here if needed
+        const info = {
+            count: countNullPaymentDay,
+            total: countTimesPrice,
+            data: nullPaymentDayRecords
         }
+
+        return info;
+
 
     } catch (error) {
         console.log("service: ", error);
         throw error;
     }
+
 }
 
 
