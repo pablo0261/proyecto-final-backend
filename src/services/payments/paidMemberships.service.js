@@ -1,42 +1,51 @@
-const { Payments } = require('../../db.js');
+const { Payments, sequelize } = require('../../db.js');
+const { Op } = require('sequelize');
 
 const paidMembershipsService = async (filter) => {
+
+    const whereCondition = {};
+    if (filter.idPeople) whereCondition.idPeople = filter.idPeople;
+    if (filter.onlyDebts) whereCondition.paymentDay = null;
+
     try {
-        if (!filter) {
-            const count = await Payments.count({ where: { paymentDay: null } });
+        const deudas = await Payments.findAll({
+            where: whereCondition
+        });
 
-            const result = await Payments.findOne({
-                attributes: [
-                    [sequelize.fn('sum', sequelize.col('price')), 'total']
-                ],
-                where: { paymentDay: null }
-            });
+        let cantidadDeudas = 0;
+        let totalDeuda = 0;
+        const data = [];
+        let result = null;
 
-            const total = result.dataValues.total;
 
-            const paymentDays = await Payments.findAll({
-                attributes: ['paymentDay']
-            });
 
-            const paymentDaysArray = paymentDays.map(payment => payment.paymentDay);
+        deudas.forEach(deuda => {
+            if (deuda.dataValues.paymentDay === null) {
+                cantidadDeudas++;
+                totalDeuda += parseFloat(deuda.dataValues.price);
+                data.push(deuda.dataValues);
+            } else if (deuda.dataValues.paymentDay !== null) {
+                data.push(deuda.dataValues);
+            }
+        });
 
-            const data = {
-                count,
-                total,
-                paymentDays: paymentDaysArray
-            };
-
-            return data;
+        if (whereCondition.paymentDay === null) {
+            result = {
+                cantidadDeudas,
+                totalDeuda,
+                data
+            }
         } else {
-            // Handle case where filter is provided
-            // Add your logic here if needed
+            result = { data }
         }
 
+
+        return result
     } catch (error) {
-        console.log("service: ", error);
+        console.log("Error al procesar deudas: ", error);
         throw error;
     }
-}
 
+}
 
 module.exports = { paidMembershipsService };
