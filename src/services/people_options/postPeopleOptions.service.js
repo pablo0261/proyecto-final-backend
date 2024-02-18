@@ -1,6 +1,7 @@
 const { Categories_options, Categories, People_options } = require('../../db');
 const { v4: uuidv4 } = require('uuid');
 const { getPeopleService } = require('../people/getPeople.service');
+const { checkUnverified } = require('../people/checkUnverified');
 
 const postPeopleOptionsService = async (dataBody) => {
     const { idPeople, idOption } = dataBody;
@@ -46,6 +47,9 @@ const postPeopleOptionsService = async (dataBody) => {
       if (!create) {
         await People_options.update(newData, { where: { idPeople, idOption } });
       }
+
+      await checkUnverified(idPeople)
+      
       const response = await getPeopleService({ idPeople: idPeople });
       return { response, status: create ? 201 : 200 };
     }
@@ -110,7 +114,9 @@ const postPeopleOptionsService = async (dataBody) => {
             where: { idPeople, idOption },
           });
         }
-  
+        
+        await checkUnverified(idPeople)
+
         const response = await getPeopleService({ idPeople });
         return { response, status: create ? 201 : 200 };
       }

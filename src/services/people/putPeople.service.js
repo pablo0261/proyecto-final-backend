@@ -1,5 +1,6 @@
 const { PEOPLE_STATE_UNVERIFIED, PEOPLE_STATE_ACTIVE, USER_PROVIDER } = require('../../constants');
 const { People, People_options, Categories_options, Categories } = require('../../db');
+const { checkUnverified } = require('./checkUnverified');
 const { getPeopleService } = require('./getPeople.service');
 
 const putPeopleService = async (params) => {
@@ -44,46 +45,8 @@ const putPeopleService = async (params) => {
         // Si no se creó, se actualiza el usuario que contiene el idPeople
         await People.update(newData, { where: { idPeople: newData.idPeople } });
 
-        //revisar state por si hay que pasarlo a activo o unverified
-        const people = await People.findByPk(idPeople)
-        if (people.dataValues.typeOfPerson === USER_PROVIDER &&
-            (people.dataValues.state === PEOPLE_STATE_UNVERIFIED || people.dataValues.state === PEOPLE_STATE_ACTIVE)) {
-            //reviso que tenga servicios
-            const { count: countServices, rows } = await People_options.findAndCountAll({
-                where: {
-                    idPeople: people.dataValues.idPeople,
-                    isDeleted: false
-                },
-                include: [
-                    {
-                        model: Categories_options,
-                        required: true,
-                        include: [
-                            {
-                                model: Categories,
-                                required: true,
-                                where: {
-                                    isService: true
-                                },
-                            }
-                        ]
-                    }
-                ]
-            });
-            //reviso que tenga calendario
-            const hasCalendar = people.dataValues.weekCalendar.find(value => value === true);
-            //
-            if (people.dataValues.idLocation &&
-                people.dataValues.geoposition &&
-                people.dataValues.image &&
-                people.dataValues.phone &&
-                countServices > 0 &&
-                hasCalendar) {
-                    await people.update({state:PEOPLE_STATE_ACTIVE})
-            }else{
-                await people.update({state:PEOPLE_STATE_UNVERIFIED})
-            }
-        }
+        await checkUnverified(idPeople)
+        
         const result = await getPeopleService({ idPeople: idPeople })
         return { result };
     } catch (error) {
