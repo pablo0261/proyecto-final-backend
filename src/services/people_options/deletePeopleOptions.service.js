@@ -1,4 +1,5 @@
 const { People_options } = require('../../db');
+const { checkUnverified } = require('../people/checkUnverified');
 const { getPeopleService } = require('../people/getPeople.service');
 
 const deletePeopleOptionsService = async ({ idPeople, idOption }) => {
@@ -11,6 +12,8 @@ const deletePeopleOptionsService = async ({ idPeople, idOption }) => {
     return { status: 404, response: { response: 'No hay registros' } };
   }
 
+  await checkUnverified(idPeople)
+  
   const people = await getPeopleService({ idPeople });
 
   return people
