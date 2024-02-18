@@ -32,7 +32,7 @@ const getPeopleService = async (params) => {
         'weekCalendar']
 
     const { idOption, idOrder, state, pageSize, pageNumber } = params
-    const { idPeople,fullName } = params
+    const { idPeople,fullName,email } = params
 
     const filters = []
 
@@ -49,7 +49,7 @@ const getPeopleService = async (params) => {
     );
 
     //activos si no viene por params
-    if (!idPeople) {
+    if (!idPeople && !email) {
         if (state) {
             filterPeople.state = state
         } else {
