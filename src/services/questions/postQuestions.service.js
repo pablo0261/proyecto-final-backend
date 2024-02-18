@@ -4,7 +4,6 @@ const { v4: uuidv4 } = require('uuid'); // Importa la función para generar UUID
 const validationDataQAA = require('../../utils/validationDataQAA');
 const validationDataFAQ = require('../../utils/validationDataFAQ');
 const { ServerError, ValidationsError, ConflictError } = require('../../errors');
-const REGEX = require('../../helpers/regex.helpers');
 
 const postQuestionsService = async (questionsData) => {
   const {
@@ -16,15 +15,12 @@ const postQuestionsService = async (questionsData) => {
     title,
     receiverMail,
     message,
-    response,
   } = questionsData;
 
   if (!typeOfQuestion) throw new ValidationsError('Tipo de pregunta es requerido');
-  if (!REGEX.SOLO_LETRAS.test(typeOfQuestion)) {
-    throw new ValidationsError('Tipo de pregunta debe contener solo letras');
-  }
 
   const idQuestion = uuidv4();
+  const dateMessage = new Date()
 
   //
   // caso para consultas o reclamos
@@ -38,13 +34,13 @@ const postQuestionsService = async (questionsData) => {
       senderMail,
       title,
       message,
-      response,
+      dateMessage,
     };
 
     validationDataQAA(newQuestionQAA);
 
     const [question, create] = await Questions.findOrCreate({
-      where: { title, message },
+      where: { title, message, senderMail },
       defaults: newQuestionQAA,
     });
 
@@ -78,9 +74,6 @@ const postQuestionsService = async (questionsData) => {
 
     const allQuestionsFAQ = await Questions.findAll({
       where: { typeOfQuestion: TYPE_OF_QUESTION_FAQ },
-      attributes: {
-        exclude: ['response', 'priority', 'senderMail', 'fullName', 'receiverMail'],
-      },
     });
 
     const questions = {
@@ -92,7 +85,7 @@ const postQuestionsService = async (questionsData) => {
     return { questions };
   }
 
-  throw new ValidationsError('El tipo de pregunta no existe');
+  throw new ValidationsError(`El tipo de pregunta debe ser ${TYPE_OF_QUESTION_FAQ} o ${TYPE_OF_QUESTION_QAA}`);
 };
 
 module.exports = postQuestionsService;
