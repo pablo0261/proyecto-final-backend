@@ -9,7 +9,7 @@ const paymentController = async (req, res) => {
     const emailExists = await checkEmailExists(params.email);
 
     if (emailExists) {
-        return res.status(400).json({ error: "El correo electrónico ya está registrado." });
+        return res.status(409).json({ error: "El correo electrónico ya está registrado." });
     }
 
     const errors = validator(params);
