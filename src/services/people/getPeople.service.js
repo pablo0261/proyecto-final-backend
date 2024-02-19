@@ -56,7 +56,6 @@ const getPeopleService = async (params) => {
             filterPeople.state = PEOPLE_STATE_ACTIVE
         }
     }
-
     //sequelize acepta filtros como array de objetosç
     //primer paso los de l aptabla people
 
