@@ -90,6 +90,10 @@ People.hasMany(Payments, {
     foreignKey: 'idPeople'
 })
 
+Payments.belongsTo(People, {
+    foreignKey: 'idPeople'
+})
+
 // Una oportunidad pertenece a un proveedor (People)
 Opportunities.belongsTo(People, { as: 'provider', foreignKey: 'idProvider' });
 
