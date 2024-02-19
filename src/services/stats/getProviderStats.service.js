@@ -205,6 +205,20 @@ const getProviderStatsService = async (idPeople) => {
             })
         })
 
+        //cantidad de clientes y proveedores
+        query = await Opportunities.findAll({
+            attributes: [
+                [Sequelize.literal(`EXTRACT('week' FROM "dateView") - EXTRACT('week' FROM date_trunc('month', "dateView")) + 1`), 'week'],
+                [Sequelize.fn('SUM', Sequelize.literal('CASE WHEN ("idService" = 0 or "idService" is null) THEN 1 ELSE 0 END')), 'countOpp'],
+                [Sequelize.fn('SUM', Sequelize.literal('CASE WHEN "idService" != 0 THEN 1 ELSE 0 END')), 'countServices'],
+                [Sequelize.fn('SUM', Sequelize.literal(`CASE WHEN "state" in('${STATE_ACCEPTED}','${STATE_COMPLETED}','${STATE_RATINGPROVIDERPENDING}',
+                '${STATE_RATINGCUSTOMERPENDING}','${STATE_RATINGPENDING}') THEN 1 ELSE 0 END`)), 'countAccepted']
+            ],
+            where: whereOpportunitiesByWeek,
+            group: [Sequelize.literal(`EXTRACT('week' FROM "dateView") - EXTRACT('week' FROM date_trunc('month', "dateView")) + 1`)],
+            order: [Sequelize.literal(`EXTRACT('week' FROM "dateView") - EXTRACT('week' FROM date_trunc('month', "dateView")) + 1`)]
+
+        })
         //salida
         const data = {
             indicadoresPersonales: indicadoresPersonales,
