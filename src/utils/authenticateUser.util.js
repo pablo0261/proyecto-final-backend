@@ -11,7 +11,7 @@ const authenticateUser = async (email, password) => {
 
         const passwordValid = person.password;
         const compare = await verifyPassword(password, passwordValid);
-        console.log(compare)
+
         if (!compare) {
             throw new Error('Contraseña incorrecta');
         }

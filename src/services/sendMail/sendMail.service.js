@@ -12,7 +12,6 @@ const transporter = nodemailer.createTransport({
 });
 
 const sendMailService = async ( to, subject, text) => {
-    console.log(to,subject,text)
     const mailOptions = {
         from: `"${MAIL_NAME}" <${MAIL_USER}`, // Remitente
         to: to,
