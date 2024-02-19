@@ -62,6 +62,8 @@ let connectedUsers = []
 io.on('connection', (socket) => {
 
     socket.on('join-request', (idPeople) => {
+        if (!idPeople) return
+
         const foundUSerSocket = connectedUsers.find((user) => {
             return user.idPeople === idPeople && user.idSocket === socket.id
         })
@@ -79,6 +81,7 @@ io.on('connection', (socket) => {
     })
 
     socket.on('join-chat', ({ idPeople, idOpportunitie }) => {
+        if (!idPeople) return
         socket.idPeople = idPeople
         socket.idOpportunitie = idOpportunitie
         connectedUsers.forEach(usuario => {
