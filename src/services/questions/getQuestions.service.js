@@ -3,6 +3,7 @@ const {
   TYPE_OF_QUESTION_QAA,
   QUESTION_STATUS_PENDING,
   QUESTION_STATUS_COMPLETED,
+  QUESTION_STATUS_DELETED,
 } = require('../../constants');
 
 const REGEX = require('../../helpers/regex.helpers');
@@ -36,8 +37,14 @@ const getQuestionsService = async (parameters = {}) => {
   });
 
   const allQuestions = await Questions.findAll({
-    where: { [Op.and]: filters },
-    order: [['typeOfQuestion', 'ASC']],
+    where: {
+      [Op.and]: filters,
+      questionStatus: { [Op.ne]: QUESTION_STATUS_DELETED },
+    },
+    order: [
+      ['typeOfQuestion', 'ASC'],
+      ['dateMessage', 'DESC'],
+    ],
   });
 
   const questions = {
