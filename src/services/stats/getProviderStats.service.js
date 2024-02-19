@@ -144,6 +144,7 @@ const getProviderStatsService = async (idPeople) => {
                 ['reviewCustomer', 'review'],
                 [Sequelize.literal('"categories_option"."description"'), 'service'],
                 [Sequelize.literal('"customer"."fullName"'), 'persona'],
+                [Sequelize.literal('"customer"."image"'), 'image']
 
             ],
             where: whereLastComment,
@@ -166,7 +167,9 @@ const getProviderStatsService = async (idPeople) => {
             fecha: query ? formatDate(query.dataValues.fecha) : "",
             review: query ? query.dataValues.review : "Sin comentarios cargados",
             cliente: query ? query.dataValues.customer.fullName : 0,
-            servicio: query ? query.dataValues.service : ''
+            imagen: query ? query.dataValues.image : '',
+            servicio: query ? query.dataValues.service : '',
+
         }
 
         //historial de contrataciones ultimp mes por semana
