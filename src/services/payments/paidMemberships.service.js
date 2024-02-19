@@ -1,4 +1,4 @@
-const { Payments, sequelize } = require('../../db.js');
+const { Payments, sequelize, People } = require('../../db.js');
 const { Op } = require('sequelize');
 
 const paidMembershipsService = async (filter) => {
@@ -9,7 +9,13 @@ const paidMembershipsService = async (filter) => {
 
     try {
         const deudas = await Payments.findAll({
-            where: whereCondition
+            attributes: ['emisionDate', 'dueDate', 'price', 'paymentDay'],
+            where: whereCondition,
+            include: {
+                model: People,
+                attributes: ['idPeople','fullName', 'email'],
+            }
+
         });
 
         let cantidadDeudas = 0;
@@ -29,14 +35,10 @@ const paidMembershipsService = async (filter) => {
             }
         });
 
-        if (whereCondition.paymentDay === null) {
-            result = {
-                cantidadDeudas,
-                totalDeuda,
-                data
-            }
-        } else {
-            result = { data }
+        result = {
+            cantidadDeudas,
+            totalDeuda,
+            data
         }
 
 
