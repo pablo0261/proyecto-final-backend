@@ -192,12 +192,14 @@ const getProviderStatsService = async (idPeople) => {
             order: [Sequelize.literal(`EXTRACT('week' FROM "dateView") - EXTRACT('week' FROM date_trunc('month', "dateView")) + 1`)]
 
         })
-        const opportunitiesByWeek = { ejex: [], Oportunidades: [], Solicitudes: [], Contrataciones: [] }
+        const opportunitiesByWeek = []
         query.forEach(value => {
-            opportunitiesByWeek.ejex.push(value.dataValues.week)
-            opportunitiesByWeek.Oportunidades.push(value.dataValues.countOpp)
-            opportunitiesByWeek.Solicitudes.push(value.dataValues.countServices)
-            opportunitiesByWeek.Contrataciones.push(value.dataValues.countAccepted)
+            opportunitiesByWeek.push({
+                ejex: value.dataValues.week,
+                Oportunidades: value.dataValues.countOpp,
+                Solicitudes: value.dataValues.countServices,
+                Contrataciones: value.dataValues.countAccepted
+            })
         })
 
         //salida
