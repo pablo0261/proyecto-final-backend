@@ -25,7 +25,6 @@ const getChatsService = async (params) => {
 
         });
         const result = allChats.map(chat => {
-            console.log(chat.get())
             return {
                 ...chat.get(),
                 sended: chat.idPeople === idPeople,

@@ -9,8 +9,7 @@ const updatePaidMembershipsController = async (req, res) => {
     try {
 
         const { result } = await updatePaidMembershipsService(params);
-        console.log("Controlle: ", result);
-
+        
 
         if (!result) {
             return res.status(204).json({ error: 'No hay registros con ese idPeople.' });
