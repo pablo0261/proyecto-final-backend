@@ -28,13 +28,13 @@ const validator = (data) => {
         errors.address = "La dirección debe contener solo letras, números y espacios, con un máximo de 20 caracteres.";
     }
 
-    if (
+    if ( 
         data.profession &&
         (!data.profession ||
             typeof data.profession !== 'string' ||
             data.profession.trim().length === 0 ||
-            data.profession.trim().length > 25 || !/^[A-Za-z\s]+$/.test(data.profession))) {
-        errors.profession = "La ocupación debe contener solo letras y espacios, con un máximo de 25 caracteres.";
+            data.profession.trim().length > 25 || !/^[A-Za-z0-9ÁÉÍÓÚáéíóúÜüÑñ\s\/()]+$/.test(data.profession))) {
+        errors.profession = "La ocupación debe contener solo letras espacios, acentos , con un máximo de 25 caracteres.";
     }
 
     if (
