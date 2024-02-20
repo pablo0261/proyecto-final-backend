@@ -48,8 +48,8 @@ const getBestCommentsService = async (idPeople, typeOfPerson) => {
                     [dateRating, 'fecha'],
                     [review, 'review'],
                     [Sequelize.literal('"categories_option"."description"'), 'service'],
-                    [Sequelize.literal(`"${type}"."fullName"`), 'persona'],
-                    [Sequelize.literal(`"${type}"."image"`), 'imagen'],
+                    [Sequelize.literal(`"${type === USER_PROVIDER ? USER_CUSTOMER : USER_PROVIDER}"."fullName"`), 'persona'],
+                    [Sequelize.literal(`"${type === USER_PROVIDER ? USER_CUSTOMER : USER_PROVIDER}"."image"`), 'imagen'],
 
                 ],
                 limit: 3,
@@ -58,10 +58,12 @@ const getBestCommentsService = async (idPeople, typeOfPerson) => {
                     {
                         model: Categories_options,
                         as: 'categories_option',
+                        attributes:['description']
                     },
                     {
                         model: People,
                         as: type === USER_PROVIDER ? USER_CUSTOMER : USER_PROVIDER,
+                        attributes:['idPeople','fullName']
                     }
                 ],
                 order: [[rating, 'DESC']]
