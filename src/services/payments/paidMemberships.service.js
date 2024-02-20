@@ -13,7 +13,7 @@ const paidMembershipsService = async (filter) => {
             where: whereCondition,
             include: {
                 model: People,
-                attributes: ['idPeople','fullName', 'email'],
+                attributes: ['idPeople','fullName', 'email','state'],
             }
 
         });
