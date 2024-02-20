@@ -9,7 +9,7 @@ const {
     Payments,
 } = require("../../db.js");
 
-const { STATE_VIEW, STATE_COMPLETED, STATE_RATINGPROVIDERPENDING, STATE_ACCEPTED, STATE_RATINGCUSTOMERPENDING, STATE_RATINGPENDING } = require("../../constants/index.js");
+const { STATE_VIEW, STATE_COMPLETED, STATE_RATINGPROVIDERPENDING, STATE_ACCEPTED, STATE_RATINGCUSTOMERPENDING, STATE_RATINGPENDING, USER_CUSTOMER, USER_PROVIDER } = require("../../constants/index.js");
 const { formatDate } = require("../../utils/formatDate.js");
 
 const getProviderStatsService = async (idPeople) => {
@@ -105,6 +105,29 @@ const getProviderStatsService = async (idPeople) => {
             where: whereView
         });
         indicadoresPersonales.cantidadViews = query ? query[0].dataValues.Cantidad : 0
+
+        //cantidad de clientes y proveedores
+        query = await People.findAll({
+            attributes: [
+                [Sequelize.fn('SUM', Sequelize.literal(`CASE WHEN ("typeOfPerson" = 'customer' and "state"='Active') THEN 1 ELSE 0 END`)), 'totalCustomer'],
+                [Sequelize.fn('SUM', Sequelize.literal(`CASE WHEN ("typeOfPerson" = 'provider') THEN 1 ELSE 0 END`)), 'totalProvider'],
+            ],
+        })
+        indicadoresPersonales.cantidadClientes = query ? query[0].dataValues.totalCustomer : 0
+        indicadoresPersonales.cantidadProveedores = query ? query[0].dataValues.totalProvider : 0
+
+        //cantidad de servicios
+        query = await People_options.count({
+            include: [
+                {
+                    model: Categories_options,
+                    where: {
+                        idCategorie: 1
+                    }
+                }
+            ]
+        })
+        indicadoresPersonales.cantidadTotalServiciosOfrecidos = query ? query : 0
 
         //servicios contratados del proveedor
         let whereHiring = idPeople ? { idProvider: idPeople } : {}
@@ -205,27 +228,33 @@ const getProviderStatsService = async (idPeople) => {
             })
         })
 
-        //cantidad de clientes y proveedores
-        query = await Opportunities.findAll({
+        //altas por semana
+        query = await People.findAll({
             attributes: [
-                [Sequelize.literal(`EXTRACT('week' FROM "dateView") - EXTRACT('week' FROM date_trunc('month', "dateView")) + 1`), 'week'],
-                [Sequelize.fn('SUM', Sequelize.literal('CASE WHEN ("idService" = 0 or "idService" is null) THEN 1 ELSE 0 END')), 'countOpp'],
-                [Sequelize.fn('SUM', Sequelize.literal('CASE WHEN "idService" != 0 THEN 1 ELSE 0 END')), 'countServices'],
-                [Sequelize.fn('SUM', Sequelize.literal(`CASE WHEN "state" in('${STATE_ACCEPTED}','${STATE_COMPLETED}','${STATE_RATINGPROVIDERPENDING}',
-                '${STATE_RATINGCUSTOMERPENDING}','${STATE_RATINGPENDING}') THEN 1 ELSE 0 END`)), 'countAccepted']
+                [Sequelize.literal(`EXTRACT('week' FROM "dateOfAdmission") - EXTRACT('week' FROM date_trunc('month', "dateOfAdmission")) + 1`), 'week'],
+                [Sequelize.fn('SUM', Sequelize.literal(`CASE WHEN "typeOfPerson" = '${USER_CUSTOMER}' THEN 1 ELSE 0 END`)), 'customer'],
+                [Sequelize.fn('SUM', Sequelize.literal(`CASE WHEN "typeOfPerson" = '${USER_PROVIDER}' THEN 1 ELSE 0 END`)), 'provider'],
             ],
-            where: whereOpportunitiesByWeek,
-            group: [Sequelize.literal(`EXTRACT('week' FROM "dateView") - EXTRACT('week' FROM date_trunc('month', "dateView")) + 1`)],
-            order: [Sequelize.literal(`EXTRACT('week' FROM "dateView") - EXTRACT('week' FROM date_trunc('month', "dateView")) + 1`)]
-
+            group: [Sequelize.literal(`EXTRACT('week' FROM "dateOfAdmission") - EXTRACT('week' FROM date_trunc('month', "dateOfAdmission")) + 1`)],
+            order: [Sequelize.literal(`EXTRACT('week' FROM "dateOfAdmission") - EXTRACT('week' FROM date_trunc('month', "dateOfAdmission")) + 1`)]
         })
+        const admissionsByWeek = []
+        query.forEach(value => {
+            admissionsByWeek.push({
+                ejex: value.dataValues.week,
+                Clientes: value.dataValues.customer,
+                Proveedores: value.dataValues.provider
+            })
+        })
+
         //salida
         const data = {
             indicadoresPersonales: indicadoresPersonales,
             serviciosMasBuscados: mostSearchedCategories,
             misServiciosMasContratados: mostSearchedServices,
             opportunidadesPorSemana: opportunitiesByWeek,
-            ultimoComentario: lastComment
+            ultimoComentario: lastComment,
+            admisionesPorSemana:admissionsByWeek
         }
         return { data }
 
