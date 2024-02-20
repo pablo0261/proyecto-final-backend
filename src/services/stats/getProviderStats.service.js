@@ -247,6 +247,34 @@ const getProviderStatsService = async (idPeople) => {
             })
         })
 
+        //cantidad de servicios por servicio
+        query = await People_options.findAll({
+            attributes: [
+                [Sequelize.col('"categories_option"."description"'), 'servicio'],
+                [Sequelize.fn('COUNT', '*'), 'cantidad']
+            ],
+            include: [
+                {
+                    model: Categories_options,
+                    attributes: [],
+                    as: 'categories_option',
+                    where: {
+                        idCategorie: 1
+                    }
+                }
+            ],
+            group: [Sequelize.literal('"categories_option"."description"')],
+            order: [[Sequelize.fn('COUNT', '*'),'DESC']],
+        })
+        const serviciosTotales = []
+        query.forEach(value => {
+            serviciosTotales.push({
+                Servicio: value.dataValues.servicio,
+                Cantidad: value.dataValues.cantidad
+            })
+        })
+        
+
         //salida
         const data = {
             indicadoresPersonales: indicadoresPersonales,
@@ -254,7 +282,8 @@ const getProviderStatsService = async (idPeople) => {
             misServiciosMasContratados: mostSearchedServices,
             opportunidadesPorSemana: opportunitiesByWeek,
             ultimoComentario: lastComment,
-            admisionesPorSemana:admissionsByWeek
+            admisionesPorSemana: admissionsByWeek,
+            serviciosTotales:serviciosTotales
         }
         return { data }
 
