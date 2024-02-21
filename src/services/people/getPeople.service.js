@@ -77,6 +77,7 @@ const getPeopleService = async (params) => {
             idPeople: {
                 [Sequelize.Op.in]: Sequelize.literal(`(SELECT "idPeople" FROM "people_options"
                                                                WHERE "people_options"."idOption" IN (${idOption})
+                                                               AND "people_options"."isDeleted"=false
                                                                GROUP BY "idPeople" HAVING  COUNT(DISTINCT "idOption") = ${lengthOption})`)
             }
         })
