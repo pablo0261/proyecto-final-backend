@@ -32,7 +32,7 @@ const paymentController = async (req, res) => {
             }
         ],
         back_urls: {
-            success: '${MP_SUCCESS}/statsProviderView',
+            success: MP_SUCCESS,
             failure: MP_FAILURE,
             pending: MP_PENDING
         },
