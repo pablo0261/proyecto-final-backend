@@ -32,7 +32,7 @@ const paymentController = async (req, res) => {
             }
         ],
         back_urls: {
-            success: MP_SUCCESS,
+            success: `${MP_SUCCESS}/statsProviderView`,
             failure: MP_FAILURE,
             pending: MP_PENDING
         },
@@ -44,7 +44,8 @@ const paymentController = async (req, res) => {
             email: params.email,
             password: params.password,
             type_of_person: params.typeOfPerson
-        }
+        },
+        auto_return: "approved"
     });
 
     const data = {
