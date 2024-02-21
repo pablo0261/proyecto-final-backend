@@ -3,6 +3,7 @@ const { v4: uuidv4 } = require('uuid');
 const { getPeopleService } = require('./getPeople.service');
 const { PEOPLE_STATE_ACTIVE, PEOPLE_STATE_UNVERIFIED } = require('../../constants');
 const { customers } = require('mercadopago');
+const { sendMailService } = require('../sendMail/sendMail.service');
 
 const postPeopleService = async (params) => {
 
@@ -80,6 +81,9 @@ const postPeopleService = async (params) => {
                 responseApi: params.responseApi
             });
         }
+        if(created){
+            sendMailService(email,'Bienvenido!',`${fullName}, bienvenido a Care With Love, por favor complete sus datos ingresando en  https://carewithlove.onrender.com`)
+        }    
         const result = await getPeopleService({ idPeople: idPeople })
         return { result, created };
     } catch (error) {
