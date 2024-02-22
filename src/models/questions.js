@@ -47,11 +47,11 @@ module.exports = (sequelize) => {
             defaultValue: 'pendiente'
         },
         dateMessage: {
-            type: DataTypes.DATEONLY,
+            type: DataTypes.DATE,
             allowNull: true,
         },
         dateResponse: {
-            type: DataTypes.DATEONLY,
+            type: DataTypes.DATE,
             allowNull: true
         },
         questionStatus: {

@@ -36,15 +36,18 @@ const getQuestionsService = async (parameters = {}) => {
     return obj;
   });
 
+  // Array de orden
+  const orderOption = [];
+  if (questionStatus === QUESTION_STATUS_PENDING) orderOption.push(['dateMessage', 'DESC']);
+  if (questionStatus === QUESTION_STATUS_COMPLETED) orderOption.push(['dateResponse', 'DESC']);
+  if (typeOfQuestion === TYPE_OF_QUESTION_FAQ) orderOption.push(['priority', 'ASC']);
+
   const allQuestions = await Questions.findAll({
     where: {
       [Op.and]: filters,
       questionStatus: { [Op.ne]: QUESTION_STATUS_DELETED },
     },
-    order: [
-      ['typeOfQuestion', 'ASC'],
-      ['dateMessage', 'DESC'],
-    ],
+    order: orderOption,
   });
 
   const questions = {
