@@ -30,7 +30,7 @@ const checkUnverified = async (idPeople) => {
                 ]
             });
             //reviso que tenga calendario
-            const hasCalendar = weekCalendar ? people.dataValues.weekCalendar.find(value => value === true) : false;
+            const hasCalendar = people.dataValues.weekCalendar ? people.dataValues.weekCalendar.find(value => value === true) : false;
             //
             if (people.dataValues.idLocation &&
                 people.dataValues.geoposition &&
