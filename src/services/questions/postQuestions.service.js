@@ -60,6 +60,7 @@ const postQuestionsService = async (questionsData) => {
       priority,
       title,
       message,
+      dateMessage,
     };
 
     validationDataFAQ(newQuestionFAQ);
