@@ -30,7 +30,7 @@ const checkUnverified = async (idPeople) => {
                 ]
             });
             //reviso que tenga calendario
-            const hasCalendar = people.dataValues.weekCalendar.find(value => value === true);
+            const hasCalendar = weekCalendar ? people.dataValues.weekCalendar.find(value => value === true) : false;
             //
             if (people.dataValues.idLocation &&
                 people.dataValues.geoposition &&
@@ -39,9 +39,9 @@ const checkUnverified = async (idPeople) => {
                 people.dataValues.address &&
                 countServices > 0 &&
                 hasCalendar) {
-                    await people.update({state:PEOPLE_STATE_ACTIVE})
-            }else{
-                await people.update({state:PEOPLE_STATE_UNVERIFIED})
+                await people.update({ state: PEOPLE_STATE_ACTIVE })
+            } else {
+                await people.update({ state: PEOPLE_STATE_UNVERIFIED })
             }
         }
     } catch (error) {
