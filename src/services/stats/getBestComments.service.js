@@ -17,7 +17,6 @@ const getBestCommentsService = async (idPeople, typeOfPerson) => {
         let type = ''
         if (idPeople) {
             const people = await People.findByPk(idPeople)
-            console.log(people)
             type = people.typeOfPerson
         } else {
             if (typeOfPerson) {
@@ -34,50 +33,55 @@ const getBestCommentsService = async (idPeople, typeOfPerson) => {
             dateRating = 'dateRatingCustomer'
             review = 'reviewCustomer'
         }
+        if (type === USER_CUSTOMER) {
+            rating = 'ratingProvider'
+            dateRating = 'dateRatingProvider'
+            review = 'reviewProvider'
+        }
 
         //mejores comentarios
         let whereBestComment = {}
-        if(idPeople){
+        if (idPeople) {
             if (type === USER_PROVIDER) whereBestComment.idProvider = idPeople
             if (type === USER_CUSTOMER) whereBestComment.idCustomer = idPeople
         }
+        if (type === USER_PROVIDER) whereBestComment.reviewCustomer = { [Sequelize.Op.ne]: '' }
+
+        if (type === USER_CUSTOMER) whereBestComment.reviewProvider = { [Sequelize.Op.ne]: '' }
+
+
 
         const query = await Opportunities.findAll({
-                attributes: [
-                    [rating, 'rating'],
-                    [dateRating, 'fecha'],
-                    [review, 'review'],
-                    [Sequelize.literal('"categories_option"."description"'), 'service'],
-                    [Sequelize.literal(`"${type === USER_PROVIDER ? USER_CUSTOMER : USER_PROVIDER}"."fullName"`), 'persona'],
-                    [Sequelize.literal(`"${type === USER_PROVIDER ? USER_CUSTOMER : USER_PROVIDER}"."image"`), 'imagen'],
+            attributes: [
+                [rating, 'rating'],
+                [dateRating, 'fecha'],
+                [review, 'review'],
+                [Sequelize.literal('"categories_option"."description"'), 'service'],
+                [Sequelize.literal(`"${type === USER_PROVIDER ? USER_CUSTOMER : USER_PROVIDER}"."fullName"`), 'persona'],
+                [Sequelize.literal(`"${type === USER_PROVIDER ? USER_CUSTOMER : USER_PROVIDER}"."image"`), 'imagen'],
 
-                ],
-                limit: 3,
-                where: whereBestComment,
-                include: [
-                    {
-                        model: Categories_options,
-                        as: 'categories_option',
-                        attributes:['description']
-                    },
-                    {
-                        model: People,
-                        as: type === USER_PROVIDER ? USER_CUSTOMER : USER_PROVIDER,
-                        attributes:['idPeople','fullName']
-                    }
-                ],
-                order: [[rating, 'DESC']]
-            });
-
-        console.log(query)            
-        const bestComment = {
-            
-        }
-
+            ],
+            limit: 3,
+            where: whereBestComment,
+            include: [
+                {
+                    model: Categories_options,
+                    as: 'categories_option',
+                    attributes: []
+                },
+                {
+                    model: People,
+                    as: type === USER_PROVIDER ? USER_CUSTOMER : USER_PROVIDER,
+                    attributes: []
+                }
+            ],
+            order: [[rating, 'DESC'], [dateRating, 'DESC']]
+        });
 
         //salida
         const data = {
-            comentarios: bestComment
+            filtro: { idPeople: idPeople ? idPeople : 'All', typeOfPerson: type },
+            comentarios: query
         }
         return { data }
 
