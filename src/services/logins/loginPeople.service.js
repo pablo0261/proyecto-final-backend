@@ -1,3 +1,4 @@
+const { PEOPLE_STATE_DELETED } = require('../../constants');
 const { People, People_logins } = require('../../db');
 const { v4: uuidv4 } = require('uuid');
 
@@ -12,6 +13,9 @@ const loginPeopleService = async (authenticatedPerson) => {
 
         if (!authenticatedPerson) {
             throw new Error('Error en la autenticación');
+        }
+        if(authenticatedPerson.state===PEOPLE_STATE_DELETED){
+            throw new Error('Usuario Borrado, no puede loguearse');
         }
 
         const currentDate = new Date();

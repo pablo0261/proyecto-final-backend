@@ -28,7 +28,7 @@ module.exports = (sequelize) => {
         geoposition: {
             type: DataTypes.STRING,
             allowNull: true,
-            defaultValue: ''
+            defaultValue: '-31.416668,-64.183334'
         },
         birthDate: {
             type: DataTypes.DATEONLY,
