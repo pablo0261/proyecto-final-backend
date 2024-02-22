@@ -38,6 +38,7 @@ const checkUnverified = async (idPeople) => {
                 people.dataValues.phone &&
                 people.dataValues.address &&
                 countServices > 0 &&
+                people.dataValues.image &&
                 hasCalendar) {
                 await people.update({ state: PEOPLE_STATE_ACTIVE })
             } else {
