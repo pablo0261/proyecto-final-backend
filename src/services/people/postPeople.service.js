@@ -13,7 +13,7 @@ const postPeopleService = async (params) => {
         phone, location, country, profession } = params;
 
     const currentDate = new Date();
-
+      
     try {
         const newData = {
             idPeople,
