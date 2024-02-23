@@ -6,7 +6,7 @@ const validator = (data) => {
         typeof data.fullName !== 'string' ||
         data.fullName.trim().length === 0 ||
         data.fullName.trim().length > 30 ||
-        !/^[a-zA-Z\s]*$/.test(data.fullName)) {
+        !/^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ]+(?:\s+[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ]+){1,5}(?:\s+[-\sa-zA-ZáéíóúÁÉÍÓÚüÜñÑ]+)?$/.test(data.fullName)) {
         errors.fullName = "El nombre completo es obligatorio y debe contener solo letras y espacios, con un máximo de 30 caracteres.";
     }
 
@@ -15,8 +15,8 @@ const validator = (data) => {
         (!data.phone ||
             typeof data.phone !== 'string' ||
             data.phone.trim().length === 0 ||
-            !/^\d{10}$/.test(data.phone))) {
-        errors.phone = "El número de teléfono debe tener un formato válido para Argentina (10 dígitos numéricos).";
+            !/^(?:(?:00)?549?)?0?(?:11|[2368]\d)(?:(?=\d{0,2}15)\d{2})??\d{8}$/.test(data.phone))) {
+        errors.phone = "El número de teléfono debe tener un formato válido para Argentina.";
     }
 
     if (
