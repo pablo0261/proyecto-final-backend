@@ -3,7 +3,7 @@
 ## Plataforma de Servicios de Asistencia a la Tercera Edad
 
 ### En primer lugar, dale una estrella a nuestro repositorio 🌟
-Plataforma que conecte a proveedores de servicios de asistencia a la tercera edad con clientes, proporcionando una experiencia transparente y eficiente.
+Plataforma que conecta a proveedores de servicios de asistencia a la tercera edad con clientes, proporcionando una experiencia transparente y eficiente.
 
 Proyecto academico de conclusion del bootcamp Henry
 
