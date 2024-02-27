@@ -1,6 +1,7 @@
 const { Router } = require("express");
 const router = Router();
 
+const apiRouter = require('./api.route.js');
 const categoriesRouter = require("./categories.route.js");
 const peopleRouter = require("./people.route.js");
 const geolocationRouter = require("./geolocation.route.js");
@@ -11,6 +12,7 @@ const questionsRouter = require("./questions.route.js");
 const statsRouter = require("./stats.route.js");
 const sendMailRouter = require("./sendMail.route.js");
 
+router.use(apiRouter);
 router.use(categoriesRouter);
 router.use(peopleRouter);
 router.use(geolocationRouter);
