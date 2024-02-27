@@ -1,4 +1,4 @@
-# Documentación del endpoint /people
+# Documentación del endpoint /api
 
 ## REST
 
